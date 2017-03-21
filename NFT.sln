@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFT_Master", "NFT_Master\NFT_Master.csproj", "{7DAE8268-64FD-4A95-B262-FF677758A7C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFT_Slave", "NFT_Slave\NFT_Slave.csproj", "{845A768A-0788-4908-A8EB-F3BE8BF0640B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7DAE8268-64FD-4A95-B262-FF677758A7C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DAE8268-64FD-4A95-B262-FF677758A7C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DAE8268-64FD-4A95-B262-FF677758A7C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DAE8268-64FD-4A95-B262-FF677758A7C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{845A768A-0788-4908-A8EB-F3BE8BF0640B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{845A768A-0788-4908-A8EB-F3BE8BF0640B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{845A768A-0788-4908-A8EB-F3BE8BF0640B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{845A768A-0788-4908-A8EB-F3BE8BF0640B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

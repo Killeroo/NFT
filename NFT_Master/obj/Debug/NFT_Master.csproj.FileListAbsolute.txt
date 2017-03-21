@@ -1,0 +1,6 @@
+C:\Projects\NFT\NFT_Master\bin\Debug\NFT_Master.exe.config
+C:\Projects\NFT\NFT_Master\bin\Debug\NFT_Master.exe
+C:\Projects\NFT\NFT_Master\bin\Debug\NFT_Master.pdb
+C:\Projects\NFT\NFT_Master\obj\Debug\NFT_Master.csprojResolveAssemblyReference.cache
+C:\Projects\NFT\NFT_Master\obj\Debug\NFT_Master.exe
+C:\Projects\NFT\NFT_Master\obj\Debug\NFT_Master.pdb
