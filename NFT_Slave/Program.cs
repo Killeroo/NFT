@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
+
 namespace NFT_Slave
 {
     class Program
@@ -27,7 +28,7 @@ namespace NFT_Slave
                         Log.info(client.Client.RemoteEndPoint.ToString() + " connected");
                         using (var stream = client.GetStream())
                         {
-                            c = deserializeCommand(stream);//Command.deserialize(stream);
+                            c = Command.deserialize(stream);
                             break;
                         }
                     }
@@ -40,6 +41,10 @@ namespace NFT_Slave
             catch (SerializationException)
             {
                 Log.fatal("Error parsing client stream (SerializationException)");
+            }
+            finally
+            {
+                Log.info("Master disconnected");
             }
 
             // Display command
@@ -54,41 +59,6 @@ namespace NFT_Slave
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
                     return ip.ToString();
             return "";
-        }
-
-
-
-        /// <summary>
-        /// TEMP - Add to command.cs
-        /// </summary>
-
-        static NetworkStream serializeCommand(Command fi, Socket sock)
-        {
-            // Create a stream for storing our serialized object
-            NetworkStream netStream = new NetworkStream(sock);
-
-            // Serialize the object onto the stream transport medium
-            IFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(netStream, fi);
-
-            // Clean up
-            netStream.Close();
-
-            // Return the network stream containing our serialized object
-            return netStream;
-        }
-
-        static Command deserializeCommand(NetworkStream netStream)
-        {
-            // Deseralize our object from the stream
-            IFormatter formatter = new BinaryFormatter();
-            Command fi = (Command)formatter.Deserialize(netStream);
-
-            // Clean up
-            netStream.Close();
-
-            // Return the deserialized object
-            return fi;
         }
     }
 }

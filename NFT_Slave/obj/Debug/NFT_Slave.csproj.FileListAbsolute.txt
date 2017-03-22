@@ -4,3 +4,5 @@ C:\Projects\NFT\NFT_Slave\bin\Debug\NFT_Slave.pdb
 C:\Projects\NFT\NFT_Slave\obj\Debug\NFT_Slave.csprojResolveAssemblyReference.cache
 C:\Projects\NFT\NFT_Slave\obj\Debug\NFT_Slave.exe
 C:\Projects\NFT\NFT_Slave\obj\Debug\NFT_Slave.pdb
+C:\Projects\NFT\NFT_Slave\bin\Debug\NFT_Master.exe
+C:\Projects\NFT\NFT_Slave\bin\Debug\NFT_Master.pdb

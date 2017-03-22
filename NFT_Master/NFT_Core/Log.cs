@@ -1,6 +1,6 @@
 ﻿using System;
 
-class Log
+public class Log
 {
     public static bool logToFile = false;
 
@@ -41,6 +41,12 @@ class Log
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("[Command] ");
         Console.ForegroundColor = ConsoleColor.Gray;
-        Console.Write("type={0} message={1} sender={2}", c.type, c.message, c.sender);
+        Console.WriteLine("type={0} message=\"{1}\" sender={2}", c.type, c.message, c.sender);
+        //Console.Write("type={0} sender={1} message=", c.type, c.sender);
+        //Console.BackgroundColor = ConsoleColor.Yellow;
+        //Console.ForegroundColor = ConsoleColor.Black;
+        //Console.WriteLine("\"{0}\"", c.message);
+        //Console.BackgroundColor = ConsoleColor.Black;
+        //Console.ForegroundColor = ConsoleColor.Gray;
     }
 }

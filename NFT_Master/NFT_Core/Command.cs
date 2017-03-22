@@ -8,8 +8,8 @@ using System.Runtime.Serialization.Formatters.Binary;
 /// <summary>
 /// Command class for communicating instructions to NFT Slave applications
 /// </summary>
-[Serializable]
-class Command
+[Serializable()]
+public class Command
 {
     public string message { get; set; }
     public string sender { get; set; }

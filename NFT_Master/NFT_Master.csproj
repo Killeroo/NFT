@@ -41,18 +41,16 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command.cs" />
-    <Compile Include="CommandType.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="NFT_Core\Command.cs" />
+    <Compile Include="NFT_Core\CommandType.cs" />
+    <Compile Include="NFT_Core\Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="NFT_Core\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

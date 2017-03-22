@@ -18,7 +18,7 @@ namespace NFT_Master
             Socket sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             IPAddress ip = IPAddress.Parse(args[0]);
             IPEndPoint ep = new IPEndPoint(ip, 11000);
-            Command c = new Command(CommandType.Info, "hello there pal");
+            Command c = new Command(CommandType.Info, "Aimee smells <3");
 
             // Connect to slave
             try
@@ -34,7 +34,7 @@ namespace NFT_Master
 
             // Send command
             c.sender = getLocalIPAddress();
-            serializeCommand(c, sock);//sock.Send(Command.serialize(c));
+            sock.Send(Command.serialize(c));
 
             // Cleanup
             Log.info("Command sent, exiting...");
@@ -55,36 +55,36 @@ namespace NFT_Master
 
 
         /// <summary>
-        /// TEMP - Add to command.cs
+        /// TEMP - Old Serialization methods
         /// </summary>
 
-        static NetworkStream serializeCommand(Command fi, Socket sock)
-        {
-            // Create a stream for storing our serialized object
-            NetworkStream netStream = new NetworkStream(sock);
+        //static NetworkStream serializeCommand(Command fi, Socket sock)
+        //{
+        //    // Create a stream for storing our serialized object
+        //    NetworkStream netStream = new NetworkStream(sock);
 
-            // Serialize the object onto the stream transport medium
-            IFormatter formatter = new BinaryFormatter();
-            formatter.Serialize(netStream, fi);
+        //    // Serialize the object onto the stream transport medium
+        //    IFormatter formatter = new BinaryFormatter();
+        //    formatter.Serialize(netStream, fi);
 
-            // Clean up
-            netStream.Close();
+        //    // Clean up
+        //    netStream.Close();
 
-            // Return the network stream containing our serialized object
-            return netStream;
-        }
+        //    // Return the network stream containing our serialized object
+        //    return netStream;
+        //}
 
-        static Command deserializeCommand(NetworkStream netStream)
-        {
-            // Deseralize our object from the stream
-            IFormatter formatter = new BinaryFormatter();
-            Command fi = (Command)formatter.Deserialize(netStream);
+        //static Command deserializeCommand(NetworkStream netStream)
+        //{
+        //    // Deseralize our object from the stream
+        //    IFormatter formatter = new BinaryFormatter();
+        //    Command fi = (Command)formatter.Deserialize(netStream);
 
-            // Clean up
-            netStream.Close();
+        //    // Clean up
+        //    netStream.Close();
 
-            // Return the deserialized object
-            return fi;
-        }
+        //    // Return the deserialized object
+        //    return fi;
+        //}
     }
 }
