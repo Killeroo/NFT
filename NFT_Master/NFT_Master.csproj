@@ -43,6 +43,7 @@
   <ItemGroup>
     <Compile Include="NFT_Core\Command.cs" />
     <Compile Include="NFT_Core\CommandType.cs" />
+    <Compile Include="NFT_Core\FileOps.cs" />
     <Compile Include="NFT_Core\Log.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

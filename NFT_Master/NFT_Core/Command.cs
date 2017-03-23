@@ -1,58 +1,38 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
+using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
 /// <summary>
-/// Command class for communicating instructions to NFT Slave applications
+/// Command class for communicating instructions between NFT Master and Slave applications
 /// </summary>
 [Serializable()]
 public class Command
 {
-    public string message { get; set; }
-    public string sender { get; set; }
-    public CommandType type { get; set; }
-    public List<string> files = new List<string>();
+    public string sender { get; set; } // IP address of sender
+    public CommandType type { get; set; } // type of command
+    public FileInfo file { get; set; } = null; // File information (optional)
 
+    // Constructors
     public Command() { }
-    public Command(CommandType ct, string[] fileArgs)
+    public Command(CommandType ct)
     {
         type = ct;
-        foreach (string file in files)
-        {
-            files.Add(file);
-        }
     }
-    public Command(CommandType ct, string mesg)
+    public Command(CommandType ct, string pathToFile)
     {
+        // Check file exists
+        if (string.IsNullOrWhiteSpace(pathToFile) || !File.Exists(pathToFile))
+            Log.error("File \"" + pathToFile + "\" could not be found");
+        else
+            file = new FileInfo(pathToFile);
+
         type = ct;
-        message = mesg;
     }
 
-    public void addFile(string filename)
-    {
-        files.Add(filename);
-    }
-
-    private void fetchFile(string addr)
-    {
-
-    }
-    private void generateSignature(string path)
-    {
-
-    }
-    private void generateDelta(string originalSignature, string newSignature)
-    {
-
-    }
-    private void patchFile(string path, string delta)
-    {
-
-    }
-
+    // Serialization functions
     public static byte[] serialize(Command c)
     {
         if (c == null)

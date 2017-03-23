@@ -2,8 +2,6 @@
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-
 
 namespace NFT_Slave
 {
@@ -29,6 +27,7 @@ namespace NFT_Slave
                         using (var stream = client.GetStream())
                         {
                             c = Command.deserialize(stream);
+                            Log.command(c); // Display command
                             break;
                         }
                     }
@@ -47,8 +46,6 @@ namespace NFT_Slave
                 Log.info("Master disconnected");
             }
 
-            // Display command
-            Log.command(c);
             Console.Read();
         }
 

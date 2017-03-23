@@ -5,31 +5,39 @@
     /// </summary>
     Initial = 0,
     /// <summary>
+    /// Synchronize all files between master and slave directories
+    /// </summary>
+    SynchronizeAll = 1,
+    /// <summary>
+    /// Transfer all files present on master to slave
+    /// </summary>
+    TranferAll = 2,
+    /// <summary>
     /// Download a given file
     /// </summary>
-    Fetch = 1,
+    Fetch = 3,
     /// <summary>
     /// Delete a local file
     /// </summary>
-    Delete = 2,
+    Delete = 4,
     /// <summary>
     /// Generate a signature for a file
     /// </summary>
-    Signature = 3,
+    Signature = 5,
     /// <summary>
     /// Create a delta for a file
     /// </summary>
-    Delta = 4, 
+    Delta = 6, 
     /// <summary>
     /// Apply a patch to a file using a given delta
     /// </summary>
-    Patch = 5,
+    Patch = 7,
     /// <summary>
     /// Info message
     /// </summary>
-    Info = 6, 
+    Info = 8, 
     /// <summary>
     /// Error Message
     /// </summary>
-    Error = 7,
+    Error = 9,
 };
