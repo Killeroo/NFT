@@ -41,10 +41,11 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NFT_Core\Command.cs" />
-    <Compile Include="NFT_Core\CommandType.cs" />
-    <Compile Include="NFT_Core\FileOps.cs" />
-    <Compile Include="NFT_Core\Log.cs" />
+    <Compile Include="NFT\Command.cs" />
+    <Compile Include="NFT\CommandType.cs" />
+    <Compile Include="NFT\FileOps.cs" />
+    <Compile Include="NFT\Log.cs" />
+    <Compile Include="NFT\Settings.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

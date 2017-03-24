@@ -34,7 +34,7 @@ class FileOps
             // Write file locally
             using (FileStream fs = File.Create(Path.Combine(destPath, filename)))
                 fileStream.CopyTo(fs);
-            Log.info("File created \"" + Path.Combine(destPath, filename + "\"");
+            Log.info("File created \"" + Path.Combine(destPath, filename + "\""));
         }
         catch (WebException)
         {

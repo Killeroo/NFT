@@ -40,4 +40,8 @@
     /// Error Message
     /// </summary>
     Error = 9,
+    /// <summary>
+    /// Quit Message
+    /// </summary>
+    Quit = 10,
 };

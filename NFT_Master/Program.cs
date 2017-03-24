@@ -40,7 +40,7 @@ namespace NFT_Master
             sock.Close();
         }
 
-        static String getLocalIPAddress()
+        static string getLocalIPAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
             foreach (var ip in host.AddressList)
