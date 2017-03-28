@@ -43,36 +43,39 @@ public class CommandListener
         Log.info("CommandListener started on " + Helper.getLocalIPAddress() + ":" + listeningPort + "...");
 
         // Listening loop
-        while (running)
+        //while (running)
+        //{
+        try
         {
-            try
+            using (var client = listener.AcceptTcpClient())
             {
-                using (var client = listener.AcceptTcpClient())
+                Log.info(client.Client.RemoteEndPoint.ToString() + " connected");
+                using (var stream = client.GetStream())
                 {
-                    // Move loop here only run when c.type != quit
-                    Log.info(client.Client.RemoteEndPoint.ToString() + " connected");
-                    using (var stream = client.GetStream())
+                    while (c.type != CommandType.Quit)
                     {
-            
-                        c = Command.deserialize(stream); // Deserialize incomming command
-                        Log.command(c); // Display
-                        //handleCommand(c); // Process the command
+                        if (stream.CanRead)
+                        {
+                            c = Command.deserialize(stream); // Deserialize incomming command
+                            Log.command(c); // Display
+                                            //handleCommand(c); // Process the command
 
-                        if (c.type == CommandType.Quit)
-                            break;
+                            //if (c.type == CommandType.Quit)
+                            //    break;
+                        }
                     }
                 }
-                Console.WriteLine("heere");
-            }
-            catch (SocketException)
-            {
-                Log.fatal("Connection error occured (SocketException)");
-            }
-            catch (SerializationException)
-            {
-                Log.fatal("Error decoding client stream (SerializationException)");
             }
         }
+        catch (SocketException)
+        {
+            Log.fatal("Connection error occured (SocketException)");
+        }
+        catch (SerializationException)
+        {
+            Log.fatal("Error decoding client stream (SerializationException)");
+        }
+        //}
     }
     private void handleCommand(Command c)
     {

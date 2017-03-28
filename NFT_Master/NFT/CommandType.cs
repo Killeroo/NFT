@@ -30,25 +30,5 @@
     /// Quit Message
     /// </summary>
     Quit = 6,
+    // Fetch (for when a file fails)
 };
-
-///// <summary>
-///// Download a given file
-///// </summary>
-//Fetch = 3,
-///// <summary>
-///// Delete a local file
-///// </summary>
-//Delete = 4,
-///// <summary>
-///// Generate a signature for a file
-///// </summary>
-//Signature = 5,
-///// <summary>
-///// Create a delta for a file
-///// </summary>
-//Delta = 6, 
-///// <summary>
-///// Apply a patch to a file using a given delta
-///// </summary>
-//Patch = 7,
