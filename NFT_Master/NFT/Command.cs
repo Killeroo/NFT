@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -13,7 +13,7 @@ public class Command
 {
     public string sender { get; set; } // IP address of sender
     public CommandType type { get; set; } // type of command
-    public FileInfo file { get; set; } = null; // File information (optional)
+    public List<string> files { get; set; }
 
     // Constructors
     public Command() { }
@@ -21,14 +21,14 @@ public class Command
     {
         type = ct;
     }
-    public Command(CommandType ct, string pathToFile)
+    public Command(CommandType ct, string pathToFiles)
     {
         // Check file exists
-        if (string.IsNullOrWhiteSpace(pathToFile) || !File.Exists(pathToFile))
-            Log.error("File \"" + pathToFile + "\" could not be found");
+        if (string.IsNullOrWhiteSpace(pathToFiles) || !Directory.Exists(pathToFiles))
+            Log.error("Path \"" + pathToFiles + "\" could not be found");
         else
-            file = new FileInfo(pathToFile);
-
+            //file = new FileInfo(pathToFile);
+            //Implement backup reursive file searh feature
         type = ct;
     }
 

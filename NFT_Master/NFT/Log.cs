@@ -41,6 +41,6 @@ public class Log
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("[Command] ");
         Console.ForegroundColor = ConsoleColor.Gray;
-        Console.WriteLine("type={0} sender={2}", c.type, c.sender);
+        Console.WriteLine("type={0} sender={1}", c.type, c.sender);
     }
 }

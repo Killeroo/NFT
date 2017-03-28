@@ -31,58 +31,21 @@ namespace NFT_Master
             }
 
             // Send command
-            c.sender = getLocalIPAddress();
+            c.sender = Helper.getLocalIPAddress();
             sock.Send(Command.serialize(c));
+
+            Console.Read();
+
+            sock.Send(Command.serialize(c));
+
+            Console.Read();
+
+            c.type = CommandType.Quit;
 
             // Cleanup
             Log.info("Command sent, exiting...");
             Console.Read();
             sock.Close();
         }
-
-        static string getLocalIPAddress()
-        {
-            var host = Dns.GetHostEntry(Dns.GetHostName());
-            foreach (var ip in host.AddressList)
-                if (ip.AddressFamily == AddressFamily.InterNetwork)
-                    return ip.ToString();
-            return "";
-        }
-
-
-
-
-        /// <summary>
-        /// TEMP - Old Serialization methods
-        /// </summary>
-
-        //static NetworkStream serializeCommand(Command fi, Socket sock)
-        //{
-        //    // Create a stream for storing our serialized object
-        //    NetworkStream netStream = new NetworkStream(sock);
-
-        //    // Serialize the object onto the stream transport medium
-        //    IFormatter formatter = new BinaryFormatter();
-        //    formatter.Serialize(netStream, fi);
-
-        //    // Clean up
-        //    netStream.Close();
-
-        //    // Return the network stream containing our serialized object
-        //    return netStream;
-        //}
-
-        //static Command deserializeCommand(NetworkStream netStream)
-        //{
-        //    // Deseralize our object from the stream
-        //    IFormatter formatter = new BinaryFormatter();
-        //    Command fi = (Command)formatter.Deserialize(netStream);
-
-        //    // Clean up
-        //    netStream.Close();
-
-        //    // Return the deserialized object
-        //    return fi;
-        //}
     }
 }
