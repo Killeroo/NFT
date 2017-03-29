@@ -52,4 +52,6 @@ public class Command
         ns.Close();
         return c;
     }
+
+    public static bool sendCommand() { }
 }

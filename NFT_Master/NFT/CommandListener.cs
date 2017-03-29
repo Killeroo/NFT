@@ -47,21 +47,52 @@ public class CommandListener
         //{
         try
         {
-            using (var client = listener.AcceptTcpClient())
-            {
-                Log.info(client.Client.RemoteEndPoint.ToString() + " connected");
-                using (var stream = client.GetStream())
-                {
-                    while (c.type != CommandType.Quit)
-                    {
-                        if (stream.CanRead)
-                        {
-                            c = Command.deserialize(stream); // Deserialize incomming command
-                            Log.command(c); // Display
-                                            //handleCommand(c); // Process the command
+            //using (var client = listener.AcceptTcpClient())
+            //{
+            //    Log.info(client.Client.RemoteEndPoint.ToString() + " connected");
+            //    while (c.type != CommandType.Quit)
+            //    {
+            //        using (var stream = client.GetStream())
+            //        {
+            //            if (stream.CanRead)
+            //            {
+            //                c = Command.deserialize(stream); // Deserialize incomming command
+            //                Log.command(c); // Display
+            //                                //handleCommand(c); // Process the command
 
-                            //if (c.type == CommandType.Quit)
-                            //    break;
+            //                //if (c.type == CommandType.Quit)
+            //                //    break;
+            //            }
+            //        }
+            //    }
+            //}
+
+            //var master = listener.AcceptTcpClient();
+
+            //while (master.Connected || c.type != CommandType.Quit)
+            //{
+            //    var stream = master.GetStream();
+
+            //    if (stream.Length > 0)
+            //    {
+            //        c = Command.deserialize(stream); // Deserialize incomming command
+            //        Log.command(c); // Display
+            //    }
+            //}
+
+            bool connected = false;
+
+            while (running)
+            {
+                using (var master = listener.AcceptTcpClient())
+                {
+                    connected = true;
+                    while (connected)
+                    {
+                        Log.info(master.Client.RemoteEndPoint.ToString() + " connected");
+                        using (var stream = master.GetStream())
+                        {
+                            stream.Read();
                         }
                     }
                 }
