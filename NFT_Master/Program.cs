@@ -33,17 +33,17 @@ namespace NFT_Master
             // Send command
             c.sender = Helper.getLocalIPAddress();
             sock.Send(Command.serialize(c));
-            Log.info("Command sent");
+            Log.info("Command sent" + sock.Connected);
 
             Console.Read();
 
+            c.type = CommandType.Abort;
             sock.Send(Command.serialize(c));
-            Log.info("Command sent");
-
-            Console.Read();
+            Log.info("Command sent" + sock.Connected);
 
             c.type = CommandType.Quit;
             sock.Send(Command.serialize(c));
+            Log.info("Command sent" + sock.Connected);
 
             // Cleanup
             Log.info("Command sent, exiting...");

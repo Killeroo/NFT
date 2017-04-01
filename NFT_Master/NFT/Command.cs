@@ -53,5 +53,5 @@ public class Command
         return c;
     }
 
-    public static bool sendCommand() { }
+    //public static bool sendCommand() { }
 }
