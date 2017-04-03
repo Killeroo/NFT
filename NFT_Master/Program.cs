@@ -35,11 +35,11 @@ namespace NFT_Master
             sock.Send(Command.serialize(c));
             Log.info("Command sent" + sock.Connected);
 
-            Console.Read();
-
             c.type = CommandType.Abort;
             sock.Send(Command.serialize(c));
             Log.info("Command sent" + sock.Connected);
+
+            Console.Read();
 
             c.type = CommandType.Quit;
             sock.Send(Command.serialize(c));

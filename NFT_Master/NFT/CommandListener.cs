@@ -24,6 +24,14 @@ public class CommandListener
     }
     public void stop() { }
     public void reset() { }
+    //public bool isConnected()
+    //{
+    //    try
+    //    {
+    //        return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
+    //    }
+    //    catch (SocketException) { return false; }
+    //}
     public bool isRunning()
     {
         // Change
@@ -36,6 +44,7 @@ public class CommandListener
     private void listeningLoop()
     {
         Command c = new Command();
+        string masterAddress = null;
 
         // Start TcpListener
         listener = new TcpListener(IPAddress.Parse(Helper.getLocalIPAddress()), listeningPort);
@@ -43,57 +52,67 @@ public class CommandListener
         Log.info("CommandListener started on " + Helper.getLocalIPAddress() + ":" + listeningPort + "...");
 
         // Listening loop
-        try
+        while (running)
         {
-            while (running)
+            using (var master = listener.AcceptSocket())
             {
-                using (var master = listener.AcceptSocket())
+                try
                 {
-                    Log.info(master.LocalEndPoint + " connected");
+                    masterAddress = master.LocalEndPoint.ToString();
+                    Log.info(masterAddress + " connected");
                     while (master.Connected)
                     {
                         using (var stream = new NetworkStream(master))
                         {
-                            //stream.Read();
-                            c = Command.deserialize(stream);
-                            Log.command(c);
+                            if (stream.DataAvailable)
+                            {
+                                c = Command.deserialize(stream);
+                                Log.command(c);
+
+                                if (c.type == CommandType.Quit)
+                                    break;
+                            }
                         }
+
+                        if (!master.IsConnected())
+                            throw new SocketException();
                     }
                 }
+                catch (SocketException)
+                {
+                    Log.error("Connection error occured (SocketException)");
+                }
+                catch (SerializationException)
+                {
+                    Log.error("Error decoding master stream (SerializationException)");
+                }
+                finally
+                {
+                    Log.info(masterAddress + " disconnected");
+                }
             }
+        }
 
-            // THIS SHOULD WORK FINE (GOOD LOGIC LAYOUT)
-            //while (running)
-            //{
-            //    using (var master = listener.AcceptTcpClient())
-            //    {
-            //        Log.info(master.Client.RemoteEndPoint.ToString() + " connected");
-            //        while (master.Connected)
-            //        {
-            //            using (var stream = master.GetStream())
-            //            {
-            //                //stream.Read();
-            //                c = Command.deserialize(stream);
-            //                Log.command(c);
-            //            }
-            //        }
-            //    }
-            //}
-        }
-        catch (SocketException)
-        {
-            Log.fatal("Connection error occured (SocketException)");
-        }
-        catch (SerializationException)
-        {
-            Log.fatal("Error decoding client stream (SerializationException)");
-        }
+        Console.ReadLine();
+        
     }
     private void handleCommand(Command c)
     {
         switch (c.type)
         {
+            case CommandType.Initial:
+                break;
             case CommandType.SynchronizeAll:
+                break;
+            case CommandType.CleanTransfer:
+                break;
+            case CommandType.Abort:
+                break;
+            case CommandType.Info:
+                break;
+            case CommandType.Error:
+                break;
+            case CommandType.Quit:
                 break;
             default:
                 Log.error("(" + c.sender + ") Command type not recognised");

@@ -20,3 +20,18 @@ public class Helper
         return "";
     }
 }
+
+/// <summary>
+/// Socket class extension to poll if a socket is actively connected
+/// </summary>
+static class SocketExtensions
+{
+    public static bool IsConnected(this Socket socket)
+    {
+        try
+        {
+            return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
+        }
+        catch (SocketException) { return false; }
+    }
+}

@@ -48,6 +48,7 @@
     <Compile Include="NFT\Helper.cs" />
     <Compile Include="NFT\Log.cs" />
     <Compile Include="NFT\Settings.cs" />
+    <Compile Include="NFT\Slave.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
