@@ -15,4 +15,9 @@ class Slave
     public void sendCommand(Command c) { }
     public void reconnect() { }
     public void disconnect() { }
+
+    public static Slave[] findSlaves()
+    {
+
+    }
 }

@@ -22,16 +22,14 @@ public class CommandListener
         running = true;
         listeningLoop();
     }
-    public void stop() { }
-    public void reset() { }
-    //public bool isConnected()
-    //{
-    //    try
-    //    {
-    //        return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
-    //    }
-    //    catch (SocketException) { return false; }
-    //}
+    public void stop()
+    {
+
+    }
+    public void reset()
+    {
+
+    }
     public bool isRunning()
     {
         // Change
@@ -58,22 +56,29 @@ public class CommandListener
             {
                 try
                 {
+                    // Store NFT master ip address
                     masterAddress = master.LocalEndPoint.ToString();
                     Log.info(masterAddress + " connected");
+
+                    // Command recieving loop
                     while (master.Connected)
                     {
                         using (var stream = new NetworkStream(master))
                         {
+                            // Only process when stream has something on it
                             if (stream.DataAvailable)
                             {
+                                // Deserialize and display command
                                 c = Command.deserialize(stream);
                                 Log.command(c);
 
+                                // Disconnect on quit command
                                 if (c.type == CommandType.Quit)
                                     break;
                             }
                         }
 
+                        // Throw exception if master unexpectedly disconnects
                         if (!master.IsConnected())
                             throw new SocketException();
                     }
@@ -92,9 +97,6 @@ public class CommandListener
                 }
             }
         }
-
-        Console.ReadLine();
-        
     }
     private void handleCommand(Command c)
     {
