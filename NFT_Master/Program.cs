@@ -45,6 +45,7 @@ namespace NFT_Master
             sock.Send(Command.serialize(c));
             Log.info("Command sent" + sock.Connected);
 
+            Console.Read();
             // Cleanup
             Log.info("Command sent, exiting...");
             Console.Read();

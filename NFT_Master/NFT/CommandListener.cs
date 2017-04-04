@@ -48,7 +48,7 @@ public class CommandListener
         listener = new TcpListener(IPAddress.Parse(Helper.getLocalIPAddress()), listeningPort);
         listener.Start();
         Log.info("CommandListener started on " + Helper.getLocalIPAddress() + ":" + listeningPort + "...");
-
+        
         // Listening loop
         while (running)
         {
@@ -56,9 +56,10 @@ public class CommandListener
             {
                 try
                 {
-                    // Store NFT master ip address
-                    masterAddress = master.LocalEndPoint.ToString();
-                    Log.info(masterAddress + " connected");
+                    // Store master ip address
+                    IPEndPoint remoteEP = master.RemoteEndPoint as IPEndPoint;
+                    masterAddress = remoteEP.Address.ToString() + ":" + remoteEP.Port.ToString();
+                    Log.info(masterAddress + " [NFT master] connected");
 
                     // Command recieving loop
                     while (master.Connected)
