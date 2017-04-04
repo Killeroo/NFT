@@ -8,7 +8,8 @@ class Slave
     public static Slave[] slaveList;
 
     public IPEndPoint endPoint;
-    public Socket socket;
+    public Socket socket; // DELETE
+    public TcpClient client { get; private set; } // SWITCH TO USE THIS
     public bool isReady;
 
     public Slave(IPEndPoint ep, Socket sock)
@@ -24,10 +25,11 @@ class Slave
     public static void findSlaves(string range)//Slave[] findSlaves()
     {
         Socket scanSock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        IPEndPoint scanEP = null;
+        IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000);
         List<Slave> foundSlaves = new List<Slave>();
         scanEP.Port = 11000; // Default NFT Slave listening port
-        scanSock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 200); // Set timeout on scan socket
+        scanSock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, 200); // Set timeout on scan socket
+        scanSock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 200);
 
         // Split ip address into segments
         string[] addressSegs = range.Split('.');
@@ -45,7 +47,7 @@ class Slave
         }
 
         // Loop through each possible address
-        Log.info("Starting scan on range [" + range + "]");
+        Log.info("Starting slave scan on range [" + range + "]");
         for (int seg1 = segLower[0]; seg1 <= segUpper[0]; seg1++)
         {
             for (int seg2 = segLower[1]; seg2 <= segUpper[1]; seg2++)
@@ -62,9 +64,10 @@ class Slave
                             // Try to connect
                             Log.info("Attempting to connect to " + scanEP.Address.ToString() + ":" + scanEP.Port.ToString() + "...");
                             scanSock.Connect(scanEP);
-                            Log.info("Connection established to " + scanEP.Address.ToString() + ":" + scanEP.Port.ToString() + "[NFT Slave]");
+                            Log.info("Connection established to " + scanEP.Address.ToString() + ":" + scanEP.Port.ToString() + " [NFT Slave]");
                         }
                         catch (SocketException) { }
+                        catch (InvalidOperationException) { }
                     }
                 }
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
@@ -52,37 +53,56 @@ public class CommandListener
         // Listening loop
         while (running)
         {
-            using (var master = listener.AcceptSocket())
+            using (var master = listener.AcceptTcpClient())//listener.AcceptSocket())
             {
                 try
                 {
                     // Store master ip address
-                    IPEndPoint remoteEP = master.RemoteEndPoint as IPEndPoint;
+                    IPEndPoint remoteEP = (IPEndPoint)master.Client.RemoteEndPoint;//IPEndPoint //master.RemoteEndPoint as IPEndPoint;
                     masterAddress = remoteEP.Address.ToString() + ":" + remoteEP.Port.ToString();
                     Log.info(masterAddress + " [NFT master] connected");
 
                     // Command recieving loop
                     while (master.Connected)
                     {
-                        using (var stream = new NetworkStream(master))
+                        using (var stream = master.GetStream())//var stream = new NetworkStream(master))
                         {
-                            // Only process when stream has something on it
-                            if (stream.DataAvailable)
+                            byte[] buffer = new byte[4096];
+                            using (MemoryStream ms = new MemoryStream())
                             {
-                                // Deserialize and display command
-                                c = Command.deserialize(stream);
+                                int readBytes = 0;
+                                while ((readBytes = stream.Read(buffer, 0, buffer.Length)) > 0)
+                                {
+                                    ms.Write(buffer, 0, readBytes);
+                                }
+
+                                c = Command.deserialize(ms);
                                 Log.command(c);
 
-                                // Disconnect on quit command
                                 if (c.type == CommandType.Quit)
                                     break;
                             }
+                            //// Only process when stream has something on it
+                            //if (stream.DataAvailable)
+                            //{
+                            //    // Deserialize and display command
+                            //    c = Command.deserialize(stream);
+                            //    Log.command(c);
+
+                            //    // Disconnect on quit command
+                            //    if (c.type == CommandType.Quit)
+                            //        break;
+                            //}
                         }
 
                         // Throw exception if master unexpectedly disconnects
-                        if (!master.IsConnected())
-                            throw new SocketException();
+                        //if (!master.IsConnected())
+                        //    throw new SocketException();
                     }
+                }
+                catch (IOException)
+                {
+                    Log.error("Connection unexpectedly closed (IOException)");
                 }
                 catch (SocketException)
                 {

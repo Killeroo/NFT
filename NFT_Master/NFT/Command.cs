@@ -45,7 +45,7 @@ public class Command
             return ms.ToArray();
         }
     }
-    public static Command deserialize(NetworkStream ns)
+    public static Command deserialize(Stream ns)//NetworkStream ns)
     {
         IFormatter formatter = new BinaryFormatter();
         Command c = (Command)formatter.Deserialize(ns);
