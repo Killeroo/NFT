@@ -6,7 +6,7 @@ namespace NFT_Slave
     {
         static void Main(string[] args)
         {
-            CommandListener listener = new CommandListener();
+            CommandListener listener = new CommandListener(11000);
 
             listener.start();
         }

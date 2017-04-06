@@ -5,141 +5,60 @@ using System.Net.Sockets;
 using System.Runtime.Serialization;
 
 /// <summary>
-/// Async class for recieving Command messages, using TCPListening loop
+/// Class for recieving Command messages from NFT master application
 /// </summary>
 public class CommandListener
 {
-    public bool running;
+    public bool isListening { get; private set; }
+    public bool isConnected { get; private set; }
+
+    private TcpClient master;
     private TcpListener listener;
+    private IPEndPoint masterEP;
+    private NetworkStream stream;
     private int listeningPort;
 
-    public CommandListener(int port = 11000)
+    public CommandListener(int port)
     {
         listeningPort = port;
+        listener = new TcpListener(IPAddress.Parse(Helper.getLocalIPAddress()), listeningPort);
     }
 
     public void start()
     {
-        running = true;
         listeningLoop();
+        Console.ReadLine();
     }
-    public void stop()
-    {
+    public void stop() { }
 
-    }
-    public void reset()
-    {
-
-    }
-    public bool isRunning()
-    {
-        // Change
-        if (listener == null)
-            return false;
-        else
-            return true;
-    }
-
+    /// <summary>
+    /// Listens for TCP connection for NFT master
+    /// </summary>
     private void listeningLoop()
     {
-        Command c = new Command();
-        string masterAddress = null;
-
-        // Start TcpListener
-        listener = new TcpListener(IPAddress.Parse(Helper.getLocalIPAddress()), listeningPort);
+        // Start Tcplistener
         listener.Start();
-        Log.info("CommandListener started on " + Helper.getLocalIPAddress() + ":" + listeningPort + "...");
-        
+        Log.info("Listening for NFT Master on " + Helper.getLocalIPAddress() + ":" + listeningPort + "...");
+        isListening = true;
+
         // Listening loop
-        while (running)
+        while (true)
         {
-            using (var master = listener.AcceptTcpClient())//listener.AcceptSocket())
+            master = listener.AcceptTcpClient();
+
+            if (master != null)
             {
-                try
-                {
-                    // Store master ip address
-                    IPEndPoint remoteEP = (IPEndPoint)master.Client.RemoteEndPoint;//IPEndPoint //master.RemoteEndPoint as IPEndPoint;
-                    masterAddress = remoteEP.Address.ToString() + ":" + remoteEP.Port.ToString();
-                    Log.info(masterAddress + " [NFT master] connected");
-
-                    // Command recieving loop
-                    while (master.Connected)
-                    {
-                        using (var stream = master.GetStream())//var stream = new NetworkStream(master))
-                        {
-                            byte[] buffer = new byte[4096];
-                            using (MemoryStream ms = new MemoryStream())
-                            {
-                                int readBytes = 0;
-                                while ((readBytes = stream.Read(buffer, 0, buffer.Length)) > 0)
-                                {
-                                    ms.Write(buffer, 0, readBytes);
-                                }
-
-                                c = Command.deserialize(ms);
-                                Log.command(c);
-
-                                if (c.type == CommandType.Quit)
-                                    break;
-                            }
-                            //// Only process when stream has something on it
-                            //if (stream.DataAvailable)
-                            //{
-                            //    // Deserialize and display command
-                            //    c = Command.deserialize(stream);
-                            //    Log.command(c);
-
-                            //    // Disconnect on quit command
-                            //    if (c.type == CommandType.Quit)
-                            //        break;
-                            //}
-                        }
-
-                        // Throw exception if master unexpectedly disconnects
-                        //if (!master.IsConnected())
-                        //    throw new SocketException();
-                    }
-                }
-                catch (IOException)
-                {
-                    Log.error("Connection unexpectedly closed (IOException)");
-                }
-                catch (SocketException)
-                {
-                    Log.error("Connection error occured (SocketException)");
-                }
-                catch (SerializationException)
-                {
-                    Log.error("Error decoding master stream (SerializationException)");
-                }
-                finally
-                {
-                    Log.info(masterAddress + " disconnected");
-                }
+                // Store NFT Master endpoint
+                masterEP = (IPEndPoint)master.Client.RemoteEndPoint;
+                Log.info(masterEP.Address.ToString() + ":" + masterEP.Port.ToString() + " [NFT Master] connected");
+                break; // Exit listening loop
             }
         }
+
+        // Cleanup
+        listener.Stop();
+        isListening = false;
     }
-    private void handleCommand(Command c)
-    {
-        switch (c.type)
-        {
-            case CommandType.Initial:
-                break;
-            case CommandType.SynchronizeAll:
-                break;
-            case CommandType.CleanTransfer:
-                break;
-            case CommandType.Abort:
-                break;
-            case CommandType.Info:
-                break;
-            case CommandType.Error:
-                break;
-            case CommandType.Quit:
-                break;
-            default:
-                Log.error("(" + c.sender + ") Command type not recognised");
-                break;
-        }
-    }
+    private void commandLoop() { }
+    private void handleCommand() { }
 }
