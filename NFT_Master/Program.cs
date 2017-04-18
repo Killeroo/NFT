@@ -43,6 +43,15 @@ namespace NFT_Master
             }
             catch(Exception) { Log.fatal("sadsd"); }
 
+            try
+            {
+                byte[] buffer = new byte[4096];
+                c.type = CommandType.CleanTransfer;
+                buffer = Command.serialize(c);
+                slave.GetStream().Write(buffer, 0, buffer.Length);
+                Log.info("Command sent");
+            }
+            catch (Exception) { Log.fatal("sadsd"); }
 
             Console.ReadLine();
 

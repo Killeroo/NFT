@@ -27,6 +27,7 @@ public class CommandListener
     public void start()
     {
         listeningLoop();
+        commandLoop();
         Console.ReadLine();
     }
     public void stop() { }
@@ -44,14 +45,32 @@ public class CommandListener
         // Listening loop
         while (true)
         {
-            master = listener.AcceptTcpClient();
-
-            if (master != null)
+            try
             {
-                // Store NFT Master endpoint
-                masterEP = (IPEndPoint)master.Client.RemoteEndPoint;
-                Log.info(masterEP.Address.ToString() + ":" + masterEP.Port.ToString() + " [NFT Master] connected");
-                break; // Exit listening loop
+                master = listener.AcceptTcpClient();
+
+                if (master != null)
+                {
+                    // Store NFT Master endpoint
+                    masterEP = (IPEndPoint)master.Client.RemoteEndPoint;
+                    stream = master.GetStream();
+                    Log.info(masterEP.Address.ToString() + ":" + masterEP.Port.ToString() + " [NFT Master] connected");
+                    break; // Exit listening loop
+                }
+            }
+            catch (SocketException)
+            {
+                Log.error("Error connecting to master client (SocketException)");
+            }
+            catch (ObjectDisposedException)
+            {
+                Log.error("Client object failure (ObjectDisposedException)");
+            }
+            catch (Exception e)
+            {
+                Log.error("General exception occured (Exception)");
+                Log.info("---Stacktrace---");
+                Log.info(e.ToString());
             }
         }
 
@@ -59,6 +78,65 @@ public class CommandListener
         listener.Stop();
         isListening = false;
     }
-    private void commandLoop() { }
+    private void commandLoop()
+    {
+        Command c = new Command();
+        isConnected = true;
+        Log.info("Listening to " + masterEP.Address.ToString() + "...");
+
+        // Command recieving loop
+        while (true)
+        {
+            byte[] buffer = new byte[4096];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int bytesRead = 0;
+
+                try
+                {
+                    do
+                    {
+                        // Read data from client stream
+                        bytesRead = stream.Read(buffer, 0, buffer.Length);
+                        ms.Write(buffer, 0, bytesRead);
+                    }
+                    while (stream.DataAvailable);
+
+                    // Deserialize command 
+                    c = Command.deserialize(ms);
+                    Log.command(c);
+                }
+                catch (SerializationException e)
+                {
+                    Log.error("Cannot parse client stream (SerializationException) - " + e.Message);
+                }
+                catch (IOException)
+                {
+                    Log.error("Connection failure (IOException)");
+                    isConnected = false;
+                }
+                catch (ObjectDisposedException)
+                {
+                    Log.error("Client object failure (ObjectDiposedException)");
+                    isConnected = false;
+                }
+                catch (Exception e)
+                {
+                    Log.error("General exception occured (Exception)");
+                    Log.info("---Stacktrace---");
+                    Log.info(e.ToString());
+                    isConnected = false;
+                }
+
+                // Disconnect on quit flags
+                if (c.type == CommandType.Quit || isConnected == false)
+                    break;
+            }
+        }
+
+        // Clean up
+        Log.info(masterEP.Address + ":" + masterEP.Port + " disconnected");
+        isConnected = false;
+    }
     private void handleCommand() { }
 }

@@ -10,6 +10,7 @@ class Slave
     public IPEndPoint endPoint;
     public Socket socket; // DELETE
     public TcpClient client { get; private set; } // SWITCH TO USE THIS
+    public NetworkStream stream { get; private set; }
     public bool isReady;
 
     public Slave(IPEndPoint ep, Socket sock)

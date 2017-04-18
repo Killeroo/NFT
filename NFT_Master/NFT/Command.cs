@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Net.Sockets;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
@@ -45,11 +44,12 @@ public class Command
             return ms.ToArray();
         }
     }
-    public static Command deserialize(Stream ns)//NetworkStream ns)
+    public static Command deserialize(MemoryStream ms)//NetworkStream ns)
     {
         IFormatter formatter = new BinaryFormatter();
-        Command c = (Command)formatter.Deserialize(ns);
-        ns.Close();
+        ms.Seek(0, SeekOrigin.Begin);
+        Command c = (Command)formatter.Deserialize(ms);
+        ms.Close();
         return c;
     }
 
