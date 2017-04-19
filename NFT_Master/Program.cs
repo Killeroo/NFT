@@ -12,18 +12,25 @@ namespace NFT_Master
             if (args.Length == 0 || string.IsNullOrWhiteSpace(args[0]))
                 Log.fatal("Please enter IP of NFT Slave");
 
-            ServerManager iisManager = new ServerManager();
-            iisManager.Sites["NewSite"].Stop();
-            //iisManager.Sites.Add("NewSite", "E:\\", 80);
-            //iisManager.CommitChanges();
+            TransferServer ts = new TransferServer();
 
-            foreach (var site in iisManager.Sites)
-            {
-                Console.WriteLine(site.Name);
-                //Console.WriteLine(site.State);
-            }
+            ts.displaySites();
+            ts.start();
 
             Console.ReadLine();
+
+            //ServerManager iisManager = new ServerManager();
+            //iisManager.Sites["NewSite"].Stop();
+            ////iisManager.Sites.Add("NewSite", "E:\\", 80);
+            ////iisManager.CommitChanges();
+
+            //foreach (var site in iisManager.Sites)
+            //{
+            //    Console.WriteLine(site.Name);
+            //    //Console.WriteLine(site.State);
+            //}
+
+            //Console.ReadLine();
 
             //Command c = new Command();
             //c.type = CommandType.Abort;

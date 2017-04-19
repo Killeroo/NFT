@@ -26,12 +26,24 @@ public class Settings
         // Check if settings exist
         if (!exists())
             createDefaultSettings();
+
+        // Check that WorkingDirectory exists
+        if (!Directory.Exists(WorkingDirectory))
+        {
+            try
+            {
+                Directory.CreateDirectory(WorkingDirectory);
+            }
+            catch (IOException) { Log.fatal("Cannot create working directory (IOException)"); }
+            catch (UnauthorizedAccessException) { Log.fatal("Cannot create working directory, Access Denied (UnauthAccessException)"); }
+            catch (Exception) { Log.fatal("Cannot create working directory (Exception)"); }
+        }
     }
 
     private void createDefaultSettings()
     {
         Registry.SetValue(settingsRegPath, "WorkingDirectory", @"C:\NFT", RegistryValueKind.String);
-        Registry.SetValue(settingsRegPath, "WorkingDirectory", 1, RegistryValueKind.DWord);
+        Registry.SetValue(settingsRegPath, "NumberOfThreads", 1, RegistryValueKind.DWord);
     }
     private bool exists()
     {

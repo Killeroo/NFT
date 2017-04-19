@@ -4,7 +4,7 @@ using Microsoft.Web.Administration;
 /// <summary>
 /// Setup and control IIS HTTP transfer server
 /// </summary>
-class TransferServer
+public class TransferServer
 {
     private const string SITE_NAME = "NFT_Transfer_Server";
 
@@ -34,6 +34,11 @@ class TransferServer
             iisManager.CommitChanges();
             Log.info("[" + url + "] IIS server stopped");
         }
+    }
+    public void displaySites()
+    {
+        foreach (var site in iisManager.Sites)
+            Log.info("Site " + site.Name + " active");
     }
 
     private bool checkIfSiteExists()
