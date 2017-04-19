@@ -2,26 +2,80 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.IO;
 
 class Slave
 {
     public static Slave[] slaveList;
 
     public IPEndPoint endPoint;
-    public Socket socket; // DELETE
-    public TcpClient client { get; private set; } // SWITCH TO USE THIS
+    public TcpClient client { get; private set; }
     public NetworkStream stream { get; private set; }
-    public bool isReady;
+    public bool isConnected { get; private set; }
 
-    public Slave(IPEndPoint ep, Socket sock)
+    public Slave(IPEndPoint ep)
     {
+        client = new TcpClient();
         endPoint = ep;
-        socket = sock;
+        connect();
     }
 
-    public void sendCommand(Command c) { }
-    public void reconnect() { }
-    public void disconnect() { }
+    public void sendCommand(Command c)
+    {
+        try
+        {
+            byte[] buffer = new byte[4096];
+            buffer = Command.serialize(c);
+            Log.command(c);
+            stream.Write(buffer, 0, buffer.Length);
+            Log.info("Command sent");
+        }
+        catch (IOException)
+        {
+            Log.error("Failed to send command (IOException)");
+        }
+        catch (ObjectDisposedException)
+        {
+            Log.error("Object failure (ObjectDisposedException)");
+        }
+        catch (Exception e)
+        {
+            Log.error("General exception occured (Exception)");
+            Log.info("---Stacktrace---");
+            Log.info(e.ToString());
+        }
+    }
+    public void connect()
+    {
+        try
+        {
+            Log.info("Connecting to " + endPoint.Address + ":" + endPoint.Port + "...");
+            client.Connect(endPoint);
+            Log.info("Connection established");
+            stream = client.GetStream();
+        }
+        catch (SocketException)
+        {
+            Log.error("Failed to connect to slave (SocketException)");
+        }
+        catch (ObjectDisposedException)
+        {
+            Log.error("Object failure (ObjectDisposedException)");
+        }
+    }
+    public void disconnect()
+    {
+        // Construct command
+        Command c = new Command();
+        c.type = CommandType.Quit;
+
+        // Send quit command to slave
+        sendCommand(c);
+
+        // Cleanup
+        client.Close();
+        stream.Close();
+    }
 
     public static void findSlaves(string range)//Slave[] findSlaves()
     {
@@ -74,8 +128,7 @@ class Slave
             }
         }
     }
-    public static void sendCommandToAll()
-    {
+    public static void sendToAllSlaves(Command c) { }
 
-    }
+    private bool checkConnected() { return true; }
 }

@@ -9,6 +9,8 @@ namespace NFT_Slave
             CommandListener listener = new CommandListener(11000);
 
             listener.start();
+
+            Console.ReadLine();
         }
     }
 }

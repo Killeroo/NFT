@@ -28,7 +28,6 @@ public class CommandListener
     {
         listeningLoop();
         commandLoop();
-        Console.ReadLine();
     }
     public void stop() { }
 
@@ -78,6 +77,9 @@ public class CommandListener
         listener.Stop();
         isListening = false;
     }
+    /// <summary>
+    /// Listens for Commands from NFT master
+    /// </summary>
     private void commandLoop()
     {
         Command c = new Command();
@@ -109,6 +111,7 @@ public class CommandListener
                 catch (SerializationException e)
                 {
                     Log.error("Cannot parse client stream (SerializationException) - " + e.Message);
+                    isConnected = false;
                 }
                 catch (IOException)
                 {
@@ -138,5 +141,8 @@ public class CommandListener
         Log.info(masterEP.Address + ":" + masterEP.Port + " disconnected");
         isConnected = false;
     }
+    /// <summary>
+    /// Handles recieved commands from NFT master
+    /// </summary>
     private void handleCommand() { }
 }

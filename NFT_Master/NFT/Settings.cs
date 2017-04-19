@@ -8,18 +8,18 @@ using Microsoft.Win32;
 public class Settings
 {
     // Reg settings
-    public string WorkingDirectory
+    public static string WorkingDirectory
     {
         get { return Registry.GetValue(settingsRegPath, "WorkingDirectory", @"C:\NFT").ToString(); }
         set { if (Directory.Exists(value)) { Registry.SetValue(settingsRegPath, "WorkingDirectory", value, RegistryValueKind.String); } }
     }
-    public int NumThreads
+    public static int NumThreads
     {
         get { return Convert.ToInt32(Registry.GetValue(settingsRegPath, "NumberOfThreads", "1")); }
         set { if (value < 5) { Registry.SetValue(settingsRegPath, "NumberOfThreads", value, RegistryValueKind.DWord); } }
     }
 
-    private string settingsRegPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\NFT\";
+    private static string settingsRegPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\NFT\";
 
     public Settings()
     {

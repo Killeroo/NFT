@@ -10,15 +10,24 @@ using System.Runtime.Serialization.Formatters.Binary;
 [Serializable()]
 public class Command
 {
-    public string sender { get; set; } // IP address of sender
     public CommandType type { get; set; } // type of command
     public List<string> files { get; set; }
+    public string sender { get; set; } // IP address of sender
+    public string reciever { get; set; } // IP address of recipient
 
     // Constructors
-    public Command() { }
+    public Command()
+    {
+        sender = Helper.getLocalIPAddress();
+    }
     public Command(CommandType ct)
     {
         type = ct;
+        sender = Helper.getLocalIPAddress();
+    }
+    public Command(string destinationIP)
+    {
+        reciever = destinationIP;
     }
     public Command(CommandType ct, string pathToFiles)
     {

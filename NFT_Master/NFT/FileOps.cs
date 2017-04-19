@@ -5,7 +5,7 @@ using System.Net;
 /// <summary>
 /// Stores static helper methods for file operations required by NFT
 /// </summary>
-class FileOps
+public class FileOps
 {
     /// <summary>
     /// Transfer file from a remote web server
@@ -38,27 +38,27 @@ class FileOps
         }
         catch (WebException)
         {
-            Log.error("Request to \"" + url + "\" timed out. (WebException)");
+            Log.error("Request to \"" + url + "\" timed out (WebException)");
         }
         catch (UnauthorizedAccessException)
         {
-            Log.error("Cannot create file \"" + filename + "\". (Unauthorized Access)");
+            Log.error("Cannot create file \"" + filename + "\" (Unauthorized Access)");
         }
         catch (PathTooLongException)
         {
-            Log.error("Cannot create file \"" + filename + "\". (Path Too Long)");
+            Log.error("Cannot create file \"" + filename + "\" (Path Too Long)");
         }
         catch (DirectoryNotFoundException)
         {
-            Log.error("ECannot create file \"" + filename + "\". (Destination Directory not Found)");
+            Log.error("ECannot create file \"" + filename + "\" (Destination Directory not Found)");
         }
         catch (IOException)
         {
-            Log.error("Cannot create file \"" + filename + "\". (IOException)");
+            Log.error("Cannot create file \"" + filename + "\" (IOException)");
         }
         catch (NotSupportedException)
         {
-            Log.error("Cannot transfer file \"" + filename + "\". (NotSupportedException)");
+            Log.error("Cannot transfer file \"" + filename + "\" (NotSupportedException)");
         }
         catch (System.Security.SecurityException)
         {
@@ -73,7 +73,7 @@ class FileOps
     /// Generate rsync signature for a given file
     /// </summary>
     /// <param name="filePath"></param>
-    public static void generateSignature(string filePath)
+    public static void createSignature(string filePath)
     {
 
     }
@@ -82,7 +82,7 @@ class FileOps
     /// </summary>
     /// <param name="originalSignaturePath"></param>
     /// <param name="newSignaturePath"></param>
-    public static void generateDelta(string originalSignaturePath, string newSignaturePath)
+    public static void createDelta(string originalSignaturePath, string newSignaturePath)
     {
 
     }
