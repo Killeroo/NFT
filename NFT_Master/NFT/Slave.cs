@@ -13,6 +13,8 @@ class Slave
     public NetworkStream stream { get; private set; }
     public bool isConnected { get; private set; }
 
+    private int curSeqNum = 0; // Current command sequence number
+
     public Slave(IPEndPoint ep)
     {
         client = new TcpClient();
@@ -25,6 +27,8 @@ class Slave
         try
         {
             byte[] buffer = new byte[4096];
+            curSeqNum++; // Increment sequence number
+            c.seq = curSeqNum;
             buffer = Command.serialize(c);
             Log.command(c);
             stream.Write(buffer, 0, buffer.Length);

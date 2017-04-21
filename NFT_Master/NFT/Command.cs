@@ -14,6 +14,7 @@ public class Command
     public List<string> files { get; set; }
     public string sender { get; set; } // IP address of sender
     public string reciever { get; set; } // IP address of recipient
+    public int seq { get; set; } // Sequence number
 
     // Constructors
     public Command()

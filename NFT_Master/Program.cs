@@ -12,12 +12,12 @@ namespace NFT_Master
             if (args.Length == 0 || string.IsNullOrWhiteSpace(args[0]))
                 Log.fatal("Please enter IP of NFT Slave");
 
-            TransferServer ts = new TransferServer();
+            //TransferServer ts = new TransferServer();
 
-            ts.displaySites();
-            ts.start();
+            //ts.displaySites();
+            //ts.start();
 
-            Console.ReadLine();
+            //Console.ReadLine();
 
             //ServerManager iisManager = new ServerManager();
             //iisManager.Sites["NewSite"].Stop();
@@ -32,21 +32,21 @@ namespace NFT_Master
 
             //Console.ReadLine();
 
-            //Command c = new Command();
-            //c.type = CommandType.Abort;
-            //IPAddress ip = IPAddress.Parse(args[0]);
-            //IPEndPoint ep = new IPEndPoint(ip, 11000);
-            //Slave s = new Slave(ep);
+            Command c = new Command();
+            c.type = CommandType.Abort;
+            IPAddress ip = IPAddress.Parse(args[0]);
+            IPEndPoint ep = new IPEndPoint(ip, 11000);
+            Slave s = new Slave(ep);
 
-            //Console.ReadLine();
+            Console.ReadLine();
 
-            //s.sendCommand(c);
+            s.sendCommand(c);
 
-            //Console.ReadLine();
+            Console.ReadLine();
 
-            //s.disconnect();
+            s.disconnect();
 
-            //Console.ReadLine();
+            Console.ReadLine();
 
         }
     }
