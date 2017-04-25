@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 
-class Slave
+public class Slave
 {
     public static List<Slave> slaves = new List<Slave>();
 
@@ -61,7 +61,7 @@ class Slave
             // Async connection attempt
             //client.Connect(endPoint);
             var result = client.BeginConnect(endPoint.Address.ToString(), endPoint.Port, null, null);
-            var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(250));//FromSeconds(1)); // Set timeout 
+            var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(500));//FromSeconds(1)); // Set timeout 
             if (!success)
                 throw new SocketException();
 

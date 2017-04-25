@@ -51,10 +51,10 @@ public class Log
         Console.Write("seq={2} type={0} sender={1} destination={3}", c.type, c.sender, c.seq, c.reciever);
 
         // Display message if exists
-        if (c.message == "" && c.type == CommandType.Info)
-            Console.WriteLine();
-        else
+        if (c.message != "" && c.type == CommandType.Info)
             Console.WriteLine(" message=\"{0}\"", c.message);
+        else
+            Console.WriteLine();
     }
 
     private static void title()

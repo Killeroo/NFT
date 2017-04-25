@@ -48,9 +48,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\NFT_Master\NFT_Master.csproj">
-      <Project>{7dae8268-64fd-4a95-b262-ff677758a7c3}</Project>
-      <Name>NFT_Master</Name>
+    <ProjectReference Include="..\NFT_Core\NFT_Core\NFT_Core.csproj">
+      <Project>{5ce70744-2e60-48bf-8bf8-a97ae93897ca}</Project>
+      <Name>NFT_Core</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

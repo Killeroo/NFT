@@ -2,6 +2,8 @@
 using System.IO;
 using Microsoft.Win32;
 
+//BUG: Not saving registry settings
+
 /// <summary>
 /// Allows modification of NFT registry setting
 /// </summary>
@@ -21,7 +23,7 @@ public class Settings
     public static int SimultaneousTransfers
     {
         get { return Convert.ToInt32(Registry.GetValue(settingsRegPath, "SimultaneousTransfers", "5")); }
-        set { if (value < 5) { Registry.SetValue(settingsRegPath, "SimultaneousTransfers", value, RegistryValueKind.DWord); } }
+        set { Registry.SetValue(settingsRegPath, "SimultaneousTransfers", value, RegistryValueKind.DWord); }
     }
 
     private static string settingsRegPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\NFT\";

@@ -22,7 +22,7 @@ namespace NFT_Master
             // Load settings
             Settings set = new Settings();
 
-            Slave.scan("192.168.0.1-100");
+            Slave.scan(args[0]);//"192.168.4.1-100");
 
             foreach (var slave in Slave.slaves)
                 slave.send(c);

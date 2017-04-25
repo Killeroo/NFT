@@ -14,6 +14,8 @@ namespace NFT_Slave
             listener.start();
 
             Console.ReadLine();
+
+            // Add control C or exit event handler
         }
     }
 }

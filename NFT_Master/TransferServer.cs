@@ -1,6 +1,8 @@
 ﻿using System;
 using Microsoft.Web.Administration;
 
+//TODO: Move to core when done
+
 /// <summary>
 /// Setup and control IIS HTTP transfer server
 /// </summary>
