@@ -34,9 +34,9 @@ public class Settings
             {
                 Directory.CreateDirectory(WorkingDirectory);
             }
-            catch (IOException) { Log.fatal("Cannot create working directory (IOException)"); }
-            catch (UnauthorizedAccessException) { Log.fatal("Cannot create working directory, Access Denied (UnauthAccessException)"); }
-            catch (Exception) { Log.fatal("Cannot create working directory (Exception)"); }
+            catch (IOException) { Log.fatal("Cannot create working directory [" + WorkingDirectory + "]"); }
+            catch (UnauthorizedAccessException) { Log.fatal("Access Denied, cannot create working directory [" + WorkingDirectory + "]"); }
+            catch (Exception) { Log.fatal("Cannot create working directory [" + WorkingDirectory + "]"); }
         }
     }
 
@@ -47,7 +47,22 @@ public class Settings
     }
     private bool exists()
     {
-        RegistryKey r = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, @"Software\NFT");
+        RegistryKey r = null;
+
+        try
+        {
+            r = RegistryKey.OpenRemoteBaseKey(RegistryHive.LocalMachine, @"Software\NFT");
+        }
+        catch (IOException)
+        {
+            Log.info("Cannot find registry settings");
+        }
+        catch (Exception e)
+        {
+            Log.error("Could not load registry settings");
+            Log.info("---Stacktrace---\n" + e.ToString());
+            Log.info(e.ToString());
+        }
 
         if (r != null)
             return true;

@@ -13,8 +13,8 @@ public class Command
     public CommandType type { get; set; } // type of command
     public List<string> files { get; set; }
     public string sender { get; set; } // IP address of sender
-    public string reciever { get; set; } // IP address of recipient
-    public int seq { get; set; } // Sequence number
+    public string reciever { get; set; } = ""; // IP address of recipient
+    public int seq { get; set; } = 0;// Sequence number
 
     // Constructors
     public Command()
@@ -26,19 +26,20 @@ public class Command
         type = ct;
         sender = Helper.getLocalIPAddress();
     }
-    public Command(string destinationIP)
+    public Command(CommandType ct, string destinationIP)
     {
+        type = ct;
         reciever = destinationIP;
     }
-    public Command(CommandType ct, string pathToFiles)
+    
+    public void addFiles(string pathToFiles)
     {
-        // Check file exists
+        // Check path exists
         if (string.IsNullOrWhiteSpace(pathToFiles) || !Directory.Exists(pathToFiles))
             Log.error("Path \"" + pathToFiles + "\" could not be found");
-        else
+        //else
             //file = new FileInfo(pathToFile);
-            //Implement backup reursive file searh feature
-        type = ct;
+            //Implement backup reursive file searh feature  
     }
 
     // Serialization functions
@@ -63,4 +64,8 @@ public class Command
         return c;
     }
 
+    // Randomise file lists to avoid overloading server
+    private void randomiseFiles() { }
+
 }
+    

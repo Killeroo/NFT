@@ -16,6 +16,7 @@ public class CommandListener
     private TcpListener listener;
     private IPEndPoint masterEP;
     private NetworkStream stream;
+    private bool running;
     private int listeningPort;
 
     public CommandListener(int port)
@@ -26,10 +27,18 @@ public class CommandListener
 
     public void start()
     {
-        listeningLoop();
-        commandLoop();
+        running = true;
+
+        while (running)
+        {
+            listeningLoop();
+            commandLoop();
+        }
     }
-    public void stop() { }
+    public void stop()
+    {
+        running = false;
+    }
 
     /// <summary>
     /// Listens for TCP connection for NFT master
@@ -42,7 +51,7 @@ public class CommandListener
         isListening = true;
 
         // Listening loop
-        while (true)
+        while (running)
         {
             try
             {
@@ -59,15 +68,15 @@ public class CommandListener
             }
             catch (SocketException)
             {
-                Log.error("Error connecting to master client (SocketException)");
+                Log.error("Error connecting to master client");
             }
             catch (ObjectDisposedException)
             {
-                Log.error("Client object failure (ObjectDisposedException)");
+                Log.error("Client object failure");
             }
             catch (Exception e)
             {
-                Log.error("General exception occured (Exception)");
+                Log.error("An exception occured");
                 Log.info("---Stacktrace---");
                 Log.info(e.ToString());
             }
@@ -87,7 +96,7 @@ public class CommandListener
         Log.info("Listening to " + masterEP.Address.ToString() + "...");
 
         // Command recieving loop
-        while (true)
+        while (running)
         {
             byte[] buffer = new byte[4096];
             using (MemoryStream ms = new MemoryStream())
@@ -110,7 +119,7 @@ public class CommandListener
                 }
                 catch (SerializationException e)
                 {
-                    Log.error("Cannot parse client stream (SerializationException) - " + e.Message);
+                    Log.error("Cannot parse client stream - " + e.Message);
                     isConnected = false;
                 }
                 catch (IOException)
@@ -120,12 +129,12 @@ public class CommandListener
                 }
                 catch (ObjectDisposedException)
                 {
-                    Log.error("Client object failure (ObjectDiposedException)");
+                    Log.error("Client object failure");
                     isConnected = false;
                 }
                 catch (Exception e)
                 {
-                    Log.error("General exception occured (Exception)");
+                    Log.error("An exception occured");
                     Log.info("---Stacktrace---");
                     Log.info(e.ToString());
                     isConnected = false;

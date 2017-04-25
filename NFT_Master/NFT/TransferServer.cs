@@ -23,6 +23,8 @@ public class TransferServer
             iisManager.Sites.Add(SITE_NAME, "http", ":8000:", Settings.WorkingDirectory);
 
         iisManager.CommitChanges();
+
+        iisManager.Sites[SITE_NAME].Start();
     }
     public void stop()
     {

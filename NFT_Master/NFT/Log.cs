@@ -32,6 +32,7 @@ public class Log
         Console.WriteLine("Press any key to exit...");
         Console.Read();
 
+        // Exit program
         System.Environment.Exit(1);
     }
 
@@ -41,6 +42,6 @@ public class Log
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("[Command] ");
         Console.ForegroundColor = ConsoleColor.Gray;
-        Console.WriteLine("seq={2} type={0} sender={1}", c.type, c.sender, c.seq);
+        Console.WriteLine("seq={2} type={0} sender={1} destination={2}", c.type, c.sender, c.seq, c.reciever);
     }
 }

@@ -8,14 +8,31 @@ namespace NFT_Master
     {
         static void Main(string[] args)
         {
-            // Arguments check
-            if (args.Length == 0 || string.IsNullOrWhiteSpace(args[0]))
-                Log.fatal("Please enter IP of NFT Slave");
+            //// Arguments check
+            //if (args.Length == 0 || string.IsNullOrWhiteSpace(args[0]))
+            //    Log.fatal("Please enter IP of NFT Slave");
+
+            Command c = new Command();
+            c.type = CommandType.Info;
+
+            Slave.scan("192.168.0.1-100");
+
+            foreach (var slave in Slave.slaves)
+                slave.send(c);
+
+            foreach (var slave in Slave.slaves)
+                slave.disconnect();
+
+            Console.ReadLine();
 
             //TransferServer ts = new TransferServer();
 
-            //ts.displaySites();
+            ////ts.displaySites();
             //ts.start();
+
+            //Console.ReadLine();
+
+            //ts.stop();
 
             //Console.ReadLine();
 
@@ -32,21 +49,21 @@ namespace NFT_Master
 
             //Console.ReadLine();
 
-            Command c = new Command();
-            c.type = CommandType.Abort;
-            IPAddress ip = IPAddress.Parse(args[0]);
-            IPEndPoint ep = new IPEndPoint(ip, 11000);
-            Slave s = new Slave(ep);
+            //Command c = new Command();
+            //c.type = CommandType.Abort;
+            //IPAddress ip = IPAddress.Parse(args[0]);
+            //IPEndPoint ep = new IPEndPoint(ip, 11000);
+            //Slave s = new Slave(ep);
 
-            Console.ReadLine();
+            //Console.ReadLine();
 
-            s.sendCommand(c);
+            //s.sendCommand(c);
 
-            Console.ReadLine();
+            //Console.ReadLine();
 
-            s.disconnect();
+            //s.disconnect();
 
-            Console.ReadLine();
+            //Console.ReadLine();
 
         }
     }

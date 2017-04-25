@@ -38,35 +38,29 @@ public class FileOps
         }
         catch (WebException)
         {
-            Log.error("Request to \"" + url + "\" timed out (WebException)");
+            Log.error("Request to \"" + url + "\" timed out");
         }
         catch (UnauthorizedAccessException)
         {
-            Log.error("Cannot create file \"" + filename + "\" (Unauthorized Access)");
+            Log.error("Cannot create file \"" + filename + "\" Access denied.");
         }
         catch (PathTooLongException)
         {
-            Log.error("Cannot create file \"" + filename + "\" (Path Too Long)");
+            Log.error("Cannot create file \"" + filename + "\" Path too long");
         }
         catch (DirectoryNotFoundException)
         {
-            Log.error("ECannot create file \"" + filename + "\" (Destination Directory not Found)");
+            Log.error("Cannot create file \"" + filename + "\" directory not found");
         }
         catch (IOException)
         {
-            Log.error("Cannot create file \"" + filename + "\" (IOException)");
+            Log.error("Cannot create file \"" + filename + "\" Connection code");
         }
-        catch (NotSupportedException)
+        catch (Exception e)
         {
-            Log.error("Cannot transfer file \"" + filename + "\" (NotSupportedException)");
-        }
-        catch (System.Security.SecurityException)
-        {
-            Log.error("Cannot transfer file \"" + filename + "\" (SecurityException)");
-        }
-        catch (Exception)
-        {
-            Log.error("Cannot transfer file \"" + filename + "\" (GeneralException)");
+            Log.error("Cannot transfer file \"" + filename + "\\");
+            Log.info("---Stacktrace---\n" + e.ToString());
+            Log.info(e.ToString());
         }
     }
     /// <summary>

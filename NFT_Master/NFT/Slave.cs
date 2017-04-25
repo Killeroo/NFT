@@ -6,12 +6,12 @@ using System.IO;
 
 class Slave
 {
-    public static Slave[] slaveList;
+    public static List<Slave> slaves = new List<Slave>();
 
     public IPEndPoint endPoint;
     public TcpClient client { get; private set; }
     public NetworkStream stream { get; private set; }
-    public bool isConnected { get; private set; }
+    public bool isConnected { get; private set; } = false;
 
     private int curSeqNum = 0; // Current command sequence number
 
@@ -19,10 +19,13 @@ class Slave
     {
         client = new TcpClient();
         endPoint = ep;
-        connect();
+        //connect();
     }
 
-    public void sendCommand(Command c)
+    /// <summary>
+    /// Send a command to connected slave
+    /// </summary>
+    public void send(Command c)
     {
         try
         {
@@ -32,19 +35,18 @@ class Slave
             buffer = Command.serialize(c);
             Log.command(c);
             stream.Write(buffer, 0, buffer.Length);
-            Log.info("Command sent");
         }
         catch (IOException)
         {
-            Log.error("Failed to send command (IOException)");
+            Log.error("Failed to send command ");
         }
         catch (ObjectDisposedException)
         {
-            Log.error("Object failure (ObjectDisposedException)");
+            Log.error("Object failure");
         }
         catch (Exception e)
         {
-            Log.error("General exception occured (Exception)");
+            Log.error("An exception occured ");
             Log.info("---Stacktrace---");
             Log.info(e.ToString());
         }
@@ -54,17 +56,28 @@ class Slave
         try
         {
             Log.info("Connecting to " + endPoint.Address + ":" + endPoint.Port + "...");
-            client.Connect(endPoint);
+
+            // Async connection attempt
+            //client.Connect(endPoint);
+            var result = client.BeginConnect(endPoint.Address.ToString(), endPoint.Port, null, null);
+            var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(1)); // Set timeout 
+            if (!success)
+                throw new SocketException();
+
+            // Connected
+            client.EndConnect(result);
             Log.info("Connection established");
+
             stream = client.GetStream();
+            isConnected = true;
         }
         catch (SocketException)
         {
-            Log.error("Failed to connect to slave (SocketException)");
+            Log.error("Failed to connect to slave");
         }
         catch (ObjectDisposedException)
         {
-            Log.error("Object failure (ObjectDisposedException)");
+            Log.error("Object failure");
         }
     }
     public void disconnect()
@@ -74,21 +87,22 @@ class Slave
         c.type = CommandType.Quit;
 
         // Send quit command to slave
-        sendCommand(c);
+        send(c);
 
         // Cleanup
         client.Close();
         stream.Close();
+        isConnected = false;
     }
 
-    public static void findSlaves(string range)//Slave[] findSlaves()
+    /// <summary>
+    /// Finds NFT slaves on specified address range
+    /// </summary>
+    public static void scan(string range)//Slave[] findSlaves()
     {
-        Socket scanSock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
         IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000);
         List<Slave> foundSlaves = new List<Slave>();
         scanEP.Port = 11000; // Default NFT Slave listening port
-        scanSock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.SendTimeout, 200); // Set timeout on scan socket
-        scanSock.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.ReceiveTimeout, 200);
 
         // Split ip address into segments
         string[] addressSegs = range.Split('.');
@@ -117,22 +131,18 @@ class Slave
                     {
                         // Update with current address to try and connect to
                         scanEP.Address = new IPAddress(new byte[] { (byte)seg1, (byte)seg2, (byte)seg3, (byte)seg4 });
+                        Slave s = new Slave(scanEP);
 
-                        try
-                        {
-                            // Try to connect
-                            Log.info("Attempting to connect to " + scanEP.Address.ToString() + ":" + scanEP.Port.ToString() + "...");
-                            scanSock.Connect(scanEP);
-                            Log.info("Connection established to " + scanEP.Address.ToString() + ":" + scanEP.Port.ToString() + " [NFT Slave]");
-                        }
-                        catch (SocketException) { }
-                        catch (InvalidOperationException) { }
+                        s.connect();
+
+                        if (s.isConnected)
+                            Slave.slaves.Add(s);
                     }
                 }
             }
         }
     }
-    public static void sendToAllSlaves(Command c) { }
+    public static void sendToAll(Command c) { }
 
     private bool checkConnected() { return true; }
 }
