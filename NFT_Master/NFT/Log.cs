@@ -48,19 +48,19 @@ public class Log
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("[Command] ");
         Console.ForegroundColor = ConsoleColor.Gray;
-        Console.WriteLine("seq={2} type={0} sender={1} destination={2}", c.type, c.sender, c.seq, c.reciever);
+        Console.WriteLine("seq={2} type={0} sender={1} destination={3}", c.type, c.sender, c.seq, c.reciever);
     }
 
     private static void title()
     {
         if (identifier != "")
-            Console.Write("[{0}] ", identifier);
+            Console.Write("[{0}]", identifier);
     }
     private static void timestamp()
     {
         if (longTimestamp)
-            Console.Write("[{0}] ", DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
+            Console.Write("[{0}]", DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
         else
-            Console.Write("[{0}] ", DateTime.Now.ToString("HH:mm:ss.fff"));
+            Console.Write("[{0}]", DateTime.Now.ToString("HH:mm:ss"));
     }
 }

@@ -16,20 +16,16 @@ namespace NFT_Master
             Command c = new Command();
             c.type = CommandType.Info;
 
-            // Load settings
-            Settings set = new Settings();
-
             // Setup log
             Log.identifier = "master";
+
+            // Load settings
+            Settings set = new Settings();
 
             Slave.scan("192.168.0.1-100");
 
             foreach (var slave in Slave.slaves)
-            {
-                c.seq++;
-                c.reciever = slave.endPoint.Address.ToString();
                 slave.send(c);
-            }
 
             foreach (var slave in Slave.slaves)
                 slave.disconnect();

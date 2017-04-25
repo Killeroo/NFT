@@ -32,6 +32,7 @@ class Slave
             byte[] buffer = new byte[4096];
             curSeqNum++; // Increment sequence number
             c.seq = curSeqNum;
+            c.reciever = endPoint.Address.ToString(); // Set command destination
             buffer = Command.serialize(c);
             Log.command(c);
             stream.Write(buffer, 0, buffer.Length);
@@ -60,7 +61,7 @@ class Slave
             // Async connection attempt
             //client.Connect(endPoint);
             var result = client.BeginConnect(endPoint.Address.ToString(), endPoint.Port, null, null);
-            var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(1)); // Set timeout 
+            var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(250));//FromSeconds(1)); // Set timeout 
             if (!success)
                 throw new SocketException();
 
