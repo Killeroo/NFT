@@ -33,6 +33,7 @@ public class CommandListener
         {
             listeningLoop();
             commandLoop();
+            // Add connection check stop stop blocking on read
         }
     }
     public void stop()
@@ -154,4 +155,5 @@ public class CommandListener
     /// Handles recieved commands from NFT master
     /// </summary>
     private void handleCommand() { }
+    private void testConnection() { }
 }

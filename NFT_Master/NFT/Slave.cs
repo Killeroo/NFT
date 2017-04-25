@@ -32,7 +32,7 @@ class Slave
             byte[] buffer = new byte[4096];
             curSeqNum++; // Increment sequence number
             c.seq = curSeqNum;
-            c.reciever = endPoint.Address.ToString(); // Set command destination
+            c.reciever = client.Client.RemoteEndPoint.ToString().Split(':')[0]; // Set destination of command
             buffer = Command.serialize(c);
             Log.command(c);
             stream.Write(buffer, 0, buffer.Length);
@@ -134,8 +134,10 @@ class Slave
                         scanEP.Address = new IPAddress(new byte[] { (byte)seg1, (byte)seg2, (byte)seg3, (byte)seg4 });
                         Slave s = new Slave(scanEP);
 
+                        // Attempt to connect
                         s.connect();
 
+                        // Add to list of connected slaves
                         if (s.isConnected)
                             Slave.slaves.Add(s);
                     }

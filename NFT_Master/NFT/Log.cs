@@ -48,7 +48,13 @@ public class Log
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("[Command] ");
         Console.ForegroundColor = ConsoleColor.Gray;
-        Console.WriteLine("seq={2} type={0} sender={1} destination={3}", c.type, c.sender, c.seq, c.reciever);
+        Console.Write("seq={2} type={0} sender={1} destination={3}", c.type, c.sender, c.seq, c.reciever);
+
+        // Display message if exists
+        if (c.message == "" && c.type == CommandType.Info)
+            Console.WriteLine();
+        else
+            Console.WriteLine(" message=\"{0}\"", c.message);
     }
 
     private static void title()
