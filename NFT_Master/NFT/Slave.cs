@@ -13,7 +13,7 @@ class Slave
     public NetworkStream stream { get; private set; }
     public bool isConnected { get; private set; } = false;
 
-    private int curSeqNum = 0; // Current command sequence number
+    private int curSeqNum = 0; // Current command sequence number (slave independent)
 
     public Slave(IPEndPoint ep)
     {

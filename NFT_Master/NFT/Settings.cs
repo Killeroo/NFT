@@ -18,6 +18,11 @@ public class Settings
         get { return Convert.ToInt32(Registry.GetValue(settingsRegPath, "NumberOfThreads", "1")); }
         set { if (value < 5) { Registry.SetValue(settingsRegPath, "NumberOfThreads", value, RegistryValueKind.DWord); } }
     }
+    public static int SimultaneousTransfers
+    {
+        get { return Convert.ToInt32(Registry.GetValue(settingsRegPath, "SimultaneousTransfers", "5")); }
+        set { if (value < 5) { Registry.SetValue(settingsRegPath, "SimultaneousTransfers", value, RegistryValueKind.DWord); } }
+    }
 
     private static string settingsRegPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\NFT\";
 
@@ -42,8 +47,10 @@ public class Settings
 
     private void createDefaultSettings()
     {
+        Log.info("Creating default registry settings...");
         Registry.SetValue(settingsRegPath, "WorkingDirectory", @"C:\NFT", RegistryValueKind.String);
         Registry.SetValue(settingsRegPath, "NumberOfThreads", 1, RegistryValueKind.DWord);
+        Registry.SetValue(settingsRegPath, "SimultaneousTransfers", 5, RegistryValueKind.DWord);
     }
     private bool exists()
     {

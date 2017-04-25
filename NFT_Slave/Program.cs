@@ -6,6 +6,9 @@ namespace NFT_Slave
     {
         static void Main(string[] args)
         {
+            // Setup log
+            Log.identifier = "slave";
+
             CommandListener listener = new CommandListener(11000);
 
             listener.start();
