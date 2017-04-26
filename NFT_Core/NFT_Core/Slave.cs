@@ -99,7 +99,7 @@ public class Slave
     /// <summary>
     /// Finds NFT slaves on specified address range
     /// </summary>
-    public static void scan(string range)//Slave[] findSlaves()
+    public static void scan(string range)
     {
         IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000);
         List<Slave> foundSlaves = new List<Slave>();
@@ -145,7 +145,10 @@ public class Slave
             }
         }
     }
+    /// <summary>
+    /// Send command to all connected slaves
+    /// </summary>
     public static void sendToAll(Command c) { }
 
-    private bool checkConnected() { return true; }
+    private bool checkConnection() { return true; }
 }

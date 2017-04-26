@@ -41,6 +41,8 @@
     <Compile Include="Command.cs" />
     <Compile Include="CommandListener.cs" />
     <Compile Include="CommandType.cs" />
+    <Compile Include="Error.cs" />
+    <Compile Include="ErrorReporter.cs" />
     <Compile Include="FileOps.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Log.cs" />
