@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Reflection;
+using System.Configuration;
 
 namespace NFT_Slave
 {
     class Program
     {
-        private static CommandListener listener = new CommandListener(11000);
+        private static CommandListener listener = new CommandListener(Properties.Settings.Default.COMMAND_LISTEN_PORT);
 
 
         static void Main(string[] args)

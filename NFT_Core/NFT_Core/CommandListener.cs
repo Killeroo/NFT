@@ -3,8 +3,6 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
-using System.Threading;
-using System.Threading.Tasks;
 
 /// <summary>
 /// Class for recieving Command messages from NFT master application
@@ -20,7 +18,7 @@ public class CommandListener
     private NetworkStream stream;
     byte[] b = new byte[4096];
     private bool running;
-    private int listeningPort;
+    private int listeningPort = 0;
 
     public CommandListener(int port)
     {
@@ -36,7 +34,6 @@ public class CommandListener
         {
             listeningLoop();
             commandLoop();
-            // Add connection check stop stop blocking on read
         }
     }
     public void stop()

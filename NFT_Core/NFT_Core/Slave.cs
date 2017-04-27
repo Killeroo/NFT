@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using System.Configuration;
 
 public class Slave
 {
@@ -96,11 +97,11 @@ public class Slave
     /// <summary>
     /// Finds NFT slaves on specified address range
     /// </summary>
-    public static void scan(string range)
+    public static void scan(string range, int port)
     {
         IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000);
         List<Slave> foundSlaves = new List<Slave>();
-        scanEP.Port = 11000; // Default NFT Slave listening port
+        scanEP.Port = port;
 
         // Split ip address into segments
         string[] addressSegs = range.Split('.');

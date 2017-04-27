@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
 
@@ -24,10 +25,7 @@ namespace NFT_Master
             Log.identifier = "master";
             Log.info(version);
 
-            // Load settings
-            Settings set = new Settings();
-
-            Slave.scan("192.168.0.1-100");
+            Slave.scan("192.168.0.1-100", Properties.Settings.Default.COMMAND_LISTEN_PORT);
 
             foreach (var slave in Slave.slaves)
                 slave.send(c);

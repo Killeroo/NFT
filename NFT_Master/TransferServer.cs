@@ -1,6 +1,6 @@
 ﻿using System;
 using Microsoft.Web.Administration;
-
+using System.Configuration;
 //TODO: Move to core when done
 
 /// <summary>
@@ -22,7 +22,7 @@ public class TransferServer
     {
         if (!checkIfSiteExists())
             // Create site instance if it doesn't exist
-            iisManager.Sites.Add(SITE_NAME, "http", ":8000:", Settings.WorkingDirectory);
+            //iisManager.Sites.Add(SITE_NAME, "http", ":8000:", Properties.Settings.Default.WorkingDirectory);
 
         iisManager.CommitChanges();
 
