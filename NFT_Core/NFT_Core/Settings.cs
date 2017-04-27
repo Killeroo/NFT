@@ -68,9 +68,7 @@ public class Settings
         }
         catch (Exception e)
         {
-            Log.error("Could not load registry settings");
-            Log.info("---Stacktrace---\n" + e.ToString());
-            Log.info(e.ToString());
+            Log.error(new Error(e, "Could not load registry settings"));
         }
 
         if (r != null)

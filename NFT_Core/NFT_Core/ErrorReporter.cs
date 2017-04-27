@@ -24,7 +24,7 @@ class ErrorReporter
     {
         using (UdpClient client = new UdpClient(UDP_SEND_PORT))
         {
-            byte[] data = Error.serialize(e);
+            byte[] data = Helper.ToByteArray<Error>(e);
             client.Send(data, data.Length + 1, (IPEndPoint)destEP);
         }
     }

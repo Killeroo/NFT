@@ -3,6 +3,8 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
+using System.Threading;
+using System.Threading.Tasks;
 
 /// <summary>
 /// Class for recieving Command messages from NFT master application
@@ -16,13 +18,14 @@ public class CommandListener
     private TcpListener listener;
     private IPEndPoint masterEP;
     private NetworkStream stream;
+    byte[] b = new byte[4096];
     private bool running;
     private int listeningPort;
 
     public CommandListener(int port)
     {
         listeningPort = port;
-        listener = new TcpListener(IPAddress.Parse(Helper.getLocalIPAddress()), listeningPort);
+        listener = new TcpListener(IPAddress.Parse(Helper.GetLocalIPAddress()), listeningPort);
     }
 
     public void start()
@@ -38,7 +41,19 @@ public class CommandListener
     }
     public void stop()
     {
+        Log.info("Stopping CommandListener...");
         running = false;
+
+        // Cleanup
+        try
+        {
+            master.Close();
+            stream.Close();
+        }
+        catch (NullReferenceException e)
+        {
+            Log.error(new Error(e));
+        }
     }
 
     /// <summary>
@@ -48,7 +63,7 @@ public class CommandListener
     {
         // Start Tcplistener
         listener.Start();
-        Log.info("Listening for NFT Master on " + Helper.getLocalIPAddress() + ":" + listeningPort + "...");
+        Log.info("Listening for NFT Master on " + Helper.GetLocalIPAddress() + ":" + listeningPort + "...");
         isListening = true;
 
         // Listening loop
@@ -67,19 +82,17 @@ public class CommandListener
                     break; // Exit listening loop
                 }
             }
-            catch (SocketException)
+            catch (SocketException e)
             {
-                Log.error("Error connecting to master client");
+                Log.error(new Error(e, "Master connection attempt failed"));
             }
-            catch (ObjectDisposedException)
+            catch (ObjectDisposedException e)
             {
-                Log.error("Client object failure");
+                Log.error(new Error(e, "Object failure"));
             }
             catch (Exception e)
             {
-                Log.error("An exception occured");
-                Log.info("---Stacktrace---");
-                Log.info(e.ToString());
+                Log.error(new Error(e, "Master connection attempt failed"));
             }
         }
 
@@ -115,29 +128,27 @@ public class CommandListener
                     while (stream.DataAvailable);
 
                     // Deserialize command 
-                    c = Command.deserialize(ms);
+                    c = Helper.FromMemoryStream<Command>(ms);//Command.deserialize(ms);
                     Log.command(c);
                 }
                 catch (SerializationException e)
                 {
-                    Log.error("Cannot parse client stream - " + e.Message);
+                    Log.error(new Error(e, "Cannot parse master stream"));
                     isConnected = false;
                 }
-                catch (IOException)
+                catch (IOException e)
                 {
-                    Log.error("Connection failure (IOException)");
+                    Log.error(new Error(e, "Connection failure"));
                     isConnected = false;
                 }
-                catch (ObjectDisposedException)
+                catch (ObjectDisposedException e)
                 {
-                    Log.error("Client object failure");
+                    Log.error(new Error(e, "Object failure"));
                     isConnected = false;
                 }
                 catch (Exception e)
                 {
-                    Log.error("An exception occured");
-                    Log.info("---Stacktrace---");
-                    Log.info(e.ToString());
+                    Log.error(new Error(e));
                     isConnected = false;
                 }
 

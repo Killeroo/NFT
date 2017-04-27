@@ -14,3 +14,5 @@ C:\temp\NFT\NFT_Master\bin\Debug\Microsoft.Web.Administration.dll
 C:\temp\NFT\NFT_Master\obj\Debug\NFT_Master.csprojResolveAssemblyReference.cache
 C:\temp\NFT\NFT_Master\bin\Debug\NFT_Core.dll
 C:\temp\NFT\NFT_Master\bin\Debug\NFT_Core.pdb
+C:\Projects\NFT\NFT_Master\bin\Debug\NFT_Core.dll
+C:\Projects\NFT\NFT_Master\bin\Debug\NFT_Core.pdb

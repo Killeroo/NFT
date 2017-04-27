@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Reflection;
 using System.Net;
-using Microsoft.Web.Administration;
+using System.Net.Sockets;
 
 namespace NFT_Master
 {
@@ -8,9 +9,12 @@ namespace NFT_Master
     {
         static void Main(string[] args)
         {
-            //// Arguments check
-            //if (args.Length == 0 || string.IsNullOrWhiteSpace(args[0]))
-            //    Log.fatal("Please enter IP of NFT Slave");
+            // Add control c hanlder
+            Console.CancelKeyPress += new ConsoleCancelEventHandler(exitHandler);
+
+            // Get version info
+            Version v = Assembly.GetExecutingAssembly().GetName().Version;
+            string version = Assembly.GetExecutingAssembly().GetName().Name + " Version " + v.Major + "." + v.Minor + "." + v.Build + " (r" + v.Revision + ")";
 
             // Local variable setup
             Command c = new Command();
@@ -18,11 +22,12 @@ namespace NFT_Master
 
             // Setup log
             Log.identifier = "master";
+            Log.info(version);
 
             // Load settings
             Settings set = new Settings();
 
-            Slave.scan(args[0]);//"192.168.4.1-100");
+            Slave.scan("192.168.0.1-100");
 
             foreach (var slave in Slave.slaves)
                 slave.send(c);
@@ -72,6 +77,16 @@ namespace NFT_Master
 
             //Console.ReadLine();
 
+        }
+
+        protected static void exitHandler(object sender, ConsoleCancelEventArgs args)
+        {
+            // Cancel termination
+            args.Cancel = true;
+
+            Console.WriteLine("Master stopped. Press any key to exit...");
+            Console.ReadLine();
+            Environment.Exit(0);
         }
     }
 }

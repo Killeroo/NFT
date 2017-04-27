@@ -36,29 +36,29 @@ public class FileOps
                 fileStream.CopyTo(fs);
             Log.info("File created \"" + Path.Combine(destPath, filename + "\""));
         }
-        catch (WebException)
+        catch (WebException e)
         {
-            Log.error("Request to \"" + url + "\" timed out");
+            Log.error(new Error(e, "Request to \"" + url + "\" timed out"));
         }
-        catch (UnauthorizedAccessException)
+        catch (UnauthorizedAccessException e)
         {
-            Log.error("Cannot create file \"" + filename + "\" Access denied.");
+            Log.error(new Error(e, "Cannot create file \"" + filename + "\""));
         }
-        catch (PathTooLongException)
+        catch (PathTooLongException e)
         {
-            Log.error("Cannot create file \"" + filename + "\" Path too long");
+            Log.error(new Error(e, "Cannot create file \"" + filename + "\""));
         }
-        catch (DirectoryNotFoundException)
+        catch (DirectoryNotFoundException e)
         {
-            Log.error("Cannot create file \"" + filename + "\" directory not found");
+            Log.error(new Error(e, "Cannot create file \"" + filename + "\""));
         }
-        catch (IOException)
+        catch (IOException e)
         {
-            Log.error("Cannot create file \"" + filename + "\" Connection code");
+            Log.error(new Error(e, "Cannot create file \"" + filename + "\""));
         }
         catch (Exception e)
         {
-            Log.error("Cannot transfer file \"" + filename + "\\");
+            Log.error(new Error(e, "Cannot transfer file \"" + filename + "\\"));
             Log.info("---Stacktrace---\n" + e.ToString());
             Log.info(e.ToString());
         }

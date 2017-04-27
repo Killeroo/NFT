@@ -6,6 +6,7 @@
 public class Log
 {
     public static bool logToFile = false;
+    public static bool showTimestamp = true;
     public static bool longTimestamp = false;
     public static string identifier = "";
 
@@ -18,14 +19,18 @@ public class Log
         Console.ForegroundColor = ConsoleColor.Gray;
         Console.WriteLine(message);
     }
-    public static void error(string message)
+    public static void error(Error err)
     {
         title();
         timestamp();
         Console.ForegroundColor = ConsoleColor.Red;
         Console.Write("[Error] ");
         Console.ForegroundColor = ConsoleColor.Gray;
-        Console.WriteLine(message);
+        if (err.message != "")
+            Console.Write("msg=\"{0}\" ", err.message); // Show message if set
+        Console.WriteLine("type={0}", err.type);
+        //if (err.ex is Exception)
+            //Console.WriteLine(err.ex.ToString()); // Print stacktrace if general exception 
     }
     public static void fatal(string message)
     {
@@ -52,7 +57,7 @@ public class Log
 
         // Display message if exists
         if (c.message != "" && c.type == CommandType.Info)
-            Console.WriteLine(" message=\"{0}\"", c.message);
+            Console.WriteLine(" msg=\"{0}\"", c.message);
         else
             Console.WriteLine();
     }
@@ -64,9 +69,12 @@ public class Log
     }
     private static void timestamp()
     {
-        if (longTimestamp)
-            Console.Write("[{0}]", DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
-        else
-            Console.Write("[{0}]", DateTime.Now.ToString("HH:mm:ss"));
+        if (showTimestamp)
+        {
+            if (longTimestamp)
+                Console.Write("[{0}]", DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
+            else
+                Console.Write("[{0}]", DateTime.Now.ToString("HH:mm:ss"));
+        }
     }
 }

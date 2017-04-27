@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Net;
+using System.Linq;
 
 /// <summary>
 /// Stores exception information (for error reporting)
@@ -7,25 +8,23 @@ using System.Net;
 [Serializable()]
 public class Error
 {
-    public Exception e { get; set; }
-    public EndPoint sender { get; private set; }
+    public Exception ex { get; set; }
+    public IPAddress localAddr { get; private set; }
     public string type { get; private set; }
+    public string message { get; set; } = "";
     public bool fatal { get; set; } = false;
 
-    public Error(Exception ex, EndPoint localEP)
+    public Error(Exception e)
     {
-        e = ex;
-        type = e.GetType().ToString();
-        sender = localEP;
+        ex = e;
+        type = e.GetType().ToString().Split('.').Last();
+        localAddr = IPAddress.Parse(Helper.GetLocalIPAddress());
     }
-
-    // Serialization functions
-    public static byte[] serialize(Error err)
+    public Error(Exception e, string msg)
     {
-
-    }
-    public static Error deserialize(byte[] data)
-    {
-
+        ex = e;
+        type = e.GetType().ToString().Split('.').Last();
+        message = msg;
+        localAddr = IPAddress.Parse(Helper.GetLocalIPAddress());
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 /// <summary>
 /// Command class for communicating instructions between NFT Master and Slave applications
@@ -20,49 +18,28 @@ public class Command
     // Constructors
     public Command()
     {
-        sender = Helper.getLocalIPAddress();
+        sender = Helper.GetLocalIPAddress();
     }
     public Command(CommandType ct)
     {
         type = ct;
-        sender = Helper.getLocalIPAddress();
+        sender = Helper.GetLocalIPAddress();
     }
     public Command(CommandType ct, string destinationIP)
     {
         type = ct;
         reciever = destinationIP;
+        sender = Helper.GetLocalIPAddress();
     }
     
     public void addFiles(string pathToFiles)
     {
         // Check path exists
         if (string.IsNullOrWhiteSpace(pathToFiles) || !Directory.Exists(pathToFiles))
-            Log.error("Path \"" + pathToFiles + "\" could not be found");
+            Log.error(new Error(new Exception(), "Path \"" + pathToFiles + "\" could not be found"));
         //else
             //file = new FileInfo(pathToFile);
             //Implement backup reursive file searh feature  
-    }
-
-    // Serialization functions
-    public static byte[] serialize(Command c)
-    {
-        if (c == null)
-            return null;
-
-        BinaryFormatter bf = new BinaryFormatter();
-        using (MemoryStream ms = new MemoryStream())
-        {
-            bf.Serialize(ms, c);
-            return ms.ToArray();
-        }
-    }
-    public static Command deserialize(MemoryStream ms)//NetworkStream ns)
-    {
-        IFormatter formatter = new BinaryFormatter();
-        ms.Seek(0, SeekOrigin.Begin);
-        Command c = (Command)formatter.Deserialize(ms);
-        ms.Close();
-        return c;
     }
 
     // Randomise file lists to avoid overloading server

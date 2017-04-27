@@ -33,23 +33,21 @@ public class Slave
             curSeqNum++; // Increment sequence number
             c.seq = curSeqNum;
             c.reciever = client.Client.RemoteEndPoint.ToString().Split(':')[0]; // Set destination of command
-            buffer = Command.serialize(c);
+            buffer = Helper.ToByteArray<Command>(c);//Command.serialize(c);
             Log.command(c);
             stream.Write(buffer, 0, buffer.Length);
         }
-        catch (IOException)
+        catch (IOException e)
         {
-            Log.error("Failed to send command ");
+            Log.error(new Error(e, "Failed to send command"));
         }
-        catch (ObjectDisposedException)
+        catch (ObjectDisposedException e)
         {
-            Log.error("Object failure");
+            Log.error(new Error(e, "Object failure"));
         }
         catch (Exception e)
         {
-            Log.error("An exception occured ");
-            Log.info("---Stacktrace---");
-            Log.info(e.ToString());
+            Log.error(new Error(e, "Could not send command"));
         }
     }
     public void connect()
@@ -59,9 +57,8 @@ public class Slave
             Log.info("Connecting to " + endPoint.Address + ":" + endPoint.Port + "...");
 
             // Async connection attempt
-            //client.Connect(endPoint);
             var result = client.BeginConnect(endPoint.Address.ToString(), endPoint.Port, null, null);
-            var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(500));//FromSeconds(1)); // Set timeout 
+            var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(150));//FromSeconds(1)); // Set timeout 
             if (!success)
                 throw new SocketException();
 
@@ -72,13 +69,13 @@ public class Slave
             stream = client.GetStream();
             isConnected = true;
         }
-        catch (SocketException)
+        catch (SocketException e)
         {
-            Log.error("Failed to connect to slave");
+            Log.error(new Error(e, "Could not connect to slave"));
         }
-        catch (ObjectDisposedException)
+        catch (ObjectDisposedException e)
         {
-            Log.error("Object failure");
+            Log.error(new Error(e, "Object failure"));
         }
     }
     public void disconnect()
@@ -148,7 +145,21 @@ public class Slave
     /// <summary>
     /// Send command to all connected slaves
     /// </summary>
-    public static void sendToAll(Command c) { }
+    public static void sendToAll(Command c)
+    {
+        if (c == null)
+            return;
 
-    private bool checkConnection() { return true; }
+        // Loop through connected slave list
+        foreach (Slave slave in Slave.slaves)
+            slave.send(c);
+    }
+
+    private bool testConnection()
+    {
+        if (!stream.DataAvailable)
+            return false;
+        else
+            return true;
+    }
 }
