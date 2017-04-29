@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Reflection;
 using System.Configuration;
+using System.Net;
 
 namespace NFT_Slave
 {
     class Program
     {
-        private static CommandListener listener = new CommandListener(Properties.Settings.Default.COMMAND_LISTEN_PORT);
+        private static CommandListener listener = new CommandListener();
 
 
         static void Main(string[] args)
@@ -24,9 +25,13 @@ namespace NFT_Slave
 
             listener.start();
 
+            Console.WriteLine("Stop");
             Console.ReadLine();
 
-            // Add control C or exit event handler
+            Error err = new Error(new Exception());
+            ErrorReporter.sendError(err, new IPEndPoint(IPAddress.Parse(Helper.GetLocalIPAddress()), 0));
+
+            Console.ReadLine();
         }
 
         protected static void exitHandler(object sender, ConsoleCancelEventArgs args)
@@ -34,11 +39,13 @@ namespace NFT_Slave
             // Cancel termination
             args.Cancel = true;
 
-            // Stop commandlistenr
+            // Stop commandlistener
             listener.stop();
 
             Console.WriteLine("Slave stopped. Press any key to exit...");
             Console.ReadLine();
+
+            args.Cancel = false;
             Environment.Exit(0);
         }
     }

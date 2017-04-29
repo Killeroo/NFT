@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace NFT_Master.Properties {
+namespace NFT_Slave.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -20,33 +20,6 @@ namespace NFT_Master.Properties {
         public static Settings Default {
             get {
                 return defaultInstance;
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("12350")]
-        public int ERROR_LISTEN_PORT {
-            get {
-                return ((int)(this["ERROR_LISTEN_PORT"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("12351")]
-        public int ERROR_SEND_PORT {
-            get {
-                return ((int)(this["ERROR_SEND_PORT"]));
-            }
-        }
-        
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("11430")]
-        public int COMMAND_LISTEN_PORT {
-            get {
-                return ((int)(this["COMMAND_LISTEN_PORT"]));
             }
         }
         

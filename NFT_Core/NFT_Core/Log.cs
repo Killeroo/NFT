@@ -32,6 +32,19 @@ public class Log
         //if (err.ex is Exception)
             //Console.WriteLine(err.ex.ToString()); // Print stacktrace if general exception 
     }
+    public static void remoteError(Error err)
+    {
+        title();
+        timestamp();
+        Console.ForegroundColor = ConsoleColor.Magenta;
+        Console.Write("[SlaveError] ");
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.Write("Sender=\"{0}\" ", err.senderAddr);
+        if (err.message != "")
+            Console.Write("msg=\"{0}\" ", err.message); // Show message if set
+        Console.Write("type={0} ", err.type);
+        Console.WriteLine("fatal={0}", err.fatal);
+    }
     public static void fatal(string message)
     {
         title();

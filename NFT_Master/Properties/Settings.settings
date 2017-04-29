@@ -1,16 +1,7 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="NFT_Master.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="NFT_Slave.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="ERROR_LISTEN_PORT" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">12350</Value>
-    </Setting>
-    <Setting Name="ERROR_SEND_PORT" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">12351</Value>
-    </Setting>
-    <Setting Name="COMMAND_LISTEN_PORT" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">11430</Value>
-    </Setting>
     <Setting Name="MAX_THREADS" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5</Value>
     </Setting>

@@ -9,7 +9,7 @@ using System.Linq;
 public class Error
 {
     public Exception ex { get; set; }
-    public IPAddress localAddr { get; private set; }
+    public IPAddress senderAddr { get; private set; }
     public string type { get; private set; }
     public string message { get; set; } = "";
     public bool fatal { get; set; } = false;
@@ -18,13 +18,13 @@ public class Error
     {
         ex = e;
         type = e.GetType().ToString().Split('.').Last();
-        localAddr = IPAddress.Parse(Helper.GetLocalIPAddress());
+        senderAddr = IPAddress.Parse(Helper.GetLocalIPAddress());
     }
     public Error(Exception e, string msg)
     {
         ex = e;
         type = e.GetType().ToString().Split('.').Last();
         message = msg;
-        localAddr = IPAddress.Parse(Helper.GetLocalIPAddress());
+        senderAddr = IPAddress.Parse(Helper.GetLocalIPAddress());
     }
 }

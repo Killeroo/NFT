@@ -25,13 +25,19 @@ namespace NFT_Master
             Log.identifier = "master";
             Log.info(version);
 
-            Slave.scan("192.168.0.1-100", Properties.Settings.Default.COMMAND_LISTEN_PORT);
+            //ErrorReporter.listen();
+
+            Slave.scan("10.40.39.130-140");//"192.168.0.1-100");
 
             foreach (var slave in Slave.slaves)
                 slave.send(c);
 
             foreach (var slave in Slave.slaves)
                 slave.disconnect();
+
+            //Console.ReadLine();
+
+            ErrorReporter.listen();
 
             Console.ReadLine();
 

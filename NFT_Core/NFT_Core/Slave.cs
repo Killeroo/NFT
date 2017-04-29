@@ -97,11 +97,10 @@ public class Slave
     /// <summary>
     /// Finds NFT slaves on specified address range
     /// </summary>
-    public static void scan(string range, int port)
+    public static void scan(string range)
     {
-        IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), 11000);
+        IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), CommandListener.COMMAND_LISTEN_PORT);
         List<Slave> foundSlaves = new List<Slave>();
-        scanEP.Port = port;
 
         // Split ip address into segments
         string[] addressSegs = range.Split('.');

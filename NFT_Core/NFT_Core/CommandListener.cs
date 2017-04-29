@@ -9,6 +9,8 @@ using System.Runtime.Serialization;
 /// </summary>
 public class CommandListener
 {
+    public const int COMMAND_LISTEN_PORT = 11430;
+
     public bool isListening { get; private set; }
     public bool isConnected { get; private set; }
 
@@ -18,12 +20,10 @@ public class CommandListener
     private NetworkStream stream;
     byte[] b = new byte[4096];
     private bool running;
-    private int listeningPort = 0;
 
-    public CommandListener(int port)
+    public CommandListener()
     {
-        listeningPort = port;
-        listener = new TcpListener(IPAddress.Parse(Helper.GetLocalIPAddress()), listeningPort);
+        listener = new TcpListener(IPAddress.Parse(Helper.GetLocalIPAddress()), COMMAND_LISTEN_PORT);
     }
 
     public void start()
@@ -60,7 +60,7 @@ public class CommandListener
     {
         // Start Tcplistener
         listener.Start();
-        Log.info("Listening for NFT Master on " + Helper.GetLocalIPAddress() + ":" + listeningPort + "...");
+        Log.info("Listening for NFT Master on " + Helper.GetLocalIPAddress() + ":" + COMMAND_LISTEN_PORT + "...");
         isListening = true;
 
         // Listening loop

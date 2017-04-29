@@ -5,7 +5,7 @@ using System.Net.Sockets;
 /// <summary>
 /// For sending and listening for errors using UDP
 /// </summary>
-class ErrorReporter
+public class ErrorReporter
 {
     private const int UDP_LISTEN_PORT = 12300;
     private const int UDP_SEND_PORT = 12301;
@@ -14,7 +14,7 @@ class ErrorReporter
     public static void listen()
     {
         UdpClient listener = new UdpClient(UDP_LISTEN_PORT);
-        Log.info("Listening for slave errors on UDP port " + UDP_LISTEN_PORT + "...");
+        Log.info("Listening for slave errors on " + Helper.GetLocalIPAddress() + ":" + UDP_LISTEN_PORT + "...");
 
         while (true)
         {
@@ -23,7 +23,7 @@ class ErrorReporter
             if (data != null)
             {
                 Error err = Helper.FromByteArray<Error>(data); // Serialize data to Error object
-                Log.error(err);
+                Log.remoteError(err);
             }
         }
     }
@@ -35,7 +35,7 @@ class ErrorReporter
         using (UdpClient client = new UdpClient(UDP_SEND_PORT))
         {
             byte[] data = Helper.ToByteArray<Error>(e);
-            client.Send(data, data.Length + 1, (IPEndPoint)destEP);
+            client.Send(data, data.Length, (IPEndPoint)destEP);
         }
     }
 }
