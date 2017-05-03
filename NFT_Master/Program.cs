@@ -29,31 +29,15 @@ namespace NFT_Master
             Log.info(version);
 
 
-            c.addFiles(@"C:\Projects\NFT");
+            Slave.scan(args[0]);
 
-            foreach (var file in c.files)
-                Log.info(file);
+            foreach (var slave in Slave.slaves)
+                slave.send(c);
 
-            Log.warning("Hip hop de stoppy");
-
-            c.shuffleFiles();
-
-            foreach (var file in c.files)
-                Log.info(file);
+            foreach (var slave in Slave.slaves)
+                slave.disconnect();
 
             Console.ReadLine();
-
-            ////ErrorReporter.listen();
-
-            //Slave.scan("10.40.39.130-140");//"192.168.0.1-100");
-
-            //foreach (var slave in Slave.slaves)
-            //    slave.send(c);
-
-            //foreach (var slave in Slave.slaves)
-            //    slave.disconnect();
-
-            ////Console.ReadLine();
 
             //ErrorReporter.listen();
 

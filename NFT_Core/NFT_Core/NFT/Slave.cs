@@ -72,16 +72,16 @@ public class Slave
             stream = client.GetStream();
             isConnected = true;
         }
-        catch (SocketException e)
+        catch (SocketException)
         {
             // For cleaner scanning output
             //Log.error(new Error(e, "Could not connect to slave"));
         }
-        catch (ObjectDisposedException e)
+        catch (ObjectDisposedException)
         {
             //Log.error(new Error(e, "Object failure"));
         }
-        catch (Exception e)
+        catch (Exception)
         {
             //Log.error(new Error(e, "Could not connect to slave"));
         }

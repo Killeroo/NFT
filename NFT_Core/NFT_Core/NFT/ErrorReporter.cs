@@ -5,7 +5,7 @@ using System.Net.Sockets;
 /// <summary>
 /// For sending and listening for errors using UDP
 /// </summary>
-public class ErrorReporter
+public class ErrorReporter // Change to ErrorListener
 {
     private const int UDP_LISTEN_PORT = 12300;
     private const int UDP_SEND_PORT = 12301;

@@ -2,7 +2,7 @@
 
 namespace Octodiff.CommandLine.Support
 {
-    interface ICommand
+    interface NCommand
     {
         void GetHelp(TextWriter writer);
         MemoryStream Execute(string[] commandLineArguments);

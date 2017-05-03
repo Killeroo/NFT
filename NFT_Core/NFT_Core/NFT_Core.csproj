@@ -46,6 +46,9 @@
     <Compile Include="NFT\FileOps.cs" />
     <Compile Include="NFT\Helper.cs" />
     <Compile Include="NFT\Log.cs" />
+    <Compile Include="NFT\RsyncListener.cs" />
+    <Compile Include="NFT\RsyncStream.cs" />
+    <Compile Include="NFT\StreamType.cs" />
     <Compile Include="Octodiff\CommandLine\DeltaCommand.cs" />
     <Compile Include="Octodiff\CommandLine\ExplainDeltaCommand.cs" />
     <Compile Include="Octodiff\CommandLine\HelpCommand.cs" />
@@ -57,6 +60,7 @@
     <Compile Include="Octodiff\CommandLine\Support\ICommand.cs" />
     <Compile Include="Octodiff\CommandLine\Support\ICommandLocator.cs" />
     <Compile Include="Octodiff\CommandLine\Support\ICommandMetadata.cs" />
+    <Compile Include="Octodiff\CommandLine\Support\NCommand.cs" />
     <Compile Include="Octodiff\CommandLine\Support\NDesk.Options.cs" />
     <Compile Include="Octodiff\Core\Adler32RollingChecksum.cs" />
     <Compile Include="Octodiff\Core\AggregateCopyOperationsDecorator.cs" />

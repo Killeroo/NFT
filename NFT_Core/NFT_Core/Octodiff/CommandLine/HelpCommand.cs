@@ -15,7 +15,7 @@ namespace Octodiff.CommandLine
         {
         }
 
-        public int Execute(string[] commandLineArguments)
+        public MemoryStream Execute(string[] commandLineArguments)
         {
 #if NET40
             var executable = Path.GetFileNameWithoutExtension(new Uri(typeof(HelpCommand).Assembly.CodeBase).LocalPath);
@@ -46,7 +46,7 @@ namespace Octodiff.CommandLine
                 }
             }
 
-            return 0;
+            return null;
         }
 
         void PrintCommandHelp(string executable, ICommand command, ICommandMetadata commandMetadata, string commandName)

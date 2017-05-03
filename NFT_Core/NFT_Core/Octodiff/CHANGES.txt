@@ -1,1 +1,5 @@
 ﻿03/05/2017 - Added comments to Octodiff\CommandLine\SignatureCommand.cs
+04/05/2017 - Converted SignatureCommand and DeltaCommand to return MemoryStreams instead of exit codes
+		   - Removed signature and delta file creation
+		   - Modified ICommand
+		   - Changed all commands to return MemoryStream

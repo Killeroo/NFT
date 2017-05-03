@@ -30,7 +30,7 @@ namespace Octodiff.CommandLine
             options.WriteOptionDescriptions(writer);
         }
 
-        public int Execute(string[] commandLineArguments)
+        public MemoryStream Execute(string[] commandLineArguments)
         {
             options.Parse(commandLineArguments);
 
@@ -66,7 +66,7 @@ namespace Octodiff.CommandLine
                 delta.Apply(basisStream, new BinaryDeltaReader(deltaStream, progressReporter), newFileStream);
             }
 
-            return 0;
+            return null;
         }
     }
 }

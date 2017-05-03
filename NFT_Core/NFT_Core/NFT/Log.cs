@@ -83,6 +83,15 @@ public class Log
         else
             Console.WriteLine();
     }
+    public static void stream(RsyncStream rs)
+    {
+        title();
+        timestamp();
+        Console.ForegroundColor = ConsoleColor.DarkCyan;
+        Console.Write("[RsyncStream] ");
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.WriteLine("seq={2} type={0} sender={1} destination={3}", rs.type, rs.sender, rs.seq, rs.reciever);
+    }
 
     private static void title()
     {
