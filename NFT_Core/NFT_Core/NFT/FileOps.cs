@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
+using Octodiff.CommandLine;
+using Octodiff.CommandLine.Support;
+using Octodiff.Core;
+
 /// <summary>
 /// Stores static helper methods for file operations required by NFT
 /// </summary>
@@ -70,16 +74,54 @@ public class FileOps
     /// Generate rsync signature for a given file
     /// </summary>
     /// <param name="filePath"></param>
-    public static void createSignature(string filePath)
+    public static MemoryStream generateSignature(string filePath)
     {
+        // Setup Octodiff command
+        var cl = new CommandLocator();
+        var command = cl.Find("signature");
+        string[] args = { filePath , "", "--progress"};
+        MemoryStream sigStream = null;
 
+        try
+        {
+            Log.info("Octodiff --signature \"" + filePath + "\" --progress");
+            sigStream = cl.Create(command).Execute(args);
+
+            return sigStream;
+        }
+        catch (OptionException ex)
+        {
+            Log.error(new Error(ex, "Octodiff exception"));
+        }
+        catch (UsageException ex)
+        {
+            Log.error(new Error(ex, "Octodiff exception"));
+        }
+        catch (FileNotFoundException ex)
+        {
+            Log.error(new Error(ex, "Octodiff exception"));
+        }
+        catch (CorruptFileFormatException ex)
+        {
+            Log.error(new Error(ex, "Octodiff exception"));
+        }
+        catch (IOException ex)
+        {
+            Log.error(new Error(ex, "Octodiff exception"));
+        }
+        catch (Exception ex)
+        {
+            Log.error(new Error(ex, "Octodiff exception"));
+        }
+
+        return null;
     }
     /// <summary>
     /// Generate rsync delta based on signature files
     /// </summary>
     /// <param name="originalSignaturePath"></param>
     /// <param name="newSignaturePath"></param>
-    public static void createDelta(string originalSignaturePath, string newSignaturePath)
+    public static void generateDelta(string originalSignaturePath, string newSignaturePath)
     {
 
     }

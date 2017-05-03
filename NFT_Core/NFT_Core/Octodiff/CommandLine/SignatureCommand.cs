@@ -29,7 +29,7 @@ namespace Octodiff.CommandLine
             options.WriteOptionDescriptions(writer);
         }
 
-        public int Execute(string[] commandLineArguments)
+        public MemoryStream Execute(string[] commandLineArguments)
         {
             // Parse through arguments
             options.Parse(commandLineArguments);
@@ -51,29 +51,15 @@ namespace Octodiff.CommandLine
                 throw new FileNotFoundException("File not found: " + basisFilePath, basisFilePath);
             }
 
-            // Make sure path exists
-            if (string.IsNullOrWhiteSpace(signatureFilePath))
-            {
-                signatureFilePath = basisFilePath + ".octosig";
-            }
-            else
-            {
-                signatureFilePath = Path.GetFullPath(signatureFilePath);
-                var sigDirectory = Path.GetDirectoryName(signatureFilePath);
-                if (sigDirectory != null && !Directory.Exists(sigDirectory))
-                {
-                    Directory.CreateDirectory(sigDirectory);
-                }
-            }
-
             // Generate signature from file
             using (var basisStream = new FileStream(basisFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var signatureStream = new FileStream(signatureFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+            using (var signatureStream = new MemoryStream())//FileStream(signatureFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 signatureBuilder.Build(basisStream, new SignatureWriter(signatureStream));
-            }
 
-            return 0;
+                // Return stream containing signature
+                return signatureStream;
+            }
         }
     }
 }

@@ -24,7 +24,7 @@ namespace Octodiff.CommandLine
             options.WriteOptionDescriptions(writer);
         }
 
-        public int Execute(string[] commandLineArguments)
+        public MemoryStream Execute(string[] commandLineArguments)
         {
             options.Parse(commandLineArguments);
 
@@ -57,7 +57,7 @@ namespace Octodiff.CommandLine
                 (start, offset) => Console.WriteLine("Copy: {0:X} to {1:X}", start, offset));
             }
 
-            return 0;
+            return null;
         }
     }
 }

@@ -30,7 +30,7 @@ namespace Octodiff.CommandLine
             options.WriteOptionDescriptions(writer);
         }
 
-        public int Execute(string[] commandLineArguments)
+        public MemoryStream Execute(string[] commandLineArguments)
         {
             options.Parse(commandLineArguments);
 
@@ -55,28 +55,14 @@ namespace Octodiff.CommandLine
                 throw new FileNotFoundException("File not found: " + newFilePath, newFilePath);
             }
 
-            if (string.IsNullOrWhiteSpace(deltaFilePath))
-            {
-                deltaFilePath = newFilePath + ".octodelta";
-            }
-            else
-            {
-                deltaFilePath = Path.GetFullPath(deltaFilePath);
-                var directory = Path.GetDirectoryName(deltaFilePath);
-                if (directory != null && !Directory.Exists(directory))
-                {
-                    Directory.CreateDirectory(directory);
-                }
-            }
-
             using (var newFileStream = new FileStream(newFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var signatureStream = new FileStream(signatureFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
-            using (var deltaStream = new FileStream(deltaFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
+            using (var deltaStream = new MemoryStream())//FileStream(deltaFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
                 delta.BuildDelta(newFileStream, new SignatureReader(signatureStream, delta.ProgressReporter), new AggregateCopyOperationsDecorator(new BinaryDeltaWriter(deltaStream)));
-            }
 
-            return 0;
+                return deltaStream;
+            }
         }
     }
 }

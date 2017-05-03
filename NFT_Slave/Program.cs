@@ -25,13 +25,10 @@ namespace NFT_Slave
 
             listener.start();
 
-            Console.WriteLine("Stop");
             Console.ReadLine();
 
-            Error err = new Error(new Exception());
-            ErrorReporter.sendError(err, new IPEndPoint(IPAddress.Parse(Helper.GetLocalIPAddress()), 0));
-
-            Console.ReadLine();
+            //Error err = new Error(new Exception());
+            //ErrorReporter.sendError(err, new IPEndPoint(IPAddress.Parse(Helper.GetLocalIPAddress()), 0));
         }
 
         protected static void exitHandler(object sender, ConsoleCancelEventArgs args)
