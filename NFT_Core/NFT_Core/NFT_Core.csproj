@@ -38,16 +38,60 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Command.cs" />
-    <Compile Include="CommandListener.cs" />
-    <Compile Include="CommandType.cs" />
-    <Compile Include="Error.cs" />
-    <Compile Include="ErrorReporter.cs" />
-    <Compile Include="FileOps.cs" />
-    <Compile Include="Helper.cs" />
-    <Compile Include="Log.cs" />
+    <Compile Include="NFT\Command.cs" />
+    <Compile Include="NFT\CommandListener.cs" />
+    <Compile Include="NFT\CommandType.cs" />
+    <Compile Include="NFT\Error.cs" />
+    <Compile Include="NFT\ErrorReporter.cs" />
+    <Compile Include="NFT\FileOps.cs" />
+    <Compile Include="NFT\Helper.cs" />
+    <Compile Include="NFT\Log.cs" />
+    <Compile Include="Octodiff\CommandLine\DeltaCommand.cs" />
+    <Compile Include="Octodiff\CommandLine\ExplainDeltaCommand.cs" />
+    <Compile Include="Octodiff\CommandLine\HelpCommand.cs" />
+    <Compile Include="Octodiff\CommandLine\PatchCommand.cs" />
+    <Compile Include="Octodiff\CommandLine\SignatureCommand.cs" />
+    <Compile Include="Octodiff\CommandLine\Support\CommandAttribute.cs" />
+    <Compile Include="Octodiff\CommandLine\Support\CommandException.cs" />
+    <Compile Include="Octodiff\CommandLine\Support\CommandLocator.cs" />
+    <Compile Include="Octodiff\CommandLine\Support\ICommand.cs" />
+    <Compile Include="Octodiff\CommandLine\Support\ICommandLocator.cs" />
+    <Compile Include="Octodiff\CommandLine\Support\ICommandMetadata.cs" />
+    <Compile Include="Octodiff\CommandLine\Support\NDesk.Options.cs" />
+    <Compile Include="Octodiff\Core\Adler32RollingChecksum.cs" />
+    <Compile Include="Octodiff\Core\AggregateCopyOperationsDecorator.cs" />
+    <Compile Include="Octodiff\Core\BinaryDeltaReader.cs" />
+    <Compile Include="Octodiff\Core\BinaryDeltaWriter.cs" />
+    <Compile Include="Octodiff\Core\BinaryFormat.cs" />
+    <Compile Include="Octodiff\Core\ChunkSignature.cs" />
+    <Compile Include="Octodiff\Core\ChunkSignatureChecksumComparer.cs" />
+    <Compile Include="Octodiff\Core\CompatibilityException.cs" />
+    <Compile Include="Octodiff\Core\CorruptFileFormatException.cs" />
+    <Compile Include="Octodiff\Core\DataRange.cs" />
+    <Compile Include="Octodiff\Core\DeltaApplier.cs" />
+    <Compile Include="Octodiff\Core\DeltaBuilder.cs" />
+    <Compile Include="Octodiff\Core\DeltaStatistics.cs" />
+    <Compile Include="Octodiff\Core\HashAlgorithmWrapper.cs" />
+    <Compile Include="Octodiff\Core\IDeltaReader.cs" />
+    <Compile Include="Octodiff\Core\IDeltaWriter.cs" />
+    <Compile Include="Octodiff\Core\IHashAlgorithm.cs" />
+    <Compile Include="Octodiff\Core\IRollingChecksum.cs" />
+    <Compile Include="Octodiff\Core\ISignatureReader.cs" />
+    <Compile Include="Octodiff\Core\ISignatureWriter.cs" />
+    <Compile Include="Octodiff\Core\Signature.cs" />
+    <Compile Include="Octodiff\Core\SignatureBuilder.cs" />
+    <Compile Include="Octodiff\Core\SignatureReader.cs" />
+    <Compile Include="Octodiff\Core\SupportedAlgorithms.cs" />
+    <Compile Include="Octodiff\Core\UsageException.cs" />
+    <Compile Include="Octodiff\Diagnostics\ConsoleProgressReporter.cs" />
+    <Compile Include="Octodiff\Diagnostics\IProgressReporter.cs" />
+    <Compile Include="Octodiff\Diagnostics\NullProgressReporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Slave.cs" />
+    <Compile Include="NFT\Slave.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Octodiff\CHANGES.txt" />
+    <Content Include="Octodiff\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
