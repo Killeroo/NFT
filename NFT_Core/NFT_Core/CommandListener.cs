@@ -18,7 +18,6 @@ public class CommandListener
     private TcpListener listener;
     private IPEndPoint masterEP;
     private NetworkStream stream;
-    byte[] b = new byte[4096];
     private bool running;
 
     public CommandListener()

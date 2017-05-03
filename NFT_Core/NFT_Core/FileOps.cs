@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
@@ -7,6 +8,8 @@ using System.Net;
 /// </summary>
 public class FileOps
 {
+    private static List<FileInfo> files = new List<FileInfo>();
+
     /// <summary>
     /// Transfer file from a remote web server
     /// </summary>
@@ -88,6 +91,64 @@ public class FileOps
     public static void patchFile(string path, string deltaPath)
     {
 
+    }
+    /// <summary>
+    /// Discover all files at a path put in list
+    /// </summary>
+    public static List<FileInfo> discoverFiles(string path, bool recursing = false)
+    {
+        if (!recursing)
+        {
+            // Check path exits
+            if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(path))
+            {
+                Log.warning("Could not discover files at [" + path + "]");
+                return null;
+            }
+
+            // Clear temp list
+            files.Clear();
+
+            // Start recursive discovery
+            Log.info("Starting file discovery at \"" + path + "\"...");
+            discoverFiles(path, true);
+            Log.info(files.Count.ToString() + " files found");
+
+            return files;
+        }
+        else
+        {
+            // Recursive file discovery //
+            DirectoryInfo dir = new DirectoryInfo(path);
+
+            try
+            {
+                // Get all files at path
+                foreach (FileInfo file in dir.GetFiles())
+                    files.Add(file);
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                Log.error(new Error(e, "Directory not found \"" + path + "\""));
+            }
+
+            try
+            {
+                // Recurse through each sub directory to find files
+                foreach (DirectoryInfo di in dir.GetDirectories())
+                    discoverFiles(di.FullName, true);
+            }
+            catch (DirectoryNotFoundException e)
+            {
+                Log.error(new Error(e, "Directory not found \"" + path + "\""));
+            }
+            catch (UnauthorizedAccessException e)
+            {
+                Log.error(new Error(e, "Access denied \"" + path + "\""));
+            }
+
+            return null;
+        }
     }
 }
 

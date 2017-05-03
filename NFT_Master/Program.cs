@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Configuration;
 using System.Net;
 using System.Net.Sockets;
+using System.Collections.Generic;
+using System.IO;
 
 namespace NFT_Master
 {
@@ -22,62 +24,43 @@ namespace NFT_Master
             c.type = CommandType.Info;
 
             // Setup log
-            Log.identifier = "master";
+            Log.identifier = Environment.MachineName;
+            Log.showTimestamp = true;
             Log.info(version);
 
-            //ErrorReporter.listen();
+            //List<FileInfo> files = FileOps.discoverFiles(@"C:\Projects\NFT");
 
-            Slave.scan("10.40.39.130-140");//"192.168.0.1-100");
+            //foreach (var file in files)
+            //    Log.info(file.FullName);
 
-            foreach (var slave in Slave.slaves)
-                slave.send(c);
 
-            foreach (var slave in Slave.slaves)
-                slave.disconnect();
+            c.addFiles(@"C:\Projects\NFT");
 
-            //Console.ReadLine();
+            foreach (var file in c.files)
+                Log.info(file);
 
-            ErrorReporter.listen();
+            Log.warning("Hip hop de stoppy");
+
+            c.shuffleFiles();
+
+            foreach (var file in c.files)
+                Log.info(file);
 
             Console.ReadLine();
 
-            //TransferServer ts = new TransferServer();
+            ////ErrorReporter.listen();
 
-            ////ts.displaySites();
-            //ts.start();
+            //Slave.scan("10.40.39.130-140");//"192.168.0.1-100");
 
-            //Console.ReadLine();
+            //foreach (var slave in Slave.slaves)
+            //    slave.send(c);
 
-            //ts.stop();
+            //foreach (var slave in Slave.slaves)
+            //    slave.disconnect();
 
-            //Console.ReadLine();
+            ////Console.ReadLine();
 
-            //ServerManager iisManager = new ServerManager();
-            //iisManager.Sites["NewSite"].Stop();
-            ////iisManager.Sites.Add("NewSite", "E:\\", 80);
-            ////iisManager.CommitChanges();
-
-            //foreach (var site in iisManager.Sites)
-            //{
-            //    Console.WriteLine(site.Name);
-            //    //Console.WriteLine(site.State);
-            //}
-
-            //Console.ReadLine();
-
-            //Command c = new Command();
-            //c.type = CommandType.Abort;
-            //IPAddress ip = IPAddress.Parse(args[0]);
-            //IPEndPoint ep = new IPEndPoint(ip, 11000);
-            //Slave s = new Slave(ep);
-
-            //Console.ReadLine();
-
-            //s.sendCommand(c);
-
-            //Console.ReadLine();
-
-            //s.disconnect();
+            //ErrorReporter.listen();
 
             //Console.ReadLine();
 
@@ -94,3 +77,27 @@ namespace NFT_Master
         }
     }
 }
+
+//TransferServer ts = new TransferServer();
+
+////ts.displaySites();
+//ts.start();
+
+//Console.ReadLine();
+
+//ts.stop();
+
+//Console.ReadLine();
+
+//ServerManager iisManager = new ServerManager();
+//iisManager.Sites["NewSite"].Stop();
+////iisManager.Sites.Add("NewSite", "E:\\", 80);
+////iisManager.CommitChanges();
+
+//foreach (var site in iisManager.Sites)
+//{
+//    Console.WriteLine(site.Name);
+//    //Console.WriteLine(site.State);
+//}
+
+//Console.ReadLine();

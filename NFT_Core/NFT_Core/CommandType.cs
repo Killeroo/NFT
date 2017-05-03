@@ -8,24 +8,23 @@
     /// Synchronize all files on the slave device
     /// so they are the same as those on the master
     /// </summary>
-    SynchronizeAll = 1,
+    Synchronize = 1,
     /// <summary>
-    /// Re-Transfer all files present on master to slave
-    /// reguardless of what files are present on slave device
+    /// Transfer all files in Command.Files
     /// </summary>
-    CleanTransfer = 2,
+    Transfer = 2,
     /// <summary>
     /// Sends signal to abort current operation
     /// </summary>
     Abort = 3,
     /// <summary>
+    /// Signals operation successful
+    /// </summary>
+    Success = 4,
+    /// <summary>
     /// Info message
     /// </summary>
-    Info = 4, 
-    /// <summary>
-    /// Error Message
-    /// </summary>
-    Error = 5,
+    Info = 5, 
     /// <summary>
     /// Quit Message
     /// </summary>

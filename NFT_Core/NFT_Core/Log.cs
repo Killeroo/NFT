@@ -19,6 +19,15 @@ public class Log
         Console.ForegroundColor = ConsoleColor.Gray;
         Console.WriteLine(message);
     }
+    public static void warning(string message)
+    {
+        title();
+        timestamp();
+        Console.ForegroundColor = ConsoleColor.Yellow;
+        Console.Write("[Warning] ");
+        Console.ForegroundColor = ConsoleColor.Gray;
+        Console.WriteLine(message);
+    }
     public static void error(Error err)
     {
         title();
@@ -78,16 +87,16 @@ public class Log
     private static void title()
     {
         if (identifier != "")
-            Console.Write("[{0}]", identifier);
+            Console.Write("[{0}] ", identifier);
     }
     private static void timestamp()
     {
         if (showTimestamp)
         {
             if (longTimestamp)
-                Console.Write("[{0}]", DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
+                Console.Write("[{0}] ", DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
             else
-                Console.Write("[{0}]", DateTime.Now.ToString("HH:mm:ss"));
+                Console.Write("[{0}] ", DateTime.Now.ToString("HH:mm:ss"));
         }
     }
 }
