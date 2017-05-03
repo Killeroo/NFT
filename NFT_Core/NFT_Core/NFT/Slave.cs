@@ -30,6 +30,10 @@ public class Slave
     {
         try
         {
+            // Check if connected first
+            if (client == null || !isConnected)
+                throw new Exception();
+
             byte[] buffer = new byte[4096];
             curSeqNum++; // Increment sequence number
             c.seq = curSeqNum;
@@ -55,8 +59,6 @@ public class Slave
     {
         try
         {
-            Log.info("Connecting to " + endPoint.Address + ":" + endPoint.Port + "...");
-
             // Async connection attempt
             var result = client.BeginConnect(endPoint.Address.ToString(), endPoint.Port, null, null);
             var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(150));//FromSeconds(1)); // Set timeout 
@@ -65,18 +67,23 @@ public class Slave
 
             // Connected
             client.EndConnect(result);
-            Log.info("Connection established");
+            Log.info("Connected to " + endPoint.Address + " [NFT_Slave]");
 
             stream = client.GetStream();
             isConnected = true;
         }
         catch (SocketException e)
         {
-            Log.error(new Error(e, "Could not connect to slave"));
+            // For cleaner scanning output
+            //Log.error(new Error(e, "Could not connect to slave"));
         }
         catch (ObjectDisposedException e)
         {
-            Log.error(new Error(e, "Object failure"));
+            //Log.error(new Error(e, "Object failure"));
+        }
+        catch (Exception e)
+        {
+            //Log.error(new Error(e, "Could not connect to slave"));
         }
     }
     public void disconnect()
@@ -101,6 +108,7 @@ public class Slave
     {
         IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), CommandListener.COMMAND_LISTEN_PORT);
         List<Slave> foundSlaves = new List<Slave>();
+        int hostCount = 0;
 
         // Split ip address into segments
         string[] addressSegs = range.Split('.');
@@ -118,7 +126,7 @@ public class Slave
         }
 
         // Loop through each possible address
-        Log.info("Starting slave scan on range [" + range + "]");
+        Log.info("Scanning for NFT_Slave programs on range [" + range + "]...");
         for (int seg1 = segLower[0]; seg1 <= segUpper[0]; seg1++)
         {
             for (int seg2 = segLower[1]; seg2 <= segUpper[1]; seg2++)
@@ -136,11 +144,15 @@ public class Slave
 
                         // Add to list of connected slaves
                         if (s.isConnected)
+                        {
                             Slave.slaves.Add(s);
+                            hostCount++;
+                        }
                     }
                 }
             }
         }
+        Log.info("Scan complete. " + hostCount + " host(s) found");
     }
     /// <summary>
     /// Send command to all connected slaves

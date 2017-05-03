@@ -28,11 +28,6 @@ namespace NFT_Master
             Log.showTimestamp = true;
             Log.info(version);
 
-            //List<FileInfo> files = FileOps.discoverFiles(@"C:\Projects\NFT");
-
-            //foreach (var file in files)
-            //    Log.info(file.FullName);
-
 
             c.addFiles(@"C:\Projects\NFT");
 
