@@ -31,21 +31,27 @@ namespace Octodiff.CommandLine
 
         public int Execute(string[] commandLineArguments)
         {
+            // Parse through arguments
             options.Parse(commandLineArguments);
 
+            // Check if the file path contains a string
             if (string.IsNullOrWhiteSpace(basisFilePath))
                 throw new OptionException("No basis file was specified", "basis-file");
 
+            // Specifiy new files path
             basisFilePath = Path.GetFullPath(basisFilePath);
 
+            // Set up the signature generator (load options)
             var signatureBuilder = new SignatureBuilder();
             foreach (var config in configuration) config(signatureBuilder);
 
+            // Check if the file exists
             if (!File.Exists(basisFilePath))
             {
                 throw new FileNotFoundException("File not found: " + basisFilePath, basisFilePath);
             }
 
+            // Make sure path exists
             if (string.IsNullOrWhiteSpace(signatureFilePath))
             {
                 signatureFilePath = basisFilePath + ".octosig";
@@ -60,6 +66,7 @@ namespace Octodiff.CommandLine
                 }
             }
 
+            // Generate signature from file
             using (var basisStream = new FileStream(basisFilePath, FileMode.Open, FileAccess.Read, FileShare.Read))
             using (var signatureStream = new FileStream(signatureFilePath, FileMode.Create, FileAccess.Write, FileShare.Read))
             {
