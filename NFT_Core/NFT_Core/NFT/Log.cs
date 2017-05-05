@@ -38,8 +38,6 @@ public class Log
         if (err.message != "")
             Console.Write("msg=\"{0}\" ", err.message); // Show message if set
         Console.WriteLine("type={0}", err.type);
-        //if (err.ex is Exception)
-            //Console.WriteLine(err.ex.ToString()); // Print stacktrace if general exception 
     }
     public static void remoteError(Error err)
     {
@@ -75,7 +73,7 @@ public class Log
         Console.ForegroundColor = ConsoleColor.Green;
         Console.Write("[Command] ");
         Console.ForegroundColor = ConsoleColor.Gray;
-        Console.Write("seq={2} type={0} sender={1} destination={3}", c.type, c.sender, c.seq, c.reciever);
+        Console.Write("seq={2} type={0} src={1} dest={3}", c.type, c.source.ToString(), c.seq, c.destination.ToString());
 
         // Display message if exists
         if (c.message != "" && c.type == CommandType.Info)
@@ -90,7 +88,7 @@ public class Log
         Console.ForegroundColor = ConsoleColor.DarkCyan;
         Console.Write("[RsyncStream] ");
         Console.ForegroundColor = ConsoleColor.Gray;
-        Console.WriteLine("seq={2} type={0} sender={1} destination={3}", rs.type, rs.sender, rs.seq, rs.reciever);
+        Console.WriteLine("seq={0} type={1} file={2}", rs.seq, rs.type, rs.filename);
     }
 
     private static void title()

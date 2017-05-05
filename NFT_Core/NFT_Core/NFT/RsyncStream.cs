@@ -2,21 +2,29 @@
 using System.IO;
 
 /// <summary>
-/// Classed used to store Rsync signature and delta streams
+/// Class used to store Rsync signature and delta streams
 /// </summary>
 [Serializable()]
 public class RsyncStream
 {
     public StreamType type { get; set; }
     public MemoryStream stream { get; set; }
-    public string sender { get; set; }
-    public string reciever { get; set; }
-    public int seq { get; set; } = 0;
+    public string filename { get; private set; }
+    public string relativePath { get; private set; }
+    public int seq { get; set; } = 0; // Remove?
 
-    public RsyncStream(StreamType st, MemoryStream ms, string destIP)
+    public RsyncStream(StreamType st, MemoryStream ms, string relativeFilePath)
     {
-        sender = Helper.GetLocalIPAddress();
-        reciever = destIP;
+        if (String.IsNullOrEmpty(relativeFilePath))
+        {
+            Log.error(new Error(new Exception(), "Relative file path empty"));
+            return;
+        }
+
+        // Setup attributes 
+        filename = Path.GetFileName(relativeFilePath);
+        relativePath = Path.GetFullPath(relativeFilePath); // Check
+        type = st;
         stream = ms;
     }
 }

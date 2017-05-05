@@ -39,15 +39,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="NFT\Command.cs" />
-    <Compile Include="NFT\CommandListener.cs" />
+    <Compile Include="NFT\CommandHandler.cs" />
+    <Compile Include="NFT\Constants.cs" />
+    <Compile Include="NFT\MasterListener.cs" />
     <Compile Include="NFT\CommandType.cs" />
     <Compile Include="NFT\Error.cs" />
     <Compile Include="NFT\ErrorReporter.cs" />
     <Compile Include="NFT\FileOps.cs" />
     <Compile Include="NFT\Helper.cs" />
     <Compile Include="NFT\Log.cs" />
-    <Compile Include="NFT\RsyncListener.cs" />
     <Compile Include="NFT\RsyncStream.cs" />
+    <Compile Include="NFT\SlaveListener.cs" />
     <Compile Include="NFT\StreamType.cs" />
     <Compile Include="Octodiff\CommandLine\DeltaCommand.cs" />
     <Compile Include="Octodiff\CommandLine\ExplainDeltaCommand.cs" />

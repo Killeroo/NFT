@@ -21,8 +21,6 @@ public class FileOps
     /// <param name="destPath"></param>
     public static void fetchFile(string url, string destPath)
     {
-        // TODO: Switch to ASync
-
         string filename = Path.GetFileName(url);
 
         try

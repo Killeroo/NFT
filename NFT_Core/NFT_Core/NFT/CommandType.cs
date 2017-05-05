@@ -14,20 +14,25 @@
     /// </summary>
     Transfer = 2,
     /// <summary>
+    /// Symbolises that command is being used
+    /// to transfer RsyncStream
+    /// </summary>
+    RsyncStream = 3,
+    /// <summary>
     /// Sends signal to abort current operation
     /// </summary>
-    Abort = 3,
+    Abort = 4,
     /// <summary>
     /// Signals operation successful
     /// </summary>
-    Success = 4,
+    Success = 5,
     /// <summary>
     /// Info message
     /// </summary>
-    Info = 5, 
+    Info = 6, 
     /// <summary>
     /// Quit Message
     /// </summary>
-    Quit = 6,
+    Quit = 7,
     // Fetch (for when a file fails)
 };

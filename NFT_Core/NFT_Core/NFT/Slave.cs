@@ -37,7 +37,7 @@ public class Slave
             byte[] buffer = new byte[4096];
             curSeqNum++; // Increment sequence number
             c.seq = curSeqNum;
-            c.reciever = client.Client.RemoteEndPoint.ToString().Split(':')[0]; // Set destination of command
+            c.destination = IPAddress.Parse(client.Client.RemoteEndPoint.ToString().Split(':')[0]); // Set destination of command
             buffer = Helper.ToByteArray<Command>(c);//Command.serialize(c);
             Log.command(c);
             stream.Write(buffer, 0, buffer.Length);
@@ -100,13 +100,14 @@ public class Slave
         stream.Close();
         isConnected = false;
     }
+    public void reconnect() { }
 
     /// <summary>
     /// Finds NFT slaves on specified address range
     /// </summary>
     public static void scan(string range)
     {
-        IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), CommandListener.COMMAND_LISTEN_PORT);
+        IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), MasterListener.COMMAND_LISTEN_PORT);
         List<Slave> foundSlaves = new List<Slave>();
         int hostCount = 0;
 

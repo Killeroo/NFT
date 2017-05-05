@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Reflection;
-using System.Configuration;
-using System.Net;
 
 namespace NFT_Slave
 {
     class Program
     {
-        private static CommandListener listener = new CommandListener();
-
+        private static MasterListener listener = new MasterListener();
 
         static void Main(string[] args)
         {
@@ -20,12 +17,12 @@ namespace NFT_Slave
             string version = Assembly.GetExecutingAssembly().GetName().Name + " Version " + v.Major + "." + v.Minor + "." + v.Build + " (r" + v.Revision + ")";
 
             // Setup log
-            Log.identifier = "slave";
+            Log.identifier = Environment.MachineName;//"slave";
             Log.info(version);
 
             listener.start();
 
-            Console.ReadLine();
+            //Console.ReadLine(); 
 
             //Error err = new Error(new Exception());
             //ErrorReporter.sendError(err, new IPEndPoint(IPAddress.Parse(Helper.GetLocalIPAddress()), 0));

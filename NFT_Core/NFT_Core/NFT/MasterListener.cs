@@ -7,20 +7,20 @@ using System.Runtime.Serialization;
 /// <summary>
 /// Class for recieving Command messages from NFT master application
 /// </summary>
-public class CommandListener
+public class MasterListener
 {
     public const int COMMAND_LISTEN_PORT = 11430;
 
     public bool isListening { get; private set; }
     public bool isConnected { get; private set; }
+    public TcpClient master { get; private set; }
 
-    private TcpClient master;
     private TcpListener listener;
     private IPEndPoint masterEP;
     private NetworkStream stream;
     private bool running;
 
-    public CommandListener()
+    public MasterListener()
     {
         listener = new TcpListener(IPAddress.Parse(Helper.GetLocalIPAddress()), COMMAND_LISTEN_PORT);
     }
@@ -124,8 +124,12 @@ public class CommandListener
                     while (stream.DataAvailable);
 
                     // Deserialize command 
-                    c = Helper.FromMemoryStream<Command>(ms);//Command.deserialize(ms);
-                    Log.command(c);
+                    c = Helper.FromMemoryStream<Command>(ms);
+
+                    // Handle command
+                    CommandHandler.handle(c);
+
+                    CommandHandler.send(new Command(CommandType.Success, c.source.ToString()), master, 0);
                 }
                 catch (SerializationException e)
                 {
@@ -158,9 +162,5 @@ public class CommandListener
         Log.info(masterEP.Address + ":" + masterEP.Port + " disconnected");
         isConnected = false;
     }
-    /// <summary>
-    /// Handles recieved commands from NFT master
-    /// </summary>
-    private void handleCommand() { }
     private void testConnection() { }
 }
