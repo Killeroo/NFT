@@ -2,6 +2,8 @@
 using System.Reflection;
 using System.Threading;
 
+using NFT;
+
 namespace NFT_Master
 {
     class Program
@@ -21,35 +23,35 @@ namespace NFT_Master
             // Setup log
             Log.identifier = Environment.MachineName;
             Log.showTimestamp = true;
-            Log.info(version);
+            Log.Info(version);
 
             // Setup error listener
-            Thread errorThread = new Thread(new ThreadStart(ErrorReporter.listen));
+            Thread errorThread = new Thread(new ThreadStart(ErrorReporter.Listen));
             errorThread.Start();
 
-            Slave.scan(args[0]);
+            Slave.Scan(args[0]);
 
             // Start listening to each connected slave
             foreach (var slave in Slave.slaves)
             {
                 SlaveListener sl = new SlaveListener(slave);
-                Thread listeningThread = new Thread(new ThreadStart(sl.start));
+                Thread listeningThread = new Thread(new ThreadStart(sl.Start));
                 listeningThread.Start();
             }
 
-            Slave.sendToAll(new Command(CommandType.Info));
+            Slave.SendAll(new Command(CommandType.Info));
 
             // Generate and store sig
-            var stream = FileOps.generateSignature(@"C:\temp\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
+            var stream = FileOps.GenerateSignature(@"C:\temp\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
             RsyncStream rs = new RsyncStream(StreamType.Signature, stream, @"C:\temp\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
             c.addStream(rs);
 
-            Slave.sendToAll(c);
+            Slave.SendAll(c);
 
             Console.ReadLine();
 
             foreach (var slave in Slave.slaves)
-                slave.disconnect();
+                slave.Disconnect();
 
             Console.ReadLine();
 

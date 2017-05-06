@@ -3,57 +3,60 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 
-/// <summary>
-/// Static class for handling Command messages
-/// </summary>
-public class CommandHandler
+namespace NFT
 {
-    public static void handle(Command c)
+    /// <summary>
+    /// Static class for handling Command messages
+    /// </summary>
+    public class CommandHandler
     {
-        switch (c.type)
+        public static void Handle(Command c)
         {
-            case CommandType.RsyncStream:
-                Log.command(c);
-                Log.stream(c.stream);
+            switch (c.type)
+            {
+                case CommandType.RsyncStream:
+                    Log.Command(c);
+                    Log.Stream(c.stream);
 
-                foreach (var data in c.stream.stream.ToArray())
-                    Console.Write(data);
+                    foreach (var data in c.stream.stream.ToArray())
+                        Console.Write(data);
 
-                ErrorReporter.sendError(new Error(new Exception(), "test"), new IPEndPoint(c.source, 0));
+                    ErrorReporter.SendError(new Error(new Exception(), "test"), new IPEndPoint(c.source, 0));
 
-                break;
+                    break;
 
-            default:
-                Log.command(c);
-                break;
+                default:
+                    Log.Command(c);
+                    break;
+            }
         }
-    }
-    public static void send(Command c, TcpClient client, int seqnum)
-    {
-        try
+        public static void Send(Command c, TcpClient client, int seqnum)
         {
-            // Check if connected first
-            if (client == null)
-                throw new Exception();
+            try
+            {
+                // Check if connected first
+                if (client == null)
+                    throw new Exception();
 
-            byte[] buffer = new byte[4096];
-            c.seq = seqnum;
-            c.destination = IPAddress.Parse(client.Client.RemoteEndPoint.ToString().Split(':')[0]); // Set destination of command
-            buffer = Helper.ToByteArray<Command>(c);
-            Log.command(c);
-            client.GetStream().Write(buffer, 0, buffer.Length);
-        }
-        catch (IOException e)
-        {
-            Log.error(new Error(e, "Failed to send command"));
-        }
-        catch (ObjectDisposedException e)
-        {
-            Log.error(new Error(e, "Object failure"));
-        }
-        catch (Exception e)
-        {
-            Log.error(new Error(e, "Could not send command"));
+                byte[] buffer = new byte[4096];
+                c.seq = seqnum;
+                c.destination = IPAddress.Parse(client.Client.RemoteEndPoint.ToString().Split(':')[0]); // Set destination of command
+                buffer = Helper.ToByteArray<Command>(c);
+                Log.Command(c);
+                client.GetStream().Write(buffer, 0, buffer.Length);
+            }
+            catch (IOException e)
+            {
+                Log.Error(new Error(e, "Failed to send command"));
+            }
+            catch (ObjectDisposedException e)
+            {
+                Log.Error(new Error(e, "Object failure"));
+            }
+            catch (Exception e)
+            {
+                Log.Error(new Error(e, "Could not send command"));
+            }
         }
     }
 }

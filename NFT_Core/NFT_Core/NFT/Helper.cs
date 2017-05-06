@@ -5,75 +5,79 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 
-/// <summary>
-/// Helper class containing misc static methods
-/// </summary>
-public class Helper
+namespace NFT
 {
-    /// <summary>
-    /// Gets IPv4 address of computer
-    /// </summary>
-    /// <returns></returns>
-    public static string GetLocalIPAddress()
-    {
-        var host = Dns.GetHostEntry(Dns.GetHostName());
-        foreach (var ip in host.AddressList)
-            if (ip.AddressFamily == AddressFamily.InterNetwork)
-                return ip.ToString();
-        return "";
-    }
 
     /// <summary>
-    /// Conversion methods
+    /// Helper class containing misc static methods
     /// </summary>
-    public static byte[] ToByteArray<T>(T obj)
+    public class Helper
     {
-        if (obj == null)
-            return null;
-
-        BinaryFormatter bf = new BinaryFormatter();
-        using (MemoryStream ms = new MemoryStream())
+        /// <summary>
+        /// Gets IPv4 address of computer
+        /// </summary>
+        /// <returns></returns>
+        public static string GetLocalIPAddress()
         {
-            bf.Serialize(ms, obj);
-            return ms.ToArray();
+            var host = Dns.GetHostEntry(Dns.GetHostName());
+            foreach (var ip in host.AddressList)
+                if (ip.AddressFamily == AddressFamily.InterNetwork)
+                    return ip.ToString();
+            return "";
         }
-    }
-    public static T FromByteArray<T>(byte[] data)
-    {
-        if (data == null)
-            return default(T);
 
-        BinaryFormatter bf = new BinaryFormatter();
-        using (MemoryStream ms = new MemoryStream(data))
+        /// <summary>
+        /// Conversion methods
+        /// </summary>
+        public static byte[] ToByteArray<T>(T obj)
         {
-            object obj = bf.Deserialize(ms);
+            if (obj == null)
+                return null;
+
+            BinaryFormatter bf = new BinaryFormatter();
+            using (MemoryStream ms = new MemoryStream())
+            {
+                bf.Serialize(ms, obj);
+                return ms.ToArray();
+            }
+        }
+        public static T FromByteArray<T>(byte[] data)
+        {
+            if (data == null)
+                return default(T);
+
+            BinaryFormatter bf = new BinaryFormatter();
+            using (MemoryStream ms = new MemoryStream(data))
+            {
+                object obj = bf.Deserialize(ms);
+                return (T)obj;
+            }
+        }
+        public static T FromMemoryStream<T>(MemoryStream ms)
+        {
+            if (ms == null)
+                return default(T);
+
+            BinaryFormatter bf = new BinaryFormatter();
+            ms.Seek(0, SeekOrigin.Begin);
+            Object obj = bf.Deserialize(ms);
+            ms.Close();
             return (T)obj;
         }
     }
-    public static T FromMemoryStream<T>(MemoryStream ms)
-    {
-        if (ms == null)
-            return default(T);
 
-        BinaryFormatter bf = new BinaryFormatter();
-        ms.Seek(0, SeekOrigin.Begin);
-        Object obj = bf.Deserialize(ms);
-        ms.Close();
-        return (T)obj; 
-    }
-}
-
-/// <summary>
-/// Socket class extension to poll if a socket is actively connected
-/// </summary>
-static class SocketExtensions
-{
-    public static bool IsConnected(this Socket socket)
+    /// <summary>
+    /// Socket class extension to poll if a socket is actively connected
+    /// </summary>
+    static class SocketExtensions
     {
-        try
+        public static bool IsConnected(this Socket socket)
         {
-            return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
+            try
+            {
+                return !(socket.Poll(1, SelectMode.SelectRead) && socket.Available == 0);
+            }
+            catch (SocketException) { return false; }
         }
-        catch (SocketException) { return false; }
     }
 }

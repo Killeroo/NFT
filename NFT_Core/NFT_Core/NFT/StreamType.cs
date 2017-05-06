@@ -1,8 +1,11 @@
-﻿/// <summary>
-/// Stores Rsync stream types
-/// </summary>
-public enum StreamType
+﻿namespace NFT
 {
-    Signature = 0,
-    Delta = 1,
+    /// <summary>
+    /// Stores Rsync stream types
+    /// </summary>
+    public enum StreamType
+    {
+        Signature = 0,
+        Delta = 1,
+    }
 }

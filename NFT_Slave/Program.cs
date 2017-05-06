@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 
+using NFT;
+
 namespace NFT_Slave
 {
     class Program
@@ -18,9 +20,9 @@ namespace NFT_Slave
 
             // Setup log
             Log.identifier = Environment.MachineName;//"slave";
-            Log.info(version);
+            Log.Info(version);
 
-            listener.start();
+            listener.Start();
 
             //Console.ReadLine(); 
 
@@ -34,7 +36,7 @@ namespace NFT_Slave
             args.Cancel = true;
 
             // Stop commandlistener
-            listener.stop();
+            listener.Stop();
 
             Console.WriteLine("Slave stopped. Press any key to exit...");
             Console.ReadLine();

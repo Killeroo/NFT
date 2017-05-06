@@ -2,40 +2,65 @@
 using System.Net;
 using System.Net.Sockets;
 
-/// <summary>
-/// For sending and listening for errors using UDP
-/// </summary>
-public class ErrorReporter // Change to ErrorListener
+namespace NFT
 {
-    private const int UDP_LISTEN_PORT = 12300;
-    private const int UDP_SEND_PORT = 12301;
 
-    // Add error handling
-    public static void listen()
+    /// <summary>
+    /// For sending and listening for errors using UDP
+    /// </summary>
+    public class ErrorReporter
     {
-        UdpClient listener = new UdpClient(UDP_LISTEN_PORT);
-        Log.info("Listening for slave errors on " + Helper.GetLocalIPAddress() + ":" + UDP_LISTEN_PORT + "...");
+        private const int UDP_LISTEN_PORT = 12300;
+        private const int UDP_SEND_PORT = 12301;
 
-        while (true)
+        public static void Listen()
         {
-            IPEndPoint remoteEP = new IPEndPoint(IPAddress.Any, UDP_SEND_PORT);
-            byte[] data = listener.Receive(ref remoteEP); // Listen for message
-            if (data != null)
+            UdpClient listener = new UdpClient(UDP_LISTEN_PORT);
+            Log.Info("Listening for slave errors on " + Helper.GetLocalIPAddress() + ":" + UDP_LISTEN_PORT + "...");
+
+            while (true)
             {
-                Error err = Helper.FromByteArray<Error>(data); // Serialize data to Error object
-                Log.remoteError(err);
+                try
+                {
+                    IPEndPoint remoteEP = new IPEndPoint(IPAddress.Any, UDP_SEND_PORT);
+                    byte[] data = listener.Receive(ref remoteEP); // Listen for message
+                    if (data != null)
+                    {
+                        Error err = Helper.FromByteArray<Error>(data); // Serialize data to Error object
+                        Log.RemoteError(err);
+                    }
+                }
+                catch (SocketException ex)
+                {
+                    Log.Error(new Error(ex, "Could not recieve UDP error message"));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(new Error(ex, "Could not recieve UDP error message"));
+                }
             }
         }
-    }
-    public static void sendError(Error e, IPEndPoint destEP)
-    {
-        Log.info("Sending error to master at " + destEP.Address + ":" + UDP_LISTEN_PORT);
-        destEP.Port = UDP_LISTEN_PORT;
-
-        using (UdpClient client = new UdpClient(UDP_SEND_PORT))
+        public static void SendError(Error e, IPEndPoint destEP)
         {
-            byte[] data = Helper.ToByteArray<Error>(e);
-            client.Send(data, data.Length, (IPEndPoint)destEP);
+            Log.Info("Sending error to master at " + destEP.Address + ":" + UDP_LISTEN_PORT);
+            destEP.Port = UDP_LISTEN_PORT;
+
+            using (UdpClient client = new UdpClient(UDP_SEND_PORT))
+            {
+                try
+                {
+                    byte[] data = Helper.ToByteArray<Error>(e);
+                    client.Send(data, data.Length, (IPEndPoint)destEP);
+                }
+                catch (SocketException ex)
+                {
+                    Log.Error(new Error(ex, "Could not send UDP error message"));
+                }
+                catch (Exception ex)
+                {
+                    Log.Error(new Error(ex, "Could not send UDP error message"));
+                }
+            }
         }
     }
 }

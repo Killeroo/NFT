@@ -3,6 +3,8 @@ using Microsoft.Web.Administration;
 using System.Configuration;
 //TODO: Move to core when done
 
+using NFT;
+
 /// <summary>
 /// Setup and control IIS HTTP transfer server
 /// </summary>
@@ -36,13 +38,13 @@ public class TransferServer
             iisManager.Sites[SITE_NAME].Stop();
             iisManager.Sites.Remove(s);
             iisManager.CommitChanges();
-            Log.info("[" + url + "] IIS server stopped");
+            Log.Info("[" + url + "] IIS server stopped");
         }
     }
     public void displaySites()
     {
         foreach (var site in iisManager.Sites)
-            Log.info("Site " + site.Name + " active");
+            Log.Info("Site " + site.Name + " active");
     }
 
     private bool checkIfSiteExists()
