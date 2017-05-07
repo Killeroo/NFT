@@ -47,7 +47,7 @@
     <Compile Include="NFT\Comms\ErrorReporter.cs" />
     <Compile Include="NFT\Rsync\RsyncOps.cs" />
     <Compile Include="NFT\Core\Helper.cs" />
-    <Compile Include="NFT\Log\Log.cs" />
+    <Compile Include="NFT\Logger\Log.cs" />
     <Compile Include="NFT\Rsync\RsyncStream.cs" />
     <Compile Include="NFT\Comms\SlaveListener.cs" />
     <Compile Include="NFT\Rsync\StreamType.cs" />
