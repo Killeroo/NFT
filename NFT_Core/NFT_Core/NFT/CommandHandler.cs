@@ -6,7 +6,7 @@ using System.IO;
 namespace NFT
 {
     /// <summary>
-    /// Static class for handling Command messages
+    /// Static class for sending and handling Command messages
     /// </summary>
     public class CommandHandler
     {
@@ -15,13 +15,15 @@ namespace NFT
             switch (c.type)
             {
                 case CommandType.RsyncStream:
+
+                    // Display
                     Log.Command(c);
                     Log.Stream(c.stream);
+                    
+                    // Generate delta
 
-                    foreach (var data in c.stream.stream.ToArray())
-                        Console.Write(data);
+                    // Send delta back to source
 
-                    ErrorReporter.SendError(new Error(new Exception(), "test"), new IPEndPoint(c.source, 0));
 
                     break;
 

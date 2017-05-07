@@ -13,7 +13,6 @@ namespace NFT
         public MemoryStream stream { get; set; }
         public string filename { get; private set; }
         public string relativePath { get; private set; }
-        public int seq { get; set; } = 0; // Remove?
 
         public RsyncStream(StreamType st, MemoryStream ms, string relativeFilePath)
         {

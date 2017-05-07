@@ -42,8 +42,9 @@ namespace NFT_Master
             Slave.SendAll(new Command(CommandType.Info));
 
             // Generate and store sig
-            var stream = FileOps.GenerateSignature(@"C:\temp\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
-            RsyncStream rs = new RsyncStream(StreamType.Signature, stream, @"C:\temp\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
+            var stream = FileOps.GenerateSignature(@"H:\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
+            RsyncStream rs = new RsyncStream(StreamType.Signature, stream, @"H:\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
+            Log.Stream(rs);
             c.addStream(rs);
 
             Slave.SendAll(c);

@@ -90,7 +90,7 @@ namespace NFT
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write("[RsyncStream] ");
             Console.ForegroundColor = ConsoleColor.Gray;
-            Console.WriteLine("seq={0} type={1} file={2}", rs.seq, rs.type, rs.filename);
+            Console.WriteLine("type={0} file={1}", rs.type, rs.filename);
         }
 
         private static void Title()

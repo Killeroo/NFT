@@ -75,6 +75,7 @@ namespace NFT
                     catch (ObjectDisposedException e)
                     {
                         Log.Error(new Error(e, "Object failure"));
+                        running = false; // Exit when object becomes disposed (must be DC)
                     }
                     catch (Exception e)
                     {
