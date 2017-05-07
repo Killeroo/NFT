@@ -3,7 +3,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 
-namespace NFT
+using NFT.Core;
+using NFT.Logger;
+
+namespace NFT.Comms
 {
     /// <summary>
     /// Static class for sending and handling Command messages

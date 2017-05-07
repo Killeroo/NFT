@@ -3,7 +3,7 @@ using Microsoft.Web.Administration;
 using System.Configuration;
 //TODO: Move to core when done
 
-using NFT;
+using NFT.Logger;
 
 /// <summary>
 /// Setup and control IIS HTTP transfer server

@@ -2,7 +2,7 @@
 using System.Net;
 using System.Linq;
 
-namespace NFT
+namespace NFT.Core
 {
 
     /// <summary>

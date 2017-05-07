@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Reflection;
 
-using NFT;
+using NFT.Comms;
+using NFT.Logger;
 
 namespace NFT_Slave
 {
@@ -23,11 +24,6 @@ namespace NFT_Slave
             Log.Info(version);
 
             listener.Start();
-
-            //Console.ReadLine(); 
-
-            //Error err = new Error(new Exception());
-            //ErrorReporter.sendError(err, new IPEndPoint(IPAddress.Parse(Helper.GetLocalIPAddress()), 0));
         }
 
         protected static void exitHandler(object sender, ConsoleCancelEventArgs args)

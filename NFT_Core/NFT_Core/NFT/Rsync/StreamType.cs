@@ -1,4 +1,4 @@
-﻿namespace NFT
+﻿namespace NFT.Rsync
 {
     /// <summary>
     /// Stores Rsync stream types

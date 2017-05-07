@@ -4,7 +4,10 @@ using System.Net.Sockets;
 using System.IO;
 using System.Runtime.Serialization;
 
-namespace NFT
+using NFT.Core;
+using NFT.Logger;
+
+namespace NFT.Comms
 {
     /// <summary>
     /// Listens for Command messages for an NFT_Slave application

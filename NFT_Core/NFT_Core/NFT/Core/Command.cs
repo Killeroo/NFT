@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Net;
 
-namespace NFT
+using NFT.Rsync;
+
+namespace NFT.Core
 {
     /// <summary>
     /// Command class for communicating instructions between NFT Master and Slave applications
@@ -41,7 +43,7 @@ namespace NFT
         /// </summary>
         public void AddFiles(string pathToFiles)
         {
-            List<FileInfo> fileList = FileOps.DiscoverFiles(pathToFiles);
+            List<FileInfo> fileList = RsyncOps.DiscoverFiles(pathToFiles);
 
             if (fileList == null)
                 return; // Exit if path does not exist

@@ -2,7 +2,10 @@
 using System.Reflection;
 using System.Threading;
 
-using NFT;
+using NFT.Core;
+using NFT.Comms;
+using NFT.Rsync;
+using NFT.Logger;
 
 namespace NFT_Master
 {
@@ -42,7 +45,7 @@ namespace NFT_Master
             Slave.SendAll(new Command(CommandType.Info));
 
             // Generate and store sig
-            var stream = FileOps.GenerateSignature(@"H:\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
+            var stream = RsyncOps.GenerateSignature(@"H:\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
             RsyncStream rs = new RsyncStream(StreamType.Signature, stream, @"H:\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
             Log.Stream(rs);
             c.addStream(rs);

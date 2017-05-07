@@ -1,4 +1,4 @@
-﻿namespace NFT
+﻿namespace NFT.Core
 {
     /// <summary>
     /// Stores NFT constant variables

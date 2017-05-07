@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
 
-namespace NFT
+using NFT.Core;
+using NFT.Logger;
+
+namespace NFT.Rsync
 {
     /// <summary>
     /// Class used to store Rsync signature and delta streams

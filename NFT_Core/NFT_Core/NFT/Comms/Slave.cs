@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 
-namespace NFT
+using NFT.Core;
+using NFT.Logger;
+
+namespace NFT.Comms
 {
     public class Slave
     {

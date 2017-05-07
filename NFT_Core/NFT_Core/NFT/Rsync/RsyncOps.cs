@@ -8,69 +8,72 @@ using Octodiff.CommandLine;
 using Octodiff.CommandLine.Support;
 using Octodiff.Core;
 
-namespace NFT
+using NFT.Core;
+using NFT.Logger;
+
+namespace NFT.Rsync
 {
     /// <summary>
-    /// Stores static helper methods for file operations required by NFT
+    /// Stores static helper methods for rsync file operations 
     /// </summary>
-    public class FileOps
+    public class RsyncOps
     {
         private static List<FileInfo> files = new List<FileInfo>();
 
-        /// <summary>
-        /// Transfer file from a remote web server
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="destPath"></param>
-        public static void FetchFile(string url, string destPath)
-        {
-            string filename = Path.GetFileName(url);
+        ///// <summary>
+        ///// Transfer file from a remote web server
+        ///// </summary>
+        ///// <param name="url"></param>
+        ///// <param name="destPath"></param>
+        //public static void FetchFile(string url, string destPath)
+        //{
+        //    string filename = Path.GetFileName(url);
 
-            try
-            {
-                // Request a file from the local server
-                WebRequest request = WebRequest.Create(url);
-                Log.Info("Requesting file (" + request.RequestUri.ToString() + ")");
-                // Retrieve the response
-                WebResponse response = request.GetResponse();
-                // Display status
-                Log.Info("Response recieved. Status=\"" + ((HttpWebResponse)response).StatusDescription + "\"");
-                // Get response stream (containing file data)
-                Stream fileStream = response.GetResponseStream();
-                Log.Info("Transferring...");
+        //    try
+        //    {
+        //        // Request a file from the local server
+        //        WebRequest request = WebRequest.Create(url);
+        //        Log.Info("Requesting file (" + request.RequestUri.ToString() + ")");
+        //        // Retrieve the response
+        //        WebResponse response = request.GetResponse();
+        //        // Display status
+        //        Log.Info("Response recieved. Status=\"" + ((HttpWebResponse)response).StatusDescription + "\"");
+        //        // Get response stream (containing file data)
+        //        Stream fileStream = response.GetResponseStream();
+        //        Log.Info("Transferring...");
 
-                // Write file locally
-                using (FileStream fs = File.Create(Path.Combine(destPath, filename)))
-                    fileStream.CopyTo(fs);
-                Log.Info("File created \"" + Path.Combine(destPath, filename + "\""));
-            }
-            catch (WebException e)
-            {
-                Log.Error(new Error(e, "Request to \"" + url + "\" timed out"));
-            }
-            catch (UnauthorizedAccessException e)
-            {
-                Log.Error(new Error(e, "Cannot create file \"" + filename + "\""));
-            }
-            catch (PathTooLongException e)
-            {
-                Log.Error(new Error(e, "Cannot create file \"" + filename + "\""));
-            }
-            catch (DirectoryNotFoundException e)
-            {
-                Log.Error(new Error(e, "Cannot create file \"" + filename + "\""));
-            }
-            catch (IOException e)
-            {
-                Log.Error(new Error(e, "Cannot create file \"" + filename + "\""));
-            }
-            catch (Exception e)
-            {
-                Log.Error(new Error(e, "Cannot transfer file \"" + filename + "\\"));
-                Log.Info("---Stacktrace---\n" + e.ToString());
-                Log.Info(e.ToString());
-            }
-        }
+        //        // Write file locally
+        //        using (FileStream fs = File.Create(Path.Combine(destPath, filename)))
+        //            fileStream.CopyTo(fs);
+        //        Log.Info("File created \"" + Path.Combine(destPath, filename + "\""));
+        //    }
+        //    catch (WebException e)
+        //    {
+        //        Log.Error(new Error(e, "Request to \"" + url + "\" timed out"));
+        //    }
+        //    catch (UnauthorizedAccessException e)
+        //    {
+        //        Log.Error(new Error(e, "Cannot create file \"" + filename + "\""));
+        //    }
+        //    catch (PathTooLongException e)
+        //    {
+        //        Log.Error(new Error(e, "Cannot create file \"" + filename + "\""));
+        //    }
+        //    catch (DirectoryNotFoundException e)
+        //    {
+        //        Log.Error(new Error(e, "Cannot create file \"" + filename + "\""));
+        //    }
+        //    catch (IOException e)
+        //    {
+        //        Log.Error(new Error(e, "Cannot create file \"" + filename + "\""));
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        Log.Error(new Error(e, "Cannot transfer file \"" + filename + "\\"));
+        //        Log.Info("---Stacktrace---\n" + e.ToString());
+        //        Log.Info(e.ToString());
+        //    }
+        //}
         /// <summary>
         /// Generate rsync signature for a given file
         /// </summary>

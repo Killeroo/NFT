@@ -38,19 +38,19 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NFT\Command.cs" />
-    <Compile Include="NFT\CommandHandler.cs" />
-    <Compile Include="NFT\Constants.cs" />
-    <Compile Include="NFT\MasterListener.cs" />
-    <Compile Include="NFT\CommandType.cs" />
-    <Compile Include="NFT\Error.cs" />
-    <Compile Include="NFT\ErrorReporter.cs" />
-    <Compile Include="NFT\FileOps.cs" />
-    <Compile Include="NFT\Helper.cs" />
-    <Compile Include="NFT\Log.cs" />
-    <Compile Include="NFT\RsyncStream.cs" />
-    <Compile Include="NFT\SlaveListener.cs" />
-    <Compile Include="NFT\StreamType.cs" />
+    <Compile Include="NFT\Core\Command.cs" />
+    <Compile Include="NFT\Comms\CommandHandler.cs" />
+    <Compile Include="NFT\Core\Constants.cs" />
+    <Compile Include="NFT\Comms\MasterListener.cs" />
+    <Compile Include="NFT\Core\CommandType.cs" />
+    <Compile Include="NFT\Core\Error.cs" />
+    <Compile Include="NFT\Comms\ErrorReporter.cs" />
+    <Compile Include="NFT\Rsync\RsyncOps.cs" />
+    <Compile Include="NFT\Core\Helper.cs" />
+    <Compile Include="NFT\Log\Log.cs" />
+    <Compile Include="NFT\Rsync\RsyncStream.cs" />
+    <Compile Include="NFT\Comms\SlaveListener.cs" />
+    <Compile Include="NFT\Rsync\StreamType.cs" />
     <Compile Include="Octodiff\CommandLine\DeltaCommand.cs" />
     <Compile Include="Octodiff\CommandLine\ExplainDeltaCommand.cs" />
     <Compile Include="Octodiff\CommandLine\HelpCommand.cs" />
@@ -93,7 +93,7 @@
     <Compile Include="Octodiff\Diagnostics\IProgressReporter.cs" />
     <Compile Include="Octodiff\Diagnostics\NullProgressReporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NFT\Slave.cs" />
+    <Compile Include="NFT\Comms\Slave.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Octodiff\CHANGES.txt" />
