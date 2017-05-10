@@ -10,7 +10,7 @@ using NFT.Logger;
 namespace NFT.Comms
 {
     /// <summary>
-    /// Listens for Command messages for an NFT_Slave application
+    /// Listens for Command messages from NFT_Slave application
     /// </summary>
     public class SlaveListener
     {

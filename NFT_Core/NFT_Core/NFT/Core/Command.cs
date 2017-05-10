@@ -43,7 +43,7 @@ namespace NFT.Core
         /// </summary>
         public void AddFiles(string pathToFiles)
         {
-            List<FileInfo> fileList = RsyncOps.DiscoverFiles(pathToFiles);
+            List<FileInfo> fileList = FileOps.DiscoverFiles(pathToFiles);
 
             if (fileList == null)
                 return; // Exit if path does not exist

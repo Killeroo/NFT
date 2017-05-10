@@ -45,6 +45,7 @@
     <Compile Include="NFT\Core\CommandType.cs" />
     <Compile Include="NFT\Core\Error.cs" />
     <Compile Include="NFT\Comms\ErrorReporter.cs" />
+    <Compile Include="NFT\Core\FileOps.cs" />
     <Compile Include="NFT\Rsync\RsyncOps.cs" />
     <Compile Include="NFT\Core\Helper.cs" />
     <Compile Include="NFT\Logger\Log.cs" />
