@@ -46,7 +46,7 @@ namespace NFT.Comms
             // Command recieving loop
             while (running)
             {
-                byte[] buffer = new byte[4096];
+                byte[] buffer = new byte[NFT.Core.Constants.COMMAND_BUFFER_SIZE];
                 using (MemoryStream ms = new MemoryStream())
                 {
                     int bytesRead = 0;
@@ -70,15 +70,17 @@ namespace NFT.Comms
                     catch (SerializationException e)
                     {
                         Log.Error(new Error(e, "Cannot parse master stream"));
+                        running = false;
                     }
                     catch (IOException e)
                     {
                         Log.Error(new Error(e, "Connection failure"));
+                        running = false;
                     }
                     catch (ObjectDisposedException e)
                     {
                         Log.Error(new Error(e, "Object failure"));
-                        running = false; // Exit when object becomes disposed (must be DC)
+                        running = false; 
                     }
                     catch (Exception e)
                     {

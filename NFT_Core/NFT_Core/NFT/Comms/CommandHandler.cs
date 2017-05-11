@@ -43,7 +43,7 @@ namespace NFT.Comms
                 if (client == null)
                     throw new Exception();
 
-                byte[] buffer = new byte[4096];
+                byte[] buffer = new byte[NFT.Core.Constants.COMMAND_BUFFER_SIZE];
                 c.seq = seqnum;
                 c.destination = IPAddress.Parse(client.Client.RemoteEndPoint.ToString().Split(':')[0]); // Set destination of command
                 buffer = Helper.ToByteArray<Command>(c);

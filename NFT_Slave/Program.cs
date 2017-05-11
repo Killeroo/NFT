@@ -24,6 +24,7 @@ namespace NFT_Slave
             Log.Info(version);
 
             listener.Start();
+            
         }
 
         protected static void exitHandler(object sender, ConsoleCancelEventArgs args)

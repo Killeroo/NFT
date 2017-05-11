@@ -10,7 +10,7 @@ namespace NFT.Core
     /// <summary>
     /// Stores static helper methods for file operations 
     /// </summary>
-    class FileOps
+    public class FileOps
     {
         private static List<FileInfo> files = new List<FileInfo>();
 

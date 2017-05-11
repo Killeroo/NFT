@@ -30,9 +30,9 @@ namespace NFT_Master
 
             // Setup error listener
             Thread errorThread = new Thread(new ThreadStart(ErrorReporter.Listen));
-            errorThread.Start();
+            //errorThread.Start();
 
-            Slave.Scan(args[0]);
+            //Slave.Scan(args[0]);
 
             // Start listening to each connected slave
             foreach (var slave in Slave.slaves)
@@ -42,15 +42,24 @@ namespace NFT_Master
                 listeningThread.Start();
             }
 
-            Slave.SendAll(new Command(CommandType.Info));
+            FileOps.FetchFile("http://localhost/kali.iso", @"C:\");
+
+            //c.type = CommandType.Info;
+            //c.message = "Hello World!";
+            //Slave.SendAll(new Command(CommandType.Info));
 
             // Generate and store sig
-            var stream = RsyncOps.GenerateSignature(@"H:\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
-            RsyncStream rs = new RsyncStream(StreamType.Signature, stream, @"H:\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
-            Log.Stream(rs);
-            c.addStream(rs);
+            //var stream = RsyncOps.GenerateSignature(@"C:\Projects\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
+            //RsyncStream rs = new RsyncStream(StreamType.Signature, stream, @"C:\NFT\NFT_Master\bin\Debug\NFT_Core.dll");
+            //Log.Stream(rs);
+            //c.addStream(rs);
+            //Slave.SendAll(c);
 
-            Slave.SendAll(c);
+            //var peam = RsyncOps.GenerateSignature(@"C:\Projects\kali.iso");
+            //RsyncStream ds = new RsyncStream(StreamType.Signature, stream, @"C:\Projects\kali.iso");
+            //Log.Stream(ds);
+            //c.addStream(rs);
+            //Slave.SendAll(c);
 
             Console.ReadLine();
 

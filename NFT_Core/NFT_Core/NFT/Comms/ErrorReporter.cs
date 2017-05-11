@@ -53,7 +53,7 @@ namespace NFT.Comms
                 try
                 {
                     byte[] data = Helper.ToByteArray<Error>(e);
-                    client.Send(data, data.Length, (IPEndPoint)destEP);
+                    client.Send(data, data.Length, destEP);
                 }
                 catch (SocketException ex)
                 {

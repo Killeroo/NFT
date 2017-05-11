@@ -113,7 +113,7 @@ namespace NFT.Comms
             // Command recieving loop
             while (running)
             {
-                byte[] buffer = new byte[4096];
+                byte[] buffer = new byte[NFT.Core.Constants.COMMAND_BUFFER_SIZE];
                 using (MemoryStream ms = new MemoryStream())
                 {
                     int bytesRead = 0;
@@ -159,7 +159,10 @@ namespace NFT.Comms
 
                     // Disconnect on quit flags
                     if (c.type == CommandType.Quit || isConnected == false)
+                    {
+                        CommandHandler.Send(new Command(CommandType.Quit), master, c.seq++); // Send back quit command to master
                         break;
+                    }
                 }
             }
 
