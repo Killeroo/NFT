@@ -24,7 +24,7 @@ namespace Octodiff.CommandLine
             options.WriteOptionDescriptions(writer);
         }
 
-        public MemoryStream Execute(string[] commandLineArguments)
+        public MemoryStream Execute(string[] commandLineArguments, MemoryStream ms = null)
         {
             options.Parse(commandLineArguments);
 

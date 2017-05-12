@@ -3,3 +3,5 @@
 		   - Removed signature and delta file creation
 		   - Modified ICommand
 		   - Changed all commands to return MemoryStream
+11/05/2017 - Changed ICommand to take MemoryStream as an argument for execute method
+		   - Switched Commands to use MemoryStream argument (nulled by default)

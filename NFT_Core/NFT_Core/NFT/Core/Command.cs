@@ -74,7 +74,7 @@ namespace NFT.Core
             }
         }
 
-        public void addStream(RsyncStream rs)
+        public void AddStream(RsyncStream rs)
         {
             stream = rs;
             type = CommandType.RsyncStream;

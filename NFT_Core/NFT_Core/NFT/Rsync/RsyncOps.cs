@@ -30,14 +30,17 @@ namespace NFT.Rsync
             return ConstructOctodiffCmd("signature", args);
         }
         /// <summary>
-        /// Generate rsync delta based on signature files
+        /// Generate rsync delta based on signature files and the new file
         /// </summary>
         /// <param name="originalSignaturePath"></param>
         /// <param name="newSignaturePath"></param>
-        public static void GenerateDelta(MemoryStream sigStream, string newSignaturePath)
+        public static MemoryStream GenerateDelta(MemoryStream sigStream, string newFilePath)
         {
             // Setup Ocotodiff command
-            //string[] args = { }
+            string[] args = { newFilePath, "", "--progress" };
+
+            // Construct and execute command
+            return ConstructOctodiffCmd("delta", args, sigStream);
         }
         /// <summary>
         /// Patch an existing file using a delta file
@@ -49,12 +52,12 @@ namespace NFT.Rsync
 
         }
 
-        private static MemoryStream ConstructOctodiffCmd(string cmdName, string[] args)
+        private static MemoryStream ConstructOctodiffCmd(string cmdName, string[] args, MemoryStream ms = null)
         {
             // Setup Octodiff command
             var sb = new StringBuilder();
             var cl = new CommandLocator();
-            var command = cl.Find("signature");
+            var command = cl.Find(cmdName);
             MemoryStream sigStream = null;
 
             // Parse commands
@@ -64,8 +67,8 @@ namespace NFT.Rsync
             try
             {
                 // Execute octodiff command 
-                Log.Info("Octodiff --" + cmdName  + " " + sb.ToString() + " --progress");
-                sigStream = cl.Create(command).Execute(args);
+                Log.Info("Octodiff --" + cmdName  + " " + sb.ToString());
+                sigStream = cl.Create(command).Execute(args, ms);
 
                 return sigStream;
             }

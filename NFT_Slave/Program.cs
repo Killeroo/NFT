@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Reflection;
+using System.Net;
 
 using NFT.Comms;
 using NFT.Logger;
+using NFT.Core;
 
 namespace NFT_Slave
 {
@@ -20,10 +22,58 @@ namespace NFT_Slave
             string version = Assembly.GetExecutingAssembly().GetName().Name + " Version " + v.Major + "." + v.Minor + "." + v.Build + " (r" + v.Revision + ")";
 
             // Setup log
-            Log.identifier = Environment.MachineName;//"slave";
+            Log.identifier = Environment.MachineName;
             Log.Info(version);
 
-            listener.Start();
+            if (string.IsNullOrEmpty(args[0]))
+                Log.Fatal("Please enter a debug argument and try again");
+
+            // Process debug arguments
+            switch (args[0])
+            {
+                case @"/scan":
+
+                    // Start listener
+                    listener.Start();
+
+                    break;
+
+                case @"/error":
+
+                    if (string.IsNullOrEmpty(args[1]))
+                        Log.Fatal("Missing args");
+
+                    // Send an error to NFT master
+                    ErrorReporter.SendError(new Error(new Exception()), new IPEndPoint(IPAddress.Parse(args[1]), 0));
+
+                    Console.ReadLine();
+
+                    break;
+
+                case @"/transfer":
+
+                    if (string.IsNullOrEmpty(args[1]) || string.IsNullOrEmpty(args[2]))
+                        Log.Fatal("Missing args");
+
+                    FileOps.FetchFile(args[1], args[2]);
+
+                    Console.ReadLine();
+
+                    break;
+
+                case @"/signature":
+
+                    // listen (for signature command)
+                    listener.Start();
+
+                    break;
+
+                default:
+
+                    Log.Fatal("Arg not recognised");
+
+                    break;
+            }
             
         }
 

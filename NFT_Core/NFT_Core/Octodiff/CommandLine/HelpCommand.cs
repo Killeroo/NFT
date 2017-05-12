@@ -15,7 +15,7 @@ namespace Octodiff.CommandLine
         {
         }
 
-        public MemoryStream Execute(string[] commandLineArguments)
+        public MemoryStream Execute(string[] commandLineArguments, MemoryStream ms = null)
         {
 #if NET40
             var executable = Path.GetFileNameWithoutExtension(new Uri(typeof(HelpCommand).Assembly.CodeBase).LocalPath);
