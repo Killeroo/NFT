@@ -35,6 +35,12 @@ namespace NFT.Comms
                     break;
             }
         }
+        /// <summary>
+        /// Send command to host
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="client"></param>
+        /// <param name="seqnum"></param>
         public static void Send(Command c, TcpClient client, int seqnum)
         {
             try

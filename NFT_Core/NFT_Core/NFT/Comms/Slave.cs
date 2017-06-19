@@ -94,10 +94,23 @@ namespace NFT.Comms
         {
             IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), MasterListener.COMMAND_LISTEN_PORT);
             List<Slave> foundSlaves = new List<Slave>();
+            bool rangeFound = false;
             int hostCount = 0;
 
             // Split ip address into segments
             string[] addressSegs = range.Split('.');
+
+            // Check range is specified
+            foreach (var seg in addressSegs)
+                if (seg.Contains("-"))
+                    rangeFound = true;
+
+            // Exit if we havent found a range
+            if (!rangeFound)
+            {
+                Log.Error(new Error(new Exception(), "Scan range not specified"));
+                return;
+            }
 
             // Holds the ranges for each IP segment
             int[] segLower = new int[4];
@@ -151,6 +164,14 @@ namespace NFT.Comms
             // Loop through connected slave list
             foreach (Slave slave in Slave.slaves)
                 slave.Send(c);
+        }
+        /// <summary>
+        /// Disconnect from all currently connected slaves
+        /// </summary>
+        public static void DisconnectAll()
+        {
+            foreach (Slave slave in Slave.slaves)
+                slave.Disconnect();
         }
 
         private bool TestConnection()

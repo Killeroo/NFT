@@ -133,8 +133,6 @@ namespace NFT.Comms
 
                         // Handle command
                         CommandHandler.Handle(c);
-
-                        CommandHandler.Send(new Command(CommandType.Success, c.source.ToString()), master, 0);
                     }
                     catch (SerializationException e)
                     {
@@ -159,10 +157,7 @@ namespace NFT.Comms
 
                     // Disconnect on quit flags
                     if (c.type == CommandType.Quit || isConnected == false)
-                    {
-                        CommandHandler.Send(new Command(CommandType.Quit), master, c.seq++); // Send back quit command to master
                         break;
-                    }
                 }
             }
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Reflection;
 using System.Threading;
+using System.Windows.Forms;
 
 using NFT.Core;
 using NFT.Comms;
@@ -11,132 +12,137 @@ namespace NFT_Master
 {
     class Program
     {
-        static void Main(string[] args)
+        [STAThread]
+        static void Main()//string[] args)
         {
-            // Add control c hanlder
-            Console.CancelKeyPress += new ConsoleCancelEventHandler(exitHandler);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainForm());
 
-            // Get version info
-            Version v = Assembly.GetExecutingAssembly().GetName().Version;
-            string version = Assembly.GetExecutingAssembly().GetName().Name + " Version " + v.Major + "." + v.Minor + "." + v.Build + " (r" + v.Revision + ")";
+            //// Add control c hanlder
+            //Console.CancelKeyPress += new ConsoleCancelEventHandler(exitHandler);
 
-            // Setup log
-            Log.identifier = Environment.MachineName;
-            Log.showTimestamp = true;
-            Log.Info(version);
+            //// Get version info
+            //Version v = Assembly.GetExecutingAssembly().GetName().Version;
+            //string version = Assembly.GetExecutingAssembly().GetName().Name + " Version " + v.Major + "." + v.Minor + "." + v.Build + " (r" + v.Revision + ")";
 
-            if (string.IsNullOrEmpty(args[0]))
-                Log.Fatal("Please enter a debug argument and try again");
+            //// Setup log
+            //Log.identifier = Environment.MachineName;
+            //Log.showTimestamp = true;
+            //Log.Info(version);
 
-            // Process debug arguments
-            switch (args[0])
-            {
-                case @"/scan":
+            //if (string.IsNullOrEmpty(args[0]))
+            //    Log.Fatal("Please enter a debug argument and try again");
 
-                    // Args check
-                    if (string.IsNullOrEmpty(args[1]))
-                        Log.Fatal("Scan - Missing scan range (format 192.168.0.1-10)");
+            //// Process debug arguments
+            //switch (args[0])
+            //{
+            //    case @"/scan":
 
-                    // Scan for slaves
-                    Slave.Scan(args[1]);
+            //        // Args check
+            //        if (string.IsNullOrEmpty(args[1]))
+            //            Log.Fatal("Scan - Missing scan range (format 192.168.0.1-10)");
 
-                    // Start listening to each connected slave
-                    foreach (var slave in Slave.slaves)
-                    {
-                        SlaveListener sl = new SlaveListener(slave);
-                        Thread listeningThread = new Thread(new ThreadStart(sl.Start));
-                        listeningThread.Start();
-                    }
+            //        // Scan for slaves
+            //        Slave.Scan(args[1]);
 
-                    // Send message to all connect slaves
-                    Command c = new Command(CommandType.Info);
-                    c.message = "Hello World! =^-^=";
-                    Slave.SendAll(c);
+            //        // Start listening to each connected slave
+            //        foreach (var slave in Slave.slaves)
+            //        {
+            //            SlaveListener sl = new SlaveListener(slave);
+            //            Thread listeningThread = new Thread(new ThreadStart(sl.Start));
+            //            listeningThread.Start();
+            //        }
 
-                    Console.ReadLine();
+            //        // Send message to all connect slaves
+            //        Command c = new Command(CommandType.Info);
+            //        c.message = "Hello World! =^-^=";
+            //        Slave.SendAll(c);
 
-                    // Disconnect
-                    foreach (var slave in Slave.slaves)
-                        slave.Disconnect();
+            //        Console.ReadLine();
 
-                    Console.ReadLine();
+            //        // Disconnect
+            //        foreach (var slave in Slave.slaves)
+            //            slave.Disconnect();
 
-                    break;
+            //        Console.ReadLine();
 
-                case @"/error":
+            //        break;
 
-                    // Setup error listener
-                    Thread errorThread = new Thread(new ThreadStart(ErrorReporter.Listen));
-                    errorThread.Start();
+            //    case @"/error":
 
-                    Console.ReadLine();
+            //        // Setup error listener
+            //        Thread errorThread = new Thread(new ThreadStart(ErrorReporter.Listen));
+            //        errorThread.Start();
 
-                    break;
+            //        Console.ReadLine();
 
-                case @"/transfer":
+            //        break;
 
-                    if (string.IsNullOrEmpty(args[1]) || string.IsNullOrEmpty(args[2]))
-                        Log.Fatal("Missing args");
+            //    case @"/transfer":
 
-                    FileOps.FetchFile(args[1], args[2]);
+            //        if (string.IsNullOrEmpty(args[1]) || string.IsNullOrEmpty(args[2]))
+            //            Log.Fatal("Missing args");
 
-                    Console.ReadLine();
+            //        FileOps.FetchFile(args[1], args[2]);
 
-                    break;
+            //        Console.ReadLine();
 
-                case @"/signature":
+            //        break;
 
-                    // Args check
-                    if (string.IsNullOrEmpty(args[1]) || string.IsNullOrEmpty(args[2]))
-                        Log.Fatal("Missing args");
+            //    case @"/signature":
 
-                    // Scan for slaves
-                    Slave.Scan(args[1]);
+            //        // Args check
+            //        if (string.IsNullOrEmpty(args[1]) || string.IsNullOrEmpty(args[2]))
+            //            Log.Fatal("Missing args");
 
-                    // Start listening to each connected slave
-                    foreach (var slave in Slave.slaves)
-                    {
-                        SlaveListener sl = new SlaveListener(slave);
-                        Thread listeningThread = new Thread(new ThreadStart(sl.Start));
-                        listeningThread.Start();
-                    }
+            //        // Scan for slaves
+            //        Slave.Scan(args[1]);
 
-                    // Generate signature
-                    RsyncStream rs = new RsyncStream(StreamType.Signature, RsyncOps.GenerateSignature(args[2]), args[2]);
+            //        // Start listening to each connected slave
+            //        foreach (var slave in Slave.slaves)
+            //        {
+            //            SlaveListener sl = new SlaveListener(slave);
+            //            Thread listeningThread = new Thread(new ThreadStart(sl.Start));
+            //            listeningThread.Start();
+            //        }
 
-                    // Pack into command
-                    Command com = new Command(CommandType.RsyncStream);
-                    com.AddStream(rs);
+            //        // Generate signature
+            //        RsyncStream rs = new RsyncStream(StreamType.Signature, RsyncOps.GenerateSignature(args[2]), args[2]);
 
-                    // Send to all slaves
-                    Slave.SendAll(com);
+            //        // Pack into command
+            //        Command com = new Command(CommandType.RsyncStream);
+            //        com.AddStream(rs);
 
-                    Console.ReadLine();
+            //        // Send to all slaves
+            //        Slave.SendAll(com);
 
-                    // Disconnect
-                    foreach (var slave in Slave.slaves)
-                        slave.Disconnect();
+            //        Console.ReadLine();
 
-                    break;
+            //        // Disconnect
+            //        foreach (var slave in Slave.slaves)
+            //            slave.Disconnect();
 
-                default:
+            //        break;
 
-                    Log.Fatal("Arg not recognised");
+            //    default:
 
-                    break;
-            }
+            //        Log.Fatal("Arg not recognised");
+
+            //        break;
+            //}
  
         }
 
-        protected static void exitHandler(object sender, ConsoleCancelEventArgs args)
-        {
-            // Cancel termination
-            args.Cancel = true;
+        //protected static void exitHandler(object sender, ConsoleCancelEventArgs args)
+        //{
+        //    // Cancel termination
+        //    args.Cancel = true;
 
-            Console.WriteLine("Master stopped. Press any key to exit...");
-            Console.ReadLine();
-            Environment.Exit(0);
-        }
+        //    Console.WriteLine("Master stopped. Press any key to exit...");
+        //    Console.ReadLine();
+        //    Environment.Exit(0);
+        //}
     }
 }
 

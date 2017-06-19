@@ -25,8 +25,12 @@ namespace NFT_Slave
             Log.identifier = Environment.MachineName;
             Log.Info(version);
 
-            if (string.IsNullOrEmpty(args[0]))
-                Log.Fatal("Please enter a debug argument and try again");
+            if (args.Length < 1)
+            {
+                listener.Start();
+                //Log.Fatal("Please enter a debug argument and try again");
+                return;
+            }
 
             // Process debug arguments
             switch (args[0])
