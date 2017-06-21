@@ -9,15 +9,15 @@ namespace NFT.Logger
     /// </summary>
     public class Log
     {
-        public static bool logToFile = false;
-        public static bool showTimestamp = true;
-        public static bool longTimestamp = false;
-        public static string identifier = "";
+        public static bool LogToFile = false;
+        public static bool ShowTimestamp = true;
+        public static bool LongTimestamp = false;
+        public static string Identifier = "";
 
         public static void Info(string message)
         {
             Title();
-            TimeStamp();
+            Timestamp();
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write("[Info] ");
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -26,7 +26,7 @@ namespace NFT.Logger
         public static void Warning(string message)
         {
             Title();
-            TimeStamp();
+            Timestamp();
             Console.ForegroundColor = ConsoleColor.Yellow;
             Console.Write("[Warning] ");
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -35,7 +35,7 @@ namespace NFT.Logger
         public static void Error(Error err)
         {
             Title();
-            TimeStamp();
+            Timestamp();
             Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("[Error] ");
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -46,7 +46,7 @@ namespace NFT.Logger
         public static void RemoteError(Error err)
         {
             Title();
-            TimeStamp();
+            Timestamp();
             Console.ForegroundColor = ConsoleColor.Magenta;
             Console.Write("[SlaveError] ");
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -59,7 +59,7 @@ namespace NFT.Logger
         public static void Fatal(string message)
         {
             Title();
-            TimeStamp();
+            Timestamp();
             Console.ForegroundColor = ConsoleColor.DarkMagenta;
             Console.Write("[Fatal] ");
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -73,7 +73,7 @@ namespace NFT.Logger
         public static void Command(Command c)
         {
             Title();
-            TimeStamp();
+            Timestamp();
             Console.ForegroundColor = ConsoleColor.Green;
             Console.Write("[Command] ");
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -88,7 +88,7 @@ namespace NFT.Logger
         public static void Stream(NFT.Rsync.RsyncStream rs)
         {
             Title();
-            TimeStamp();
+            Timestamp();
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.Write("[RsyncStream] ");
             Console.ForegroundColor = ConsoleColor.Gray;
@@ -97,14 +97,14 @@ namespace NFT.Logger
 
         private static void Title()
         {
-            if (identifier != "")
-                Console.Write("[{0}]", identifier);
+            if (Identifier != "")
+                Console.Write("[{0}]", Identifier);
         }
-        private static void TimeStamp()
+        private static void Timestamp()
         {
-            if (showTimestamp)
+            if (ShowTimestamp)
             {
-                if (longTimestamp)
+                if (LongTimestamp)
                     Console.Write("[{0}]", DateTime.Now.ToString("MM/dd/yyyy HH:mm:ss.fff"));
                 else
                     Console.Write("[{0}]", DateTime.Now.ToString("HH:mm:ss"));

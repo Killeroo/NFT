@@ -22,7 +22,7 @@ namespace NFT_Slave
             string version = Assembly.GetExecutingAssembly().GetName().Name + " Version " + v.Major + "." + v.Minor + "." + v.Build + " (r" + v.Revision + ")";
 
             // Setup log
-            Log.identifier = Environment.MachineName;
+            Log.Identifier = "";//Environment.MachineName;
             Log.Info(version);
 
             if (args.Length < 1)
