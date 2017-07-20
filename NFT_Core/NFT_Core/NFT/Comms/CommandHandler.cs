@@ -5,6 +5,7 @@ using System.IO;
 
 using NFT.Core;
 using NFT.Logger;
+using NFT.Rsync;
 
 namespace NFT.Comms
 {
@@ -13,20 +14,50 @@ namespace NFT.Comms
     /// </summary>
     public class CommandHandler
     {
-        public static void Handle(Command c)
+        /// <summary>
+        /// Handle & execute a command
+        /// </summary>
+        /// <param name="c"></param>
+        /// <param name="client"></param>
+        public static void Handle(Command c, TcpClient client)
         {
             switch (c.type)
             {
+                case CommandType.Synchronize:
+
+
+                    break;
+
                 case CommandType.RsyncStream:
 
-                    // Display
-                    Log.Command(c);
-                    Log.Stream(c.stream);
-                    
-                    // Generate delta
+                    if (c.stream.type == StreamType.Signature)
+                    {
+                        // Display
+                        Log.Command(c);
+                        Log.Stream(c.stream);
 
-                    // Send delta back to source
+                        // Generate delta
+                        MemoryStream deltaStream = RsyncOps.GenerateDelta(c.stream.stream, c.stream.relativePath);
+                        RsyncStream rs = new RsyncStream(StreamType.Delta, deltaStream, c.stream.relativePath);
+                        Command replyCommand = new Command(CommandType.RsyncStream, c.source.ToString());
+                        replyCommand.AddStream(rs);
 
+                        // Send delta back to source
+                        CommandHandler.Send(replyCommand, client, c.seq++);
+                    }
+                    else if (c.stream.type == StreamType.Delta)
+                    {
+                        // Display
+                        Log.Command(c);
+                        Log.Stream(c.stream);
+
+                        // Patch delta to file
+
+                    }
+                    else
+                    {
+                        Log.Error(new Error(new Exception(), "Recieved unknown rsync stream type"));
+                    }
 
                     break;
 

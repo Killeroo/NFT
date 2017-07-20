@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 using NFT.Core;
 using NFT.Logger;
@@ -14,8 +15,6 @@ namespace NFT.Comms
     /// </summary>
     public class MasterListener
     {
-        public const int COMMAND_LISTEN_PORT = 11430;
-
         public bool isListening { get; private set; }
         public bool isConnected { get; private set; }
         public TcpClient master { get; private set; }
@@ -27,7 +26,7 @@ namespace NFT.Comms
 
         public MasterListener()
         {
-            listener = new TcpListener(IPAddress.Parse(Helper.GetLocalIPAddress()), COMMAND_LISTEN_PORT);
+            listener = new TcpListener(IPAddress.Parse(Helper.GetLocalIPAddress()), NFT.Core.Constants.COMMAND_LISTEN_PORT);
         }
 
         public void Start()
@@ -64,7 +63,7 @@ namespace NFT.Comms
         {
             // Start Tcplistener
             listener.Start();
-            Log.Info("Listening for NFT Master on " + Helper.GetLocalIPAddress() + ":" + COMMAND_LISTEN_PORT + "...");
+            Log.Info("Listening for NFT Master on " + Helper.GetLocalIPAddress() + ":" + NFT.Core.Constants.COMMAND_LISTEN_PORT + "...");
             isListening = true;
 
             // Listening loop
@@ -132,7 +131,7 @@ namespace NFT.Comms
                         c = Helper.FromMemoryStream<Command>(ms);
 
                         // Handle command
-                        CommandHandler.Handle(c);
+                        Task.Run(() => CommandHandler.Handle(c, master));
                     }
                     catch (SerializationException e)
                     {

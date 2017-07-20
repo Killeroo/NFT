@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.IO;
 using System.Runtime.Serialization;
+using System.Threading.Tasks;
 
 using NFT.Core;
 using NFT.Logger;
@@ -14,13 +15,15 @@ namespace NFT.Comms
     /// </summary>
     public class SlaveListener
     {
-        private NetworkStream stream; // Need to be a reference?
+        private NetworkStream stream; 
         private IPEndPoint ep;
+        private TcpClient client; // The specific TcpClient object we are listening too
         private bool running = false;
 
         public SlaveListener(Slave s)
         {
             // Load required slave data
+            client = s.client;
             stream = s.stream;
             ep = s.endPoint;
         }
@@ -65,7 +68,7 @@ namespace NFT.Comms
                         c = Helper.FromMemoryStream<Command>(ms);
 
                         // Handle command
-                        CommandHandler.Handle(c);
+                        Task.Run(() => CommandHandler.Handle(c, client));
                     }
                     catch (SerializationException e)
                     {

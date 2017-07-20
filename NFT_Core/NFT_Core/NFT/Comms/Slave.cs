@@ -92,7 +92,7 @@ namespace NFT.Comms
         /// </summary>
         public static void Scan(string range)
         {
-            IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), MasterListener.COMMAND_LISTEN_PORT);
+            IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), NFT.Core.Constants.COMMAND_LISTEN_PORT);
             List<Slave> foundSlaves = new List<Slave>();
             bool rangeFound = false;
             int hostCount = 0;

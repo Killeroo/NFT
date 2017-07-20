@@ -15,6 +15,25 @@ namespace NFT.Core
         private static List<FileInfo> files = new List<FileInfo>();
 
         /// <summary>
+        /// Synchronize files from master to slaves
+        /// </summary>
+        public static void SynchronizeFiles()
+        {
+            // Loop through files
+
+            // If file exists
+
+            // Generate signature
+
+            // Send signature to master
+
+            // Wait for reply?
+
+            // If file doesn't exist
+
+            // Request file be transfered
+        }
+        /// <summary>
         /// Transfer file from a remote web server
         /// </summary>
         /// <param name="url"></param>
