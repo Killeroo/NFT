@@ -13,29 +13,29 @@ namespace NFT.Core
     [Serializable()]
     public class Command
     {
-        public CommandType type { get; set; } // type of command
-        public List<string> files { get; set; } = new List<string>(); // Relative file paths (eg \TestDir\filename.txt)
-        public IPAddress source { get; set; } // IP address of sender
-        public IPAddress destination { get; set; } // IP address of recipient
-        public string message { get; set; } = ""; // (Optional) text to be displayed if INFO type command
-        public int seq { get; set; } = 0; // Sequence number
-        public RsyncStream stream { get; private set; } = null; // (Optional) stores Rsync data
+        public CommandType Type { get; set; } // type of command
+        public List<string> Files { get; set; } = new List<string>(); // Relative file paths (eg \TestDir\filename.txt)
+        public IPAddress Source { get; set; } // IP address of sender
+        public IPAddress Destination { get; set; } // IP address of recipient
+        public string Message { get; set; } = ""; // (Optional) text to be displayed if INFO type command
+        public int Seq { get; set; } = 0; // Sequence number
+        public RsyncStream Stream { get; private set; } = null; // (Optional) stores Rsync data
 
         // Constructors
         public Command()
         {
-            source = IPAddress.Parse(Helper.GetLocalIPAddress());
+            Source = IPAddress.Parse(Helper.GetLocalIPAddress());
         }
         public Command(CommandType ct)
         {
-            type = ct;
-            source = IPAddress.Parse(Helper.GetLocalIPAddress());
+            Type = ct;
+            Source = IPAddress.Parse(Helper.GetLocalIPAddress());
         }
         public Command(CommandType ct, string destinationIP)
         {
-            type = ct;
-            destination = IPAddress.Parse(destinationIP);
-            source = IPAddress.Parse(Helper.GetLocalIPAddress());
+            Type = ct;
+            Destination = IPAddress.Parse(destinationIP);
+            Source = IPAddress.Parse(Helper.GetLocalIPAddress());
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace NFT.Core
 
             // Add file paths to list
             foreach (var file in fileList)
-                files.Add(file.FullName.ToString().Replace(pathToFiles, "")); // Remove inputted path to get relative path
+                Files.Add(file.FullName.ToString().Replace(pathToFiles, "")); // Remove inputted path to get relative path
 
         }
         /// <summary>
@@ -60,7 +60,7 @@ namespace NFT.Core
         {
             // Shuffle list based on Fisher-Yates shuffle
             Random rng = new Random();
-            int x = files.Count;
+            int x = Files.Count;
 
             // Decrement through list
             while (x > 1)
@@ -68,16 +68,16 @@ namespace NFT.Core
                 x--;
                 int r = rng.Next(x + 1);
                 // Swap round values at random position and x
-                string value = files[r];
-                files[r] = files[x];
-                files[x] = value;
+                string value = Files[r];
+                Files[r] = Files[x];
+                Files[x] = value;
             }
         }
 
         public void AddStream(RsyncStream rs)
         {
-            stream = rs;
-            type = CommandType.RsyncStream;
+            Stream = rs;
+            Type = CommandType.RsyncStream;
         }
 
     }

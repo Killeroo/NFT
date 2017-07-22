@@ -6,6 +6,8 @@ using NFT.Comms;
 using NFT.Logger;
 using NFT.Core;
 
+using Console = Colorful.Console;
+
 namespace NFT_Slave
 {
     class Program
@@ -19,11 +21,13 @@ namespace NFT_Slave
 
             // Get version info
             Version v = Assembly.GetExecutingAssembly().GetName().Version;
-            string version = Assembly.GetExecutingAssembly().GetName().Name + " Version " + v.Major + "." + v.Minor + "." + v.Build + " (r" + v.Revision + ")";
+            string version = Assembly.GetExecutingAssembly().GetName().Name;// + " V" + v.Major + "." + v.Minor;// + "." + v.Build;// + " (r" + v.Revision + ")";
 
             // Setup log
             Log.Identifier = "";//Environment.MachineName;
-            Log.Info(version);
+            //Log.Info(version);
+            Console.WriteAscii("NFT_SLAVE");//version);
+            Console.WriteAscii("   V" + v.Major + "." + v.Minor + "." + v.Build);//, Colorful.Figlet);
 
             if (args.Length < 1)
             {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using NFT.Logger;
+using NFT.Comms;
 
 namespace NFT.Core
 {
@@ -15,9 +16,46 @@ namespace NFT.Core
         private static List<FileInfo> files = new List<FileInfo>();
 
         /// <summary>
-        /// Synchronize files from master to slaves
+        /// Transfer files in working directory to all connected slaves
         /// </summary>
-        public static void SynchronizeFiles()
+        public static void TransferFiles(string path)
+        {
+            List<string> filePaths = new List<string>();
+       
+            Log.Info("Starting file transfer");
+
+            // Check path exists
+            if (!Directory.Exists(path))
+            {
+                Log.Warning("Cannot find path [" + path + "], Stopping...");
+                return;
+            }
+
+            // Check there are slaves to transfer too
+            if (Slave.ConnectedSlaves.Count == 0)
+            {
+                Log.Warning("No connected slaves to transfer too, Stopping...");
+                return;
+            }
+
+            // Construct command 
+            Command transferCommand = new Command(CommandType.Transfer);
+            transferCommand.AddFiles(path);
+            transferCommand.ShuffleFiles(); // Shuffle files to avoid server overload
+            Log.Info("Sending file lists to slaves...");
+
+            // Send to all currently connected slaves
+            foreach (Slave s in Slave.ConnectedSlaves)
+            {
+                s.Send(transferCommand);
+            }
+
+            ///TODO: Wait for failure or success signals...
+        }
+        /// <summary>
+        /// Synchronize files from master to connected slaves
+        /// </summary>
+        public static void SynchronizeFiles(string path)
         {
             // Loop through files
 
@@ -105,7 +143,7 @@ namespace NFT.Core
                 files.Clear();
 
                 // Start recursive discovery
-                Log.Info("Starting file discovery at \"" + path + "\"...");
+                Log.Info("Discovering files at \"" + path + "\"...");
                 DiscoverFiles(path, true);
                 Log.Info(files.Count.ToString() + " files found");
 

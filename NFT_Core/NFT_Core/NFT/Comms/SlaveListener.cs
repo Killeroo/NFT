@@ -23,9 +23,9 @@ namespace NFT.Comms
         public SlaveListener(Slave s)
         {
             // Load required slave data
-            client = s.client;
-            stream = s.stream;
-            ep = s.endPoint;
+            client = s.Client;
+            stream = s.Stream;
+            ep = s.EndPoint;
         }
 
         public void Start()
@@ -91,7 +91,7 @@ namespace NFT.Comms
                     }
 
                     // Disconnect on quit flags
-                    if (c.type == CommandType.Quit)
+                    if (c.Type == CommandType.Quit)
                         break;
                 }
             }

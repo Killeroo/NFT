@@ -27,9 +27,16 @@ namespace NFT_Master
         public MainForm()
         {
             InitializeComponent();
-            
+
             // Setup ui defaults
-            txtRange.Text = Helper.GetLocalIPAddress(); 
+            string range = "";
+            int count = 0;
+            foreach (var seg in Helper.GetLocalIPAddress().Split('.'))
+            { 
+                range += count == 3 ? "1-255" : seg + ".";
+                count++;
+            }
+            txtRange.Text = range;// Helper.GetLocalIPAddress(); 
             txtWorkingDirectory_TextChanged(new object(), new EventArgs()); // Load list view
             SetLogText(version); // Print current version in log window
         }
@@ -39,11 +46,9 @@ namespace NFT_Master
         private void btnScan_Click(object sender, EventArgs e)
         {
             // Start scan task in new thread
-            /// TODO: Background thread
-            new Thread(() =>
+            Thread background = new Thread(() =>
             {
                 // Setup UI stuff
-                SetLogText("Scanning for NFT_Slaves...");
                 SetSlaveCount(0);
                 SetStatusLabel("Scanning");
                 ToggleProgressBar();
@@ -52,33 +57,28 @@ namespace NFT_Master
                 // Scan for slaves
                 Slave.Scan(txtRange.Text);
 
-                SetLogText(Slave.slaves.Count + " Slaves found, starting listeners...");
-
                 // Start listening to each connected slave
                 /// TODO: add to scan? or move somewhere else
-                foreach (var slave in Slave.slaves)
+                foreach (var slave in Slave.ConnectedSlaves)
                 {
-                    SlaveListener sl = new SlaveListener(slave);
-                    Thread listeningThread = new Thread(new ThreadStart(sl.Start));
-                    listeningThread.Start();
-
                     // Add to slave list box
-                    AddToSlaveList(slave.client.Client.RemoteEndPoint.ToString().Split(':')[0]);
+                    AddToSlaveList(slave.Client.Client.RemoteEndPoint.ToString().Split(':')[0]);
                 }
 
                 // Update UI stuff
-                SetLogText("Done.");
-                SetSlaveCount(Slave.slaves.Count);
+                SetSlaveCount(Slave.ConnectedSlaves.Count);
                 SetStatusLabel("Ready");
                 ToggleProgressBar();
 
-            }).Start();
-            
+            });
+            background.IsBackground = true;
+            background.Start();
+
         }
         private void btnSend_Click(object sender, EventArgs e)
         {
             Command c = new Command(NFT.Core.CommandType.Info);
-            c.message = txtMessage.Text;
+            c.Message = txtMessage.Text;
 
             // Send to all connected slaves
             Slave.SendAll(c);
@@ -92,6 +92,10 @@ namespace NFT_Master
                 if (fbd.ShowDialog(this) == DialogResult.OK)
                     txtWorkingDirectory.Text = fbd.SelectedPath;
             }
+        }
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            Console.SetOut(new ConsoleWriter(txtLog));
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -152,6 +156,14 @@ namespace NFT_Master
                 // Add to node
                 dirsTreeView.Nodes.Add(node);
             }
+        }
+        private void txtLog_TextChanged(object sender, EventArgs e)
+        {
+            // Set caret position to end of current text
+            txtLog.SelectionStart = txtLog.Text.Length;
+
+            // Scroll to bottom automatically
+            txtLog.ScrollToCaret();
         }
         private void dirsTreeView_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
@@ -337,5 +349,10 @@ namespace NFT_Master
 
         #endregion
 
+        private void btnTransfer_Click(object sender, EventArgs e)
+        {
+            ///TODO: Change to use properties
+            FileOps.TransferFiles(txtWorkingDirectory.Text);
+        }
     }
 }

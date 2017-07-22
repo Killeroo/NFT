@@ -21,8 +21,16 @@ namespace NFT.Comms
         /// <param name="client"></param>
         public static void Handle(Command c, TcpClient client)
         {
-            switch (c.type)
+            switch (c.Type)
             {
+                case CommandType.Transfer:
+                    Log.Command(c);
+
+                    foreach (string path in c.Files)
+                        Console.WriteLine(path);
+
+                    break;
+
                 case CommandType.Synchronize:
 
 
@@ -30,26 +38,26 @@ namespace NFT.Comms
 
                 case CommandType.RsyncStream:
 
-                    if (c.stream.type == StreamType.Signature)
+                    if (c.Stream.type == StreamType.Signature)
                     {
                         // Display
                         Log.Command(c);
-                        Log.Stream(c.stream);
+                        Log.Stream(c.Stream);
 
                         // Generate delta
-                        MemoryStream deltaStream = RsyncOps.GenerateDelta(c.stream.stream, c.stream.relativePath);
-                        RsyncStream rs = new RsyncStream(StreamType.Delta, deltaStream, c.stream.relativePath);
-                        Command replyCommand = new Command(CommandType.RsyncStream, c.source.ToString());
+                        MemoryStream deltaStream = RsyncOps.GenerateDelta(c.Stream.stream, c.Stream.relativePath);
+                        RsyncStream rs = new RsyncStream(StreamType.Delta, deltaStream, c.Stream.relativePath);
+                        Command replyCommand = new Command(CommandType.RsyncStream, c.Source.ToString());
                         replyCommand.AddStream(rs);
 
                         // Send delta back to source
-                        CommandHandler.Send(replyCommand, client, c.seq++);
+                        CommandHandler.Send(replyCommand, client, c.Seq++);
                     }
-                    else if (c.stream.type == StreamType.Delta)
+                    else if (c.Stream.type == StreamType.Delta)
                     {
                         // Display
                         Log.Command(c);
-                        Log.Stream(c.stream);
+                        Log.Stream(c.Stream);
 
                         // Patch delta to file
 
@@ -81,8 +89,8 @@ namespace NFT.Comms
                     throw new Exception();
 
                 byte[] buffer = new byte[NFT.Core.Constants.COMMAND_BUFFER_SIZE];
-                c.seq = seqnum;
-                c.destination = IPAddress.Parse(client.Client.RemoteEndPoint.ToString().Split(':')[0]); // Set destination of command
+                c.Seq = seqnum;
+                c.Destination = IPAddress.Parse(client.Client.RemoteEndPoint.ToString().Split(':')[0]); // Set destination of command
                 buffer = Helper.ToByteArray<Command>(c);
                 Log.Command(c);
                 client.GetStream().Write(buffer, 0, buffer.Length);

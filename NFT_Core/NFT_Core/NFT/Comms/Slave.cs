@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Threading;
 
 using NFT.Core;
 using NFT.Logger;
@@ -10,19 +11,19 @@ namespace NFT.Comms
 {
     public class Slave
     {
-        public static List<Slave> slaves = new List<Slave>();
+        public static List<Slave> ConnectedSlaves = new List<Slave>();
 
-        public IPEndPoint endPoint;
-        public TcpClient client { get; private set; }
-        public NetworkStream stream { get; private set; }
-        public bool isConnected { get; private set; } = false;
+        public IPEndPoint EndPoint;
+        public TcpClient Client { get; private set; }
+        public NetworkStream Stream { get; private set; }
+        public bool IsConnected { get; private set; } = false;
 
         private int curSeqNum = 0; // Current command sequence number (slave independent)
 
         public Slave(IPEndPoint ep)
         {
-            client = new TcpClient();
-            endPoint = ep;
+            Client = new TcpClient();
+            EndPoint = ep;
             //connect();
         }
 
@@ -32,30 +33,30 @@ namespace NFT.Comms
         public void Send(Command c)
         {
             // Check if connected first
-            if (client == null || !isConnected)
+            if (Client == null || !IsConnected)
                 throw new Exception();
 
             curSeqNum++; // Increment sequence number
 
             // Send command
-            CommandHandler.Send(c, client, curSeqNum);
+            CommandHandler.Send(c, Client, curSeqNum);
         }
         public void Connect()
         {
             try
             {
                 // Async connection attempt
-                var result = client.BeginConnect(endPoint.Address.ToString(), endPoint.Port, null, null);
+                var result = Client.BeginConnect(EndPoint.Address.ToString(), EndPoint.Port, null, null);
                 var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(150));//FromSeconds(1)); // Set timeout 
                 if (!success)
                     throw new SocketException();
 
                 // Connected
-                client.EndConnect(result);
-                Log.Info("Connected to " + endPoint.Address + " [NFT_Slave]");
+                Client.EndConnect(result);
+                Log.Info("Connected to " + EndPoint.Address + " [NFT_Slave]");
 
-                stream = client.GetStream();
-                isConnected = true;
+                Stream = Client.GetStream();
+                IsConnected = true;
             }
             catch (SocketException)
             {
@@ -75,15 +76,15 @@ namespace NFT.Comms
         {
             // Construct command
             Command c = new Command();
-            c.type = CommandType.Quit;
+            c.Type = CommandType.Quit;
 
             // Send quit command to slave
             Send(c);
 
             // Cleanup
-            client.Close();
-            stream.Close();
-            isConnected = false;
+            Client.Close();
+            Stream.Close();
+            IsConnected = false;
         }
         public void Reconnect() { }
 
@@ -125,7 +126,7 @@ namespace NFT.Comms
             }
 
             // Loop through each possible address
-            Log.Info("Scanning for NFT_Slave programs on range [" + range + "]...");
+            Log.Info("Scanning for NFT Slaves on range [" + range + "]");
             for (int seg1 = segLower[0]; seg1 <= segUpper[0]; seg1++)
             {
                 for (int seg2 = segLower[1]; seg2 <= segUpper[1]; seg2++)
@@ -142,15 +143,40 @@ namespace NFT.Comms
                             s.Connect();
 
                             // Add to list of connected slaves
-                            if (s.isConnected)
+                            if (s.IsConnected)
                             {
-                                Slave.slaves.Add(s);
+                                Slave.ConnectedSlaves.Add(s);
                                 hostCount++;
                             }
                         }
                     }
                 }
             }
+
+            // Start listening to each connected slave in new thread
+            foreach (var slave in Slave.ConnectedSlaves)
+            {
+                SlaveListener sl = new SlaveListener(slave);
+                Thread listeningThread = new Thread(new ThreadStart(sl.Start));
+                listeningThread.IsBackground = true; // Stop threading hanging program
+
+                try
+                {
+                    // Attempt to start listening thread
+                    listeningThread.Start();
+                }
+                catch (OutOfMemoryException)
+                {
+                    // Exit program if we are out of memory
+                    Log.Fatal("Ran out of memory");
+                }
+                catch (Exception e)
+                {
+                    // Otherwise throw error
+                    Log.Error(new Error(e, "Cannot create listening thread for [" + slave.EndPoint.Address.ToString() + "]"));
+                }
+            }
+
             Log.Info("Scan complete. " + hostCount + " host(s) found");
         }
         /// <summary>
@@ -162,7 +188,7 @@ namespace NFT.Comms
                 return;
 
             // Loop through connected slave list
-            foreach (Slave slave in Slave.slaves)
+            foreach (Slave slave in Slave.ConnectedSlaves)
                 slave.Send(c);
         }
         /// <summary>
@@ -170,13 +196,13 @@ namespace NFT.Comms
         /// </summary>
         public static void DisconnectAll()
         {
-            foreach (Slave slave in Slave.slaves)
+            foreach (Slave slave in Slave.ConnectedSlaves)
                 slave.Disconnect();
         }
 
         private bool TestConnection()
         {
-            if (!stream.DataAvailable)
+            if (!Stream.DataAvailable)
                 return false;
             else
                 return true;

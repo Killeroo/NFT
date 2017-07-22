@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            this.txtLog = new System.Windows.Forms.TextBox();
             this.btnScan = new System.Windows.Forms.Button();
             this.txtRange = new System.Windows.Forms.TextBox();
             this.listBoxSlaves = new System.Windows.Forms.CheckedListBox();
@@ -45,6 +44,7 @@
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.lblStatus = new System.Windows.Forms.ToolStripLabel();
+            this.txtLog = new System.Windows.Forms.RichTextBox();
             this.btnSend = new System.Windows.Forms.Button();
             this.txtMessage = new System.Windows.Forms.TextBox();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
@@ -57,6 +57,12 @@
             this.blacklistRulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.broadcastMessageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.scanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnTransfer = new System.Windows.Forms.Button();
+            this.btnSync = new System.Windows.Forms.Button();
             this.slaveGroupBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
@@ -67,19 +73,9 @@
             this.menuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
-            // txtLog
-            // 
-            this.txtLog.Location = new System.Drawing.Point(229, 233);
-            this.txtLog.Multiline = true;
-            this.txtLog.Name = "txtLog";
-            this.txtLog.ReadOnly = true;
-            this.txtLog.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txtLog.Size = new System.Drawing.Size(168, 89);
-            this.txtLog.TabIndex = 0;
-            // 
             // btnScan
             // 
-            this.btnScan.Location = new System.Drawing.Point(328, 334);
+            this.btnScan.Location = new System.Drawing.Point(328, 233);
             this.btnScan.Name = "btnScan";
             this.btnScan.Size = new System.Drawing.Size(75, 23);
             this.btnScan.TabIndex = 1;
@@ -89,7 +85,7 @@
             // 
             // txtRange
             // 
-            this.txtRange.Location = new System.Drawing.Point(223, 336);
+            this.txtRange.Location = new System.Drawing.Point(223, 235);
             this.txtRange.Name = "txtRange";
             this.txtRange.Size = new System.Drawing.Size(99, 20);
             this.txtRange.TabIndex = 4;
@@ -187,20 +183,22 @@
             // toolStripContainer1.ContentPanel
             // 
             this.toolStripContainer1.ContentPanel.AutoScroll = true;
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.btnSync);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.btnTransfer);
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.txtLog);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.groupBox2);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.slaveGroupBox);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.txtRange);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.btnSend);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.txtMessage);
             this.toolStripContainer1.ContentPanel.Controls.Add(this.btnScan);
-            this.toolStripContainer1.ContentPanel.Controls.Add(this.txtLog);
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(415, 365);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(415, 442);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.toolStripContainer1.LeftToolStripPanelVisible = false;
             this.toolStripContainer1.Location = new System.Drawing.Point(0, 0);
             this.toolStripContainer1.Name = "toolStripContainer1";
             this.toolStripContainer1.RightToolStripPanelVisible = false;
-            this.toolStripContainer1.Size = new System.Drawing.Size(415, 414);
+            this.toolStripContainer1.Size = new System.Drawing.Size(415, 491);
             this.toolStripContainer1.TabIndex = 13;
             this.toolStripContainer1.Text = "toolStripContainer1";
             // 
@@ -217,7 +215,7 @@
             this.lblStatus});
             this.toolStrip.Location = new System.Drawing.Point(3, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(190, 25);
+            this.toolStrip.Size = new System.Drawing.Size(159, 25);
             this.toolStrip.TabIndex = 0;
             // 
             // progressBar
@@ -238,19 +236,29 @@
             this.lblStatus.Size = new System.Drawing.Size(39, 22);
             this.lblStatus.Text = "Ready";
             // 
+            // txtLog
+            // 
+            this.txtLog.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtLog.Location = new System.Drawing.Point(12, 335);
+            this.txtLog.Name = "txtLog";
+            this.txtLog.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+            this.txtLog.Size = new System.Drawing.Size(391, 96);
+            this.txtLog.TabIndex = 13;
+            this.txtLog.Text = "";
+            // 
             // btnSend
             // 
-            this.btnSend.Location = new System.Drawing.Point(127, 334);
+            this.btnSend.Location = new System.Drawing.Point(328, 259);
             this.btnSend.Name = "btnSend";
             this.btnSend.Size = new System.Drawing.Size(75, 23);
             this.btnSend.TabIndex = 3;
-            this.btnSend.Text = "Send";
+            this.btnSend.Text = "Broadcast";
             this.btnSend.UseVisualStyleBackColor = true;
             this.btnSend.Click += new System.EventHandler(this.btnSend_Click);
             // 
             // txtMessage
             // 
-            this.txtMessage.Location = new System.Drawing.Point(22, 336);
+            this.txtMessage.Location = new System.Drawing.Point(223, 261);
             this.txtMessage.Name = "txtMessage";
             this.txtMessage.Size = new System.Drawing.Size(99, 20);
             this.txtMessage.TabIndex = 2;
@@ -280,29 +288,34 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // connectionToolStripMenuItem
             // 
             this.connectionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.scanToolStripMenuItem,
+            this.toolStripSeparator3,
             this.synchronizeAllToolStripMenuItem,
-            this.retransferAllToolStripMenuItem});
+            this.retransferAllToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.broadcastMessageToolStripMenuItem});
             this.connectionToolStripMenuItem.Name = "connectionToolStripMenuItem";
             this.connectionToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.connectionToolStripMenuItem.Text = "Actions";
+            this.connectionToolStripMenuItem.TextChanged += new System.EventHandler(this.txtLog_TextChanged);
             // 
             // synchronizeAllToolStripMenuItem
             // 
             this.synchronizeAllToolStripMenuItem.Name = "synchronizeAllToolStripMenuItem";
-            this.synchronizeAllToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.synchronizeAllToolStripMenuItem.Text = "Synchronize All";
+            this.synchronizeAllToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.synchronizeAllToolStripMenuItem.Text = "Synchronize";
             // 
             // retransferAllToolStripMenuItem
             // 
             this.retransferAllToolStripMenuItem.Name = "retransferAllToolStripMenuItem";
-            this.retransferAllToolStripMenuItem.Size = new System.Drawing.Size(155, 22);
-            this.retransferAllToolStripMenuItem.Text = "Retransfer All";
+            this.retransferAllToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.retransferAllToolStripMenuItem.Text = "Transfer";
             // 
             // settingsToolStripMenuItem
             // 
@@ -316,13 +329,13 @@
             // blacklistRulesToolStripMenuItem
             // 
             this.blacklistRulesToolStripMenuItem.Name = "blacklistRulesToolStripMenuItem";
-            this.blacklistRulesToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.blacklistRulesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.blacklistRulesToolStripMenuItem.Text = "Blacklist Rules";
             // 
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.preferencesToolStripMenuItem.Text = "Preferences";
             // 
             // aboutToolStripMenuItem
@@ -331,15 +344,57 @@
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(172, 6);
+            // 
+            // broadcastMessageToolStripMenuItem
+            // 
+            this.broadcastMessageToolStripMenuItem.Name = "broadcastMessageToolStripMenuItem";
+            this.broadcastMessageToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.broadcastMessageToolStripMenuItem.Text = "Broadcast Message";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(172, 6);
+            // 
+            // scanToolStripMenuItem
+            // 
+            this.scanToolStripMenuItem.Name = "scanToolStripMenuItem";
+            this.scanToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.scanToolStripMenuItem.Text = "Scan";
+            // 
+            // btnTransfer
+            // 
+            this.btnTransfer.Location = new System.Drawing.Point(223, 287);
+            this.btnTransfer.Name = "btnTransfer";
+            this.btnTransfer.Size = new System.Drawing.Size(75, 23);
+            this.btnTransfer.TabIndex = 14;
+            this.btnTransfer.Text = "Transfer";
+            this.btnTransfer.UseVisualStyleBackColor = true;
+            this.btnTransfer.Click += new System.EventHandler(this.btnTransfer_Click);
+            // 
+            // btnSync
+            // 
+            this.btnSync.Location = new System.Drawing.Point(304, 287);
+            this.btnSync.Name = "btnSync";
+            this.btnSync.Size = new System.Drawing.Size(75, 23);
+            this.btnSync.TabIndex = 15;
+            this.btnSync.Text = "Sync";
+            this.btnSync.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(415, 414);
+            this.ClientSize = new System.Drawing.Size(415, 491);
             this.Controls.Add(this.toolStripContainer1);
             this.Name = "MainForm";
             this.Text = "Network File Transfer - Master";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.slaveGroupBox.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
@@ -360,8 +415,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox txtLog;
         private System.Windows.Forms.Button btnScan;
         private System.Windows.Forms.TextBox txtRange;
         private System.Windows.Forms.CheckedListBox listBoxSlaves;
@@ -388,5 +441,12 @@
         private System.Windows.Forms.ToolStripLabel lblStatus;
         private System.Windows.Forms.Button btnSend;
         private System.Windows.Forms.TextBox txtMessage;
+        private System.Windows.Forms.RichTextBox txtLog;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem broadcastMessageToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem scanToolStripMenuItem;
+        private System.Windows.Forms.Button btnSync;
+        private System.Windows.Forms.Button btnTransfer;
     }
 }

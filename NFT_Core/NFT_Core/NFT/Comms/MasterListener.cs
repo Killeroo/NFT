@@ -15,9 +15,9 @@ namespace NFT.Comms
     /// </summary>
     public class MasterListener
     {
-        public bool isListening { get; private set; }
-        public bool isConnected { get; private set; }
-        public TcpClient master { get; private set; }
+        public bool IsListening { get; private set; }
+        public bool IsConnected { get; private set; }
+        public TcpClient Master { get; private set; }
 
         private TcpListener listener;
         private IPEndPoint masterEP;
@@ -47,7 +47,7 @@ namespace NFT.Comms
             // Cleanup
             try
             {
-                master.Close();
+                Master.Close();
                 stream.Close();
             }
             catch (NullReferenceException e)
@@ -64,20 +64,20 @@ namespace NFT.Comms
             // Start Tcplistener
             listener.Start();
             Log.Info("Listening for NFT Master on " + Helper.GetLocalIPAddress() + ":" + NFT.Core.Constants.COMMAND_LISTEN_PORT + "...");
-            isListening = true;
+            IsListening = true;
 
             // Listening loop
             while (running)
             {
                 try
                 {
-                    master = listener.AcceptTcpClient();
+                    Master = listener.AcceptTcpClient();
 
-                    if (master != null)
+                    if (Master != null)
                     {
                         // Store NFT Master endpoint
-                        masterEP = (IPEndPoint)master.Client.RemoteEndPoint;
-                        stream = master.GetStream();
+                        masterEP = (IPEndPoint)Master.Client.RemoteEndPoint;
+                        stream = Master.GetStream();
                         Log.Info(masterEP.Address.ToString() + ":" + masterEP.Port.ToString() + " [NFT Master] connected");
                         break; // Exit listening loop
                     }
@@ -98,7 +98,7 @@ namespace NFT.Comms
 
             // Cleanup
             listener.Stop();
-            isListening = false;
+            IsListening = false;
         }
         /// <summary>
         /// Listens for Commands from NFT master
@@ -106,7 +106,7 @@ namespace NFT.Comms
         private void CommandLoop()
         {
             Command c = new Command();
-            isConnected = true;
+            IsConnected = true;
             Log.Info("Listening to " + masterEP.Address.ToString() + "...");
 
             // Command recieving loop
@@ -131,38 +131,38 @@ namespace NFT.Comms
                         c = Helper.FromMemoryStream<Command>(ms);
 
                         // Handle command
-                        Task.Run(() => CommandHandler.Handle(c, master));
+                        Task.Run(() => CommandHandler.Handle(c, Master));
                     }
                     catch (SerializationException e)
                     {
                         Log.Error(new Error(e, "Cannot parse master stream"));
-                        isConnected = false;
+                        IsConnected = false;
                     }
                     catch (IOException e)
                     {
                         Log.Error(new Error(e, "Connection failure"));
-                        isConnected = false;
+                        IsConnected = false;
                     }
                     catch (ObjectDisposedException e)
                     {
                         Log.Error(new Error(e, "Object failure"));
-                        isConnected = false;
+                        IsConnected = false;
                     }
                     catch (Exception e)
                     {
                         Log.Error(new Error(e));
-                        isConnected = false;
+                        IsConnected = false;
                     }
 
                     // Disconnect on quit flags
-                    if (c.type == CommandType.Quit || isConnected == false)
+                    if (c.Type == CommandType.Quit || IsConnected == false)
                         break;
                 }
             }
 
             // Clean up
             Log.Info(masterEP.Address + ":" + masterEP.Port + " disconnected");
-            isConnected = false;
+            IsConnected = false;
         }
         private void TestConnection() { }
     }
