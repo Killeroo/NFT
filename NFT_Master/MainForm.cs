@@ -39,6 +39,7 @@ namespace NFT_Master
             txtRange.Text = range;// Helper.GetLocalIPAddress(); 
             txtWorkingDirectory_TextChanged(new object(), new EventArgs()); // Load list view
             SetLogText(version); // Print current version in log window
+            ToggleSlaveActionButtons(false); // Disable slave context buttons on startup
         }
 
         #region Event Handlers
@@ -50,7 +51,7 @@ namespace NFT_Master
             {
                 // Setup UI stuff
                 SetSlaveCount(0);
-                SetStatusLabel("Scanning");
+                SetStatusLabel("Scanning...");
                 ToggleProgressBar();
                 ClearSlaveList();
 
@@ -69,6 +70,12 @@ namespace NFT_Master
                 SetSlaveCount(Slave.ConnectedSlaves.Count);
                 SetStatusLabel("Ready");
                 ToggleProgressBar();
+
+                // Disable Slave context buttons if no slaves are connected
+                if (Slave.ConnectedSlaves.Count == 0)
+                    ToggleSlaveActionButtons(false);
+                else
+                    ToggleSlaveActionButtons(true);
 
             });
             background.IsBackground = true;
@@ -95,6 +102,7 @@ namespace NFT_Master
         }
         private void MainForm_Load(object sender, EventArgs e)
         {
+            // Redirect console output to richtextbox
             Console.SetOut(new ConsoleWriter(txtLog));
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
@@ -348,6 +356,33 @@ namespace NFT_Master
         }
 
         #endregion
+
+        private void ToggleSlaveActionButtons(bool enabled)
+        {
+            if (btnTransfer.InvokeRequired)
+            {
+                // Create delegate for callback
+                MethodInvoker d = (MethodInvoker)delegate
+                {
+                    ToggleSlaveActionButtons(enabled);
+                };
+
+                // Invoke delegate on UI Thread
+                this.Invoke(d);
+            }
+            else
+            {
+                // Toggle buttons
+                btnTransfer.Enabled = enabled;
+                btnSync.Enabled = enabled;
+                btnSend.Enabled = enabled;
+
+                // Toggle context menu buttons
+                synchronizeAllToolStripMenuItem.Enabled = enabled;
+                transferAllToolStripMenuItem.Enabled = enabled;
+                broadcastMessageToolStripMenuItem.Enabled = enabled;
+            }
+        }
 
         private void btnTransfer_Click(object sender, EventArgs e)
         {

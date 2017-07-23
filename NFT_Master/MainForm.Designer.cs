@@ -44,6 +44,8 @@
             this.progressBar = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.lblStatus = new System.Windows.Forms.ToolStripLabel();
+            this.btnSync = new System.Windows.Forms.Button();
+            this.btnTransfer = new System.Windows.Forms.Button();
             this.txtLog = new System.Windows.Forms.RichTextBox();
             this.btnSend = new System.Windows.Forms.Button();
             this.txtMessage = new System.Windows.Forms.TextBox();
@@ -51,18 +53,16 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.scanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.synchronizeAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.retransferAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.transferAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.broadcastMessageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.settingsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.blacklistRulesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.broadcastMessageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.scanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.btnTransfer = new System.Windows.Forms.Button();
-            this.btnSync = new System.Windows.Forms.Button();
             this.slaveGroupBox.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
@@ -236,6 +236,25 @@
             this.lblStatus.Size = new System.Drawing.Size(39, 22);
             this.lblStatus.Text = "Ready";
             // 
+            // btnSync
+            // 
+            this.btnSync.Location = new System.Drawing.Point(320, 287);
+            this.btnSync.Name = "btnSync";
+            this.btnSync.Size = new System.Drawing.Size(83, 23);
+            this.btnSync.TabIndex = 15;
+            this.btnSync.Text = "Sync";
+            this.btnSync.UseVisualStyleBackColor = true;
+            // 
+            // btnTransfer
+            // 
+            this.btnTransfer.Location = new System.Drawing.Point(223, 287);
+            this.btnTransfer.Name = "btnTransfer";
+            this.btnTransfer.Size = new System.Drawing.Size(91, 23);
+            this.btnTransfer.TabIndex = 14;
+            this.btnTransfer.Text = "Transfer";
+            this.btnTransfer.UseVisualStyleBackColor = true;
+            this.btnTransfer.Click += new System.EventHandler(this.btnTransfer_Click);
+            // 
             // txtLog
             // 
             this.txtLog.Font = new System.Drawing.Font("Consolas", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -288,7 +307,7 @@
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(92, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             // 
             // connectionToolStripMenuItem
@@ -297,7 +316,7 @@
             this.scanToolStripMenuItem,
             this.toolStripSeparator3,
             this.synchronizeAllToolStripMenuItem,
-            this.retransferAllToolStripMenuItem,
+            this.transferAllToolStripMenuItem,
             this.toolStripSeparator2,
             this.broadcastMessageToolStripMenuItem});
             this.connectionToolStripMenuItem.Name = "connectionToolStripMenuItem";
@@ -305,17 +324,39 @@
             this.connectionToolStripMenuItem.Text = "Actions";
             this.connectionToolStripMenuItem.TextChanged += new System.EventHandler(this.txtLog_TextChanged);
             // 
+            // scanToolStripMenuItem
+            // 
+            this.scanToolStripMenuItem.Name = "scanToolStripMenuItem";
+            this.scanToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.scanToolStripMenuItem.Text = "Scan";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(172, 6);
+            // 
             // synchronizeAllToolStripMenuItem
             // 
             this.synchronizeAllToolStripMenuItem.Name = "synchronizeAllToolStripMenuItem";
             this.synchronizeAllToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
             this.synchronizeAllToolStripMenuItem.Text = "Synchronize";
             // 
-            // retransferAllToolStripMenuItem
+            // transferAllToolStripMenuItem
             // 
-            this.retransferAllToolStripMenuItem.Name = "retransferAllToolStripMenuItem";
-            this.retransferAllToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.retransferAllToolStripMenuItem.Text = "Transfer";
+            this.transferAllToolStripMenuItem.Name = "transferAllToolStripMenuItem";
+            this.transferAllToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.transferAllToolStripMenuItem.Text = "Transfer";
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(172, 6);
+            // 
+            // broadcastMessageToolStripMenuItem
+            // 
+            this.broadcastMessageToolStripMenuItem.Name = "broadcastMessageToolStripMenuItem";
+            this.broadcastMessageToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
+            this.broadcastMessageToolStripMenuItem.Text = "Broadcast Message";
             // 
             // settingsToolStripMenuItem
             // 
@@ -329,13 +370,13 @@
             // blacklistRulesToolStripMenuItem
             // 
             this.blacklistRulesToolStripMenuItem.Name = "blacklistRulesToolStripMenuItem";
-            this.blacklistRulesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.blacklistRulesToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.blacklistRulesToolStripMenuItem.Text = "Blacklist Rules";
             // 
             // preferencesToolStripMenuItem
             // 
             this.preferencesToolStripMenuItem.Name = "preferencesToolStripMenuItem";
-            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.preferencesToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.preferencesToolStripMenuItem.Text = "Preferences";
             // 
             // aboutToolStripMenuItem
@@ -343,47 +384,6 @@
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(172, 6);
-            // 
-            // broadcastMessageToolStripMenuItem
-            // 
-            this.broadcastMessageToolStripMenuItem.Name = "broadcastMessageToolStripMenuItem";
-            this.broadcastMessageToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.broadcastMessageToolStripMenuItem.Text = "Broadcast Message";
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(172, 6);
-            // 
-            // scanToolStripMenuItem
-            // 
-            this.scanToolStripMenuItem.Name = "scanToolStripMenuItem";
-            this.scanToolStripMenuItem.Size = new System.Drawing.Size(175, 22);
-            this.scanToolStripMenuItem.Text = "Scan";
-            // 
-            // btnTransfer
-            // 
-            this.btnTransfer.Location = new System.Drawing.Point(223, 287);
-            this.btnTransfer.Name = "btnTransfer";
-            this.btnTransfer.Size = new System.Drawing.Size(75, 23);
-            this.btnTransfer.TabIndex = 14;
-            this.btnTransfer.Text = "Transfer";
-            this.btnTransfer.UseVisualStyleBackColor = true;
-            this.btnTransfer.Click += new System.EventHandler(this.btnTransfer_Click);
-            // 
-            // btnSync
-            // 
-            this.btnSync.Location = new System.Drawing.Point(304, 287);
-            this.btnSync.Name = "btnSync";
-            this.btnSync.Size = new System.Drawing.Size(75, 23);
-            this.btnSync.TabIndex = 15;
-            this.btnSync.Text = "Sync";
-            this.btnSync.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -430,7 +430,7 @@
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem connectionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem synchronizeAllToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem retransferAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem transferAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem settingsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem blacklistRulesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem preferencesToolStripMenuItem;
