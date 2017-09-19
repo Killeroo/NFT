@@ -44,7 +44,7 @@ namespace NFT_Master
             //            Log.Fatal("Scan - Missing scan range (format 192.168.0.1-10)");
 
             //        // Scan for slaves
-            //        Slave.Scan(args[1]);
+            //        CommUtils.Scan(args[1]);
 
             //        // Start listening to each connected slave
             //        foreach (var slave in Slave.slaves)
@@ -57,7 +57,7 @@ namespace NFT_Master
             //        // Send message to all connect slaves
             //        Command c = new Command(CommandType.Info);
             //        c.message = "Hello World! =^-^=";
-            //        Slave.SendAll(c);
+            //        CommUtils.SendAll(c);
 
             //        Console.ReadLine();
 
@@ -97,7 +97,7 @@ namespace NFT_Master
             //            Log.Fatal("Missing args");
 
             //        // Scan for slaves
-            //        Slave.Scan(args[1]);
+            //        CommUtils.Scan(args[1]);
 
             //        // Start listening to each connected slave
             //        foreach (var slave in Slave.slaves)
@@ -115,7 +115,7 @@ namespace NFT_Master
             //        com.AddStream(rs);
 
             //        // Send to all slaves
-            //        Slave.SendAll(com);
+            //        CommUtils.SendAll(com);
 
             //        Console.ReadLine();
 

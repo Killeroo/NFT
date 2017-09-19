@@ -32,7 +32,7 @@ namespace NFT.Core
             }
 
             // Check there are slaves to transfer too
-            if (Slave.ConnectedSlaves.Count == 0)
+            if (CommUtils.ConnectedClients.Count == 0)
             {
                 Log.Warning("No connected slaves to transfer too, Stopping...");
                 return;
@@ -45,7 +45,7 @@ namespace NFT.Core
             Log.Info("Sending file lists to slaves...");
 
             // Send to all currently connected slaves
-            foreach (Slave s in Slave.ConnectedSlaves)
+            foreach (Client s in CommUtils.ConnectedClients)
             {
                 s.Send(transferCommand);
             }
