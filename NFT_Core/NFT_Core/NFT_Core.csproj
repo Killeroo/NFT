@@ -39,6 +39,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="NFT\Comms\CommUtils.cs" />
     <Compile Include="NFT\Core\Command.cs" />
     <Compile Include="NFT\Comms\CommandHandler.cs" />
     <Compile Include="NFT\Core\Constants.cs" />
@@ -95,7 +96,7 @@
     <Compile Include="Octodiff\Diagnostics\IProgressReporter.cs" />
     <Compile Include="Octodiff\Diagnostics\NullProgressReporter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="NFT\Comms\Slave.cs" />
+    <Compile Include="NFT\Comms\Client.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Octodiff\CHANGES.txt" />

@@ -20,12 +20,12 @@ namespace NFT.Comms
         private TcpClient client; // The specific TcpClient object we are listening too
         private bool running = false;
 
-        public SlaveListener(Slave s)
+        public SlaveListener(Client c)
         {
             // Load required slave data
-            client = s.Client;
-            stream = s.Stream;
-            ep = s.EndPoint;
+            client = c.ClientObj;
+            stream = c.Stream;
+            ep = c.EndPoint;
         }
 
         public void Start()
