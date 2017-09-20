@@ -39,7 +39,7 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="NFT\Comms\CommUtils.cs" />
+    <Compile Include="NFT\Comms\Utils.cs" />
     <Compile Include="NFT\Core\Command.cs" />
     <Compile Include="NFT\Comms\CommandHandler.cs" />
     <Compile Include="NFT\Core\Constants.cs" />

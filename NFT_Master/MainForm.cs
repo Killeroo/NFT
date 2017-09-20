@@ -56,23 +56,23 @@ namespace NFT_Master
                 ClearSlaveList();
 
                 // Scan for slaves
-                CommUtils.Scan(txtRange.Text);
+                Utils.Scan(txtRange.Text);
 
                 // Start listening to each connected slave
                 /// TODO: add to scan? or move somewhere else
-                foreach (var client in CommUtils.ConnectedClients)
+                foreach (var client in Utils.ConnectedClients)
                 {
                     // Add to slave list box
                     AddToSlaveList(client.ClientObj.Client.RemoteEndPoint.ToString().Split(':')[0]);
                 }
 
                 // Update UI stuff
-                SetSlaveCount(CommUtils.ConnectedClients.Count);
+                SetSlaveCount(Utils.ConnectedClients.Count);
                 SetStatusLabel("Ready");
                 ToggleProgressBar();
 
                 // Disable Slave context buttons if no slaves are connected
-                if (CommUtils.ConnectedClients.Count == 0)
+                if (Utils.ConnectedClients.Count == 0)
                     ToggleSlaveActionButtons(false);
                 else
                     ToggleSlaveActionButtons(true);
@@ -88,7 +88,7 @@ namespace NFT_Master
             c.Message = txtMessage.Text;
 
             // Send to all connected slaves
-            CommUtils.SendAll(c);
+            Utils.SendAll(c);
         }
         private void btnFolderBrowse_Click(object sender, EventArgs e)
         {
@@ -107,7 +107,7 @@ namespace NFT_Master
         }
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
-            CommUtils.DisconnectAll();
+            Utils.DisconnectAll();
         }
         private void txtWorkingDirectory_TextChanged(object sender, EventArgs e)
         {

@@ -8,7 +8,7 @@ using NFT.Logger;
 
 namespace NFT.Comms
 {
-    public static class CommUtils
+    public static class Utils
     {
         public static List<Client> ConnectedClients { get; set; }
         /// <summary>
