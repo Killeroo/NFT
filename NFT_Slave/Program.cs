@@ -12,7 +12,7 @@ namespace NFT_Slave
 {
     class Program
     {
-        private static MasterListener listener = new MasterListener();
+        private static Client listener = new Client();
 
         static void Main(string[] args)
         {

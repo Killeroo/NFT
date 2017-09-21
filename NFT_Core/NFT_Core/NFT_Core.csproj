@@ -43,7 +43,6 @@
     <Compile Include="NFT\Core\Command.cs" />
     <Compile Include="NFT\Comms\CommandHandler.cs" />
     <Compile Include="NFT\Core\Constants.cs" />
-    <Compile Include="NFT\Comms\MasterListener.cs" />
     <Compile Include="NFT\Core\CommandType.cs" />
     <Compile Include="NFT\Core\Error.cs" />
     <Compile Include="NFT\Comms\ErrorReporter.cs" />
