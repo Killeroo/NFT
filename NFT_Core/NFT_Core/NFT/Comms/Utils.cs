@@ -10,7 +10,8 @@ namespace NFT.Comms
 {
     public static class Utils
     {
-        public static List<Client> ConnectedClients { get; set; }
+        public static List<Client> ConnectedClients = new List<Client>();
+
         /// <summary>
         /// Finds NFT Clients on specified address range
         /// </summary>
