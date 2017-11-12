@@ -11,7 +11,7 @@ using System.Net.Sockets;
 using NFT.Logger;
 using NFT.Core;
 
-namespace NFT_Core.NFT.Comms
+namespace NFT_Core.NFT.Net
 {
     class Server
     {
@@ -19,6 +19,9 @@ namespace NFT_Core.NFT.Comms
         List<Task> pendingConnections = new List<Task>(); // List of connections to be established
         List<TcpClient> connections = new List<TcpClient>(); // List of connected clients
         
+        /// <summary>
+        /// Listen for clients
+        /// </summary>
         private async Task StartListener()
         {
             var listener = TcpListener.Create(Constants.COMMAND_LISTEN_PORT);
@@ -34,9 +37,32 @@ namespace NFT_Core.NFT.Comms
                     task.Wait();
             }
         }
+        /// <summary>
+        /// Handle newly connected clients
+        /// </summary>
         private async Task StartHandleConnectionAsync(TcpClient client)
         {
+            // Handle client connection
+            var connectionTask = HandleConnectionAsync(client);
 
+            // Only add to other pending connection when list is free
+            lock (syncLock)
+                pendingConnections.Add(connectionTask);
+
+            try
+            {
+                // Wait for task to finish
+                await connectionTask;
+            }
+            catch (Exception ex)
+            {
+                Log.Error(new Error(ex, "Error handling client connection"));
+            }
+            finally
+            {
+                lock (syncLock)
+                    pendingConnections.Remove(connectionTask);
+            }
         } // Change to use NFT.Comms.Client?
         private async Task HandleConnectionAsync(TcpClient client) { }
         private async Task HandleDisconnectAsync() { }
