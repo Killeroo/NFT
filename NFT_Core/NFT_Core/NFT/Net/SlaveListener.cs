@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using NFT.Core;
 using NFT.Logger;
 
-namespace NFT.Comms
+namespace NFT.Net
 {
     /// <summary>
     /// Listens for Command messages from NFT_Slave application
@@ -23,7 +23,7 @@ namespace NFT.Comms
         public SlaveListener(Client c)
         {
             // Load required slave data
-            client = c.ClientObj;
+            client = c.Connection;
             stream = c.Stream;
             ep = c.EndPoint;
         }

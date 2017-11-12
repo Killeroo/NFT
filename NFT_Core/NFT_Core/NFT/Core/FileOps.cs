@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 
 using NFT.Logger;
-using NFT.Comms;
+using NFT.Net;
 
 namespace NFT.Core
 {

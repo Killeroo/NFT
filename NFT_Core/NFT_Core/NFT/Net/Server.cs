@@ -9,6 +9,7 @@ using System.Net;
 using System.Net.Sockets;
 
 using NFT.Logger;
+using NFT.Core;
 
 namespace NFT_Core.NFT.Comms
 {
@@ -16,9 +17,27 @@ namespace NFT_Core.NFT.Comms
     {
         object syncLock = new Object(); // Locking object (prevents two threads from using the same code)
         List<Task> pendingConnections = new List<Task>(); // List of connections to be established
-        List<Task> connections = new List<TcpClient>(); // List of connected clients
+        List<TcpClient> connections = new List<TcpClient>(); // List of connected clients
+        
+        private async Task StartListener()
+        {
+            var listener = TcpListener.Create(Constants.COMMAND_LISTEN_PORT);
+            listener.Start();
 
-        private async Task StartHandleConnectionAsync(TcpClient client) { } // Change to use NFT.Comms.Client?
+            // Listen for clients 
+            while (true)
+            {
+                var client = await listener.AcceptTcpClientAsync();
+                var task = StartHandleConnectionAsync(client);
+
+                if (task.IsFaulted)
+                    task.Wait();
+            }
+        }
+        private async Task StartHandleConnectionAsync(TcpClient client)
+        {
+
+        } // Change to use NFT.Comms.Client?
         private async Task HandleConnectionAsync(TcpClient client) { }
         private async Task HandleDisconnectAsync() { }
 

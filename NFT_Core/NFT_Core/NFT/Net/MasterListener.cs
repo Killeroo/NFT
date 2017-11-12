@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using NFT.Core;
 using NFT.Logger;
 
-namespace NFT.Comms
+namespace NFT.Net
 {
     /// <summary>
     /// Class for recieving Command messages from NFT master application

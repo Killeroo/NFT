@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using NFT.Core;
-using NFT.Comms;
+using NFT.Net;
 using NFT.Rsync;
 using NFT.Logger;
 
@@ -63,7 +63,7 @@ namespace NFT_Master
                 foreach (var client in Utils.ConnectedClients)
                 {
                     // Add to slave list box
-                    AddToSlaveList(client.ClientObj.Client.RemoteEndPoint.ToString().Split(':')[0]);
+                    AddToSlaveList(client.Connection.Client.RemoteEndPoint.ToString().Split(':')[0]);
                 }
 
                 // Update UI stuff

@@ -6,7 +6,7 @@ using System.Threading;
 using NFT.Core;
 using NFT.Logger;
 
-namespace NFT.Comms
+namespace NFT.Net
 {
     public static class Utils
     {

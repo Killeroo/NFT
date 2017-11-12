@@ -4,7 +4,7 @@ using System.Threading;
 using System.Windows.Forms;
 
 using NFT.Core;
-using NFT.Comms;
+using NFT.Net;
 using NFT.Rsync;
 using NFT.Logger;
 

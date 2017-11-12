@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Net;
 
-using NFT.Comms;
+using NFT.Net;
 using NFT.Logger;
 using NFT.Core;
 

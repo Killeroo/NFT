@@ -7,12 +7,12 @@ using System.Threading;
 using NFT.Core;
 using NFT.Logger;
 
-namespace NFT.Comms
+namespace NFT.Net
 {
     public class Client
     {
         public IPEndPoint EndPoint;
-        public TcpClient ClientObj { get; private set; }
+        public TcpClient Connection { get; private set; }
         public NetworkStream Stream { get; private set; }
         public bool IsConnected { get; private set; } = false;
 
@@ -20,7 +20,7 @@ namespace NFT.Comms
 
         public Client(IPEndPoint ep)
         {
-            ClientObj = new TcpClient();
+            Connection = new TcpClient();
             EndPoint = ep;
             //connect();
         }
@@ -31,29 +31,29 @@ namespace NFT.Comms
         public void Send(Command c)
         {
             // Check if connected first
-            if (ClientObj == null || !IsConnected)
+            if (Connection == null || !IsConnected)
                 throw new Exception();
 
             curSeqNum++; // Increment sequence number
 
             // Send command
-            CommandHandler.Send(c, ClientObj, curSeqNum);
+            CommandHandler.Send(c, Connection, curSeqNum);
         }
         public void Connect()
         {
             try
             {
                 // Async connection attempt
-                var result = ClientObj.BeginConnect(EndPoint.Address.ToString(), EndPoint.Port, null, null);
+                var result = Connection.BeginConnect(EndPoint.Address.ToString(), EndPoint.Port, null, null);
                 var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(150));//FromSeconds(1)); // Set timeout 
                 if (!success)
                     throw new SocketException();
 
                 // Connected
-                ClientObj.EndConnect(result);
+                Connection.EndConnect(result);
                 Log.Info("Connected to " + EndPoint.Address + " [NFT_Client]");
 
-                Stream = ClientObj.GetStream();
+                Stream = Connection.GetStream();
                 IsConnected = true;
             }
             catch (SocketException)
@@ -80,7 +80,7 @@ namespace NFT.Comms
             Send(c);
 
             // Cleanup
-            ClientObj.Close();
+            Connection.Close();
             Stream.Close();
             IsConnected = false;
         }

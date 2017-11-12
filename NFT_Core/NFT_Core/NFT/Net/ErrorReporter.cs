@@ -5,7 +5,7 @@ using System.Net.Sockets;
 using NFT.Core;
 using NFT.Logger;
 
-namespace NFT.Comms
+namespace NFT.Net
 {
 
     /// <summary>

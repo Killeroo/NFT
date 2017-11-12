@@ -7,7 +7,7 @@ using NFT.Core;
 using NFT.Logger;
 using NFT.Rsync;
 
-namespace NFT.Comms
+namespace NFT.Net
 {
     /// <summary>
     /// Static class for sending and handling Command messages
