@@ -22,13 +22,12 @@ namespace NFT.Net
         {
             Connection = new TcpClient();
             EndPoint = ep;
-            //connect();
         }
 
         /// <summary>
         /// Send a command to connected Client
         /// </summary>
-        public void Send(Command c)
+        public bool Send(Command c)
         {
             // Check if connected first
             if (Connection == null || !IsConnected)
@@ -55,6 +54,8 @@ namespace NFT.Net
 
                 Stream = Connection.GetStream();
                 IsConnected = true;
+                
+                return true;
             }
             catch (SocketException)
             {
@@ -63,12 +64,14 @@ namespace NFT.Net
             }
             catch (ObjectDisposedException)
             {
-                //Log.error(new Error(e, "Object failure"));
+                Log.error(new Error(e, "Object failure"));
             }
             catch (Exception)
             {
                 //Log.error(new Error(e, "Could not connect to Client"));
             }
+
+            return false;
         }
         public void Disconnect()
         {

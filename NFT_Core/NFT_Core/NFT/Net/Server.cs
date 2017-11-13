@@ -18,7 +18,7 @@ namespace NFT_Core.NFT.Net
     {
         object syncLock = new Object(); // Locking object (prevents two threads from using the same code)
         List<Task> pendingConnections = new List<Task>(); // List of connections to be established
-        List<TcpClient> connections = new List<TcpClient>(); // List of connected clients
+        List<Client> connections = new List<Client>(); // List of connected clients
         
         /// <summary>
         /// Listen for clients
@@ -41,7 +41,7 @@ namespace NFT_Core.NFT.Net
         /// <summary>
         /// Handle newly connected clients
         /// </summary>
-        private async Task StartHandleConnectionAsync(TcpClient client)
+        private async Task StartHandleConnectionAsync(NFT_Core.Net.Client client)
         {
             // Handle client connection
             var connectionTask = HandleConnectionAsync(client);
@@ -61,11 +61,12 @@ namespace NFT_Core.NFT.Net
             }
             finally
             {
+                // Remove from pending connections once we are done
                 lock (syncLock)
                     pendingConnections.Remove(connectionTask);
             }
         } // Change to use NFT.Comms.Client?
-        private async Task HandleConnectionAsync(TcpClient client) { }
+        private async Task HandleConnectionAsync(NFT.Net.Client client) { }
         private async Task HandleDisconnectAsync() { }
 
         private async Task Scan(string range)
@@ -114,11 +115,14 @@ namespace NFT_Core.NFT.Net
                         {
                             // Update with current address to try and connect to
                             scanEP.Address = new IPAddress(new byte[] { (byte)seg1, (byte)seg2, (byte)seg3, (byte)seg4 });
-                            Client s = new Client(scanEP);
+                            NFT.Net.Client c = new Client(scanEP);
 
                             // Attempt to connect
-                            //s.Connect();
-                            HandleConnectionAsync(Client);
+                            if (c.Connect())
+                                // Handle connection if connection is established
+                                HandleConnectionAsync(c);
+                            else 
+                                continue;
 
                             // Add to list of connected Clients
                             if (s.IsConnected)
