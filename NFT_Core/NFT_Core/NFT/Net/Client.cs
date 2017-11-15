@@ -12,10 +12,21 @@ namespace NFT.Net
     // Stores all client operations and functions
     public class Client
     {
-        public IPEndPoint EndPoint;
-        public TcpClient Connection { get; private set; }
-        public NetworkStream Stream { get; private set; }
-        public bool IsConnected { get; private set; } = false;
+
+        public bool IsListening { get; private set; }
+        public bool IsConnected { get; private set; }
+        public TcpClient Master { get; private set; }
+
+        private TcpListener listener;
+        private IPEndPoint masterEP;
+        private NetworkStream stream;
+        private bool running;
+
+
+        //public IPEndPoint EndPoint;
+        //public TcpClient Connection { get; private set; }
+        //public NetworkStream Stream { get; private set; }
+        //public bool IsConnected { get; private set; } = false;
 
         private int curSeqNum = 0; // Current command sequence number (Client independent)
 
