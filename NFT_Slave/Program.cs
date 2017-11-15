@@ -7,6 +7,7 @@ using NFT.Logger;
 using NFT.Core;
 
 using Console = Colorful.Console;
+using System.Collections.Generic;
 
 namespace NFT_Slave
 {
@@ -36,19 +37,18 @@ namespace NFT_Slave
                 return;
             }
 
+            //Debug(arg[0]);
+            
+        }
+
+        private static void Debug(string debugArg)
+        {
             // Process debug arguments
-            switch (args[0])
+            switch (debugArg)
             {
-                case @"/scan":
-
-                    // Start listener
-                    listener.Start();
-
-                    break;
-
                 case @"/error":
 
-                    if (string.IsNullOrEmpty(args[1]))
+                    if (string.IsNullOrEmpty(debugArg))
                         Log.Fatal("Missing args");
 
                     // Send an error to NFT master
@@ -60,12 +60,12 @@ namespace NFT_Slave
 
                 case @"/transfer":
 
-                    if (string.IsNullOrEmpty(args[1]) || string.IsNullOrEmpty(args[2]))
-                        Log.Fatal("Missing args");
+                    //if (string.IsNullOrEmpty(args[1]) || string.IsNullOrEmpty(args[2]))
+                    //    Log.Fatal("Missing args");
 
-                    FileOps.FetchFile(args[1], args[2]);
+                    //FileOps.FetchFile(args[1], args[2]);
 
-                    Console.ReadLine();
+                    //Console.ReadLine();
 
                     break;
 
@@ -82,7 +82,6 @@ namespace NFT_Slave
 
                     break;
             }
-            
         }
 
         protected static void exitHandler(object sender, ConsoleCancelEventArgs args)

@@ -11,15 +11,18 @@ using System.Net.Sockets;
 using NFT.Logger;
 using NFT.Core;
 using NFT.Net;
+using System.Runtime.Serialization;
 
 namespace NFT_Core.NFT.Net
 {
     // Stores all server operations and functions
-    class Server
+    public class Server
     {
+        //https://stackoverflow.com/questions/21013751/what-is-the-async-await-equivalent-of-a-threadpool-server
+
         object syncLock = new Object(); // Locking object (prevents two threads from using the same code)
         List<Task> pendingConnections = new List<Task>(); // List of connections to be established
-        List<TcpClients> connections = new List<TcpClients>(); // List of connected clients
+        List<TcpClient> connections = new List<TcpClient>(); // List of connected clients
         
         /// <summary>
         /// Listen for clients
@@ -47,7 +50,7 @@ namespace NFT_Core.NFT.Net
             // Handle client connection
             var connectionTask = HandleConnectionAsync(client);
 
-            // Only add to other pending connection when list is free
+            // Add to pending connections
             lock (syncLock)
                 pendingConnections.Add(connectionTask);
 
@@ -67,38 +70,81 @@ namespace NFT_Core.NFT.Net
                     pendingConnections.Remove(connectionTask);
             }
         }
-        private async Task HandleConnectionAsync(tcpClient client) 
+        private async Task HandleConnectionAsync(TcpClient client) 
         { 
             // Resume threads here
             await Task.Yield();
 
-            bool connected = true; // Client is connected
+            // Client is connected
+            NetworkStream stream = client.GetStream();
+            string slaveName = GenerateSlaveName();
+            bool connected = true;
             int seqNum = 1;
             
-            try 
+            // Add to active connections
+            lock (syncLock)
+                connections.Add(client);
+
+            // Command listening loop
+            while (connected)
             {
-                using (var netStream = client.GetStream())
+                Command c = new Command();
+                int bytesRead = 0;
+                var buffer = new byte[Constants.COMMAND_BUFFER_SIZE];
+
+                using (MemoryStream ms = new MemoryStream())
                 {
-                    // Add client to active connections
-                    lock (syncLock)
-                        connections.Add(client);
-
-                    // Command listening loop
-                    while (connected)
+                    try
                     {
-                        Command c; // Command from client
+                        // Method
+                        //// Wait for data from client
+                        //var buffer = new byte[Constants.COMMAND_BUFFER_SIZE];
+                        //var bytesRecv = await stream.ReadAsync(buffer, 0, buffer.Length);
 
-                        // Wait for data from client
-                        var buffer = new byte[Constants.COMMAND_BUFFER_SIZE];
-                        var bytesRecv = await netStream.ReadAsync(buffer, 0, buffer.Length);
+                        //// Convert stream to command
+                        //c = Helper.FromByteArray<Command>(buffer);
 
-                        // Convert stream to command
-                        c = Helper.FromByteArray<Command>(buffer);
+                        do
+                        {
+                            // Recieve message/command from client
+                            bytesRead = await stream.ReadAsync(buffer, 0, buffer.Length);
+                            ms.Write(buffer, 0, bytesRead);
 
+                        }
+                        while (stream.DataAvailable);
 
+                        // Deserialise & execute command in new thread
+                        c = Helper.FromMemoryStream<Command>(ms);
+                        Task.Run(() => CommandHandler.Handle(c, client));
+                        
+                    }
+                    catch (SerializationException e)
+                    {
+                        Log.Error(new Error(e, "Cannot parse master stream"));
+                        connected = false;
+                    }
+                    catch (IOException e)
+                    {
+                        Log.Error(new Error(e, "Connection failure"));
+                        connected = false;
+                    }
+                    catch (ObjectDisposedException e)
+                    {
+                        Log.Error(new Error(e, "Object failure"));
+                    }
+                    catch (Exception e)
+                    {
+                        Log.Error(new Error(e));
                     }
                 }
+
+                if (c.Type == CommandType.Quit)
+                    connected = false;
+
+
             }
+
+
         }
         private async Task HandleDisconnectAsync() { }
 
@@ -149,21 +195,21 @@ namespace NFT_Core.NFT.Net
                         {
                             // Update with current address to try and connect to
                             scanEP.Address = new IPAddress(new byte[] { (byte)seg1, (byte)seg2, (byte)seg3, (byte)seg4 });
-                            NFT.Net.Client c = new Client(scanEP);
+                            //NFT.Net.Client c = new Client(scanEP);
 
-                            // Attempt to connect
-                            if (c.Connect())
-                                // Handle connection if connection is established
-                                HandleConnectionAsync(c);
-                            else 
-                                continue;
+                            //// Attempt to connect
+                            //if c.Connect())
+                            //    // Handle connection if connection is established
+                            //    //HandleConnectionAsync(c);
+                            //else 
+                            //    continue;
 
-                            // Add to list of connected Clients
-                            if (s.IsConnected)
-                            {
-                                //ConnectedClients.Add(s);
-                                //hostCount++;
-                            }
+                            //// Add to list of connected Clients
+                            //if s.IsConnected)
+                            //{
+                            //    //ConnectedClients.Add(s);
+                            //    //hostCount++;
+                            //}
                         }
                     }
                 }
@@ -177,11 +223,73 @@ namespace NFT_Core.NFT.Net
             
         }
         // Attempts to connect to a client
-        private async Task Connect(TcpClient client) { }
+        private async Task Connect(IPEndPoint ep)
+        {
+            TcpClient client = new TcpClient();
+            try
+            {
+                // Async connection attempt
+                var result = client.BeginConnect(ep.Address.ToString(), ep.Port, null, null);
+                var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(150));//FromSeconds(1)); // Set timeout 
+                if (!success)
+                    throw new SocketException();
+
+                // Connected
+                Log.Info("Found NFT_Slave @ " + ep.Address);
+            }
+            catch (SocketException)
+            {
+                // For cleaner scanning output
+                //Log.error(new Error(e, "Could not connect to Client"));
+            }
+            catch (ObjectDisposedException e)
+            {
+                Log.Error(new Error(e, "Object failure"));
+            }
+            catch (Exception e)
+            {
+                Log.Error(new Error(e, "Could not connect to Client"));
+            }
+        }
         // Broadcasts a message to all connectect clients
         private async Task Broadcast() { }
-
         private async Task DisconnectAll() { }
+        // Generate a unique id for client
+        public string GenerateSlaveName()
+        {
+            string[] actions = new string[] {
+                               "Raving", "Praying", "Cautious", "Fast", "Light",
+                                "Slow", "Tired", "Warm", "Snazzy", "Soft", "Sharp",
+                                "Sweet", "Strong", "Hard", "Dull", "Noisy", "Mute",
+                                "Faint", "Light", "Shaggy", "Slippery", "Icy", "Young",
+                                "Frantic", "Invisible", "Friendly", "Silly", "Tense",
+                                "Cross", "Glow", "Gold", "Red", "Green", "Shiny"};
+
+            string[] names = new string[] {
+                               "Mako", "", "Alpha", "Beaver", "Pigglet",
+                                "Axy", "Squid", "Troll", "Snazzy", "Ray", "Lance",
+                                "Otter", "Bear", "Wolf", "Weasal", "Rabbit", "Snail",
+                                "Cheater", "Lion", "Frog", "Cloud", "Nimbus", "Linx",
+                                "Eagle", "Whale", "Bioid", "Pika", "Ozzy", "Slave", "Daemon",
+                                "Cat", "Rhino", "Anteater", "Crab"};
+
+            Random random = new Random();
+            List<int> indices = new List<int>();
+            // Get an array of 2 random ints 
+            while (indices.Count < 2)
+            {
+                int index = random.Next(0, names.Length);
+                if (indices.Count == 0 || !indices.Contains(index))
+                    indices.Add(index);
+            }
+            // Use to get 2 random elements in name array
+            string[] slaveName = new string[2];
+            slaveName[0] = actions[indices[0]];
+            slaveName[1] = names[indices[1]];
+
+            // Return name
+            return string.Concat(slaveName);
+        }
 
         public void Start() { }
         public void Stop() { }
