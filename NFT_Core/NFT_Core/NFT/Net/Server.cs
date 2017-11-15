@@ -14,11 +14,12 @@ using NFT.Net;
 
 namespace NFT_Core.NFT.Net
 {
+    // Stores all server operations and functions
     class Server
     {
         object syncLock = new Object(); // Locking object (prevents two threads from using the same code)
         List<Task> pendingConnections = new List<Task>(); // List of connections to be established
-        List<Client> connections = new List<Client>(); // List of connected clients
+        List<TcpClients> connections = new List<TcpClients>(); // List of connected clients
         
         /// <summary>
         /// Listen for clients
@@ -41,7 +42,7 @@ namespace NFT_Core.NFT.Net
         /// <summary>
         /// Handle newly connected clients
         /// </summary>
-        private async Task StartHandleConnectionAsync(NFT_Core.Net.Client client)
+        private async Task StartHandleConnectionAsync(TcpClient client)
         {
             // Handle client connection
             var connectionTask = HandleConnectionAsync(client);
@@ -65,10 +66,43 @@ namespace NFT_Core.NFT.Net
                 lock (syncLock)
                     pendingConnections.Remove(connectionTask);
             }
-        } // Change to use NFT.Comms.Client?
-        private async Task HandleConnectionAsync(NFT.Net.Client client) { }
+        }
+        private async Task HandleConnectionAsync(tcpClient client) 
+        { 
+            // Resume threads here
+            await Task.Yield();
+
+            bool connected = true; // Client is connected
+            int seqNum = 1;
+            
+            try 
+            {
+                using (var netStream = client.GetStream())
+                {
+                    // Add client to active connections
+                    lock (syncLock)
+                        connections.Add(client);
+
+                    // Command listening loop
+                    while (connected)
+                    {
+                        Command c; // Command from client
+
+                        // Wait for data from client
+                        var buffer = new byte[Constants.COMMAND_BUFFER_SIZE];
+                        var bytesRecv = await netStream.ReadAsync(buffer, 0, buffer.Length);
+
+                        // Convert stream to command
+                        c = Helper.FromByteArray<Command>(buffer);
+
+
+                    }
+                }
+            }
+        }
         private async Task HandleDisconnectAsync() { }
 
+        // Scans for clients on a network range
         private async Task Scan(string range)
         {
             IPEndPoint scanEP = new IPEndPoint(IPAddress.Parse("127.0.0.1"), Constants.COMMAND_LISTEN_PORT);
@@ -137,7 +171,14 @@ namespace NFT_Core.NFT.Net
 
             Log.Info("Scan complete. " + hostCount + " host(s) found");
         }
-        private async Task Send(Command c) { }
+        // Sends a command to a client
+        private async Task Send(TcpClient client, Command c) 
+        { 
+            
+        }
+        // Attempts to connect to a client
+        private async Task Connect(TcpClient client) { }
+        // Broadcasts a message to all connectect clients
         private async Task Broadcast() { }
 
         private async Task DisconnectAll() { }
