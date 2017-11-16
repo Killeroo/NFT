@@ -266,8 +266,8 @@ namespace NFT_Core.NFT.Net
                                 "Cross", "Glow", "Gold", "Red", "Green", "Shiny"};
 
             string[] names = new string[] {
-                               "Mako", "", "Alpha", "Beaver", "Pigglet",
-                                "Axy", "Squid", "Troll", "Snazzy", "Ray", "Lance",
+                               "Mako", "Turtle", "Alpha", "Beaver", "Pigglet",
+                                "Axy", "Squid", "Troll", "Seal", "Ray", "Eel",
                                 "Otter", "Bear", "Wolf", "Weasal", "Rabbit", "Snail",
                                 "Cheater", "Lion", "Frog", "Cloud", "Nimbus", "Linx",
                                 "Eagle", "Whale", "Bioid", "Pika", "Ozzy", "Slave", "Daemon",
