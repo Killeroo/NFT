@@ -1,8 +1,12 @@
 # NFT
-Network File Transfer - Rsync and HTTP based file transfer
+[![version](https://img.shields.io/badge/version-0.7--alpha-yellow.svg)]() ![maintained](https://img.shields.io/maintenance/yes/2018.svg)
+![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)
 
-Use this:
-https://github.com/noffle/art-of-readme
+Network File Transfer - Rsync and HTTP based file transfer and synchronization tool for Windows.
+
+_**Work in progress.**_
+
+*Technical details and context can be found in /docs*
 
 ## Features
 
