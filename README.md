@@ -1,4 +1,4 @@
-# NFT
+# NFT - Network File Transfer
 [![version](https://img.shields.io/badge/version-0.7--alpha-yellow.svg)]() ![maintained](https://img.shields.io/maintenance/yes/2018.svg)
 ![Packagist](https://img.shields.io/packagist/l/doctrine/orm.svg)
 
