@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFT_Master", "NFT_Master\NFT_Master.csproj", "{7DAE8268-64FD-4A95-B262-FF677758A7C3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFT_Master", "src\NFT_Master\NFT_Master.csproj", "{7DAE8268-64FD-4A95-B262-FF677758A7C3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFT_Slave", "NFT_Slave\NFT_Slave.csproj", "{845A768A-0788-4908-A8EB-F3BE8BF0640B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFT_Slave", "src\NFT_Slave\NFT_Slave.csproj", "{845A768A-0788-4908-A8EB-F3BE8BF0640B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFT_Core", "NFT_Core\NFT_Core\NFT_Core.csproj", "{5CE70744-2E60-48BF-8BF8-A97AE93897CA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NFT_Core", "src\NFT_Core\NFT_Core\NFT_Core.csproj", "{5CE70744-2E60-48BF-8BF8-A97AE93897CA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

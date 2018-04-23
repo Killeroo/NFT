@@ -96,7 +96,7 @@ namespace NFT_Core.NFT.Net
                 {
                     try
                     {
-                        // Method
+                        // Method 1
                         //// Wait for data from client
                         //var buffer = new byte[Constants.COMMAND_BUFFER_SIZE];
                         //var bytesRecv = await stream.ReadAsync(buffer, 0, buffer.Length);
@@ -230,7 +230,7 @@ namespace NFT_Core.NFT.Net
             {
                 // Async connection attempt
                 var result = client.BeginConnect(ep.Address.ToString(), ep.Port, null, null);
-                var success = result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(150));//FromSeconds(1)); // Set timeout 
+                var success = await result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(150));//FromSeconds(1)); // Set timeout 
                 if (!success)
                     throw new SocketException();
 
@@ -263,7 +263,7 @@ namespace NFT_Core.NFT.Net
                                 "Sweet", "Strong", "Hard", "Dull", "Noisy", "Mute",
                                 "Faint", "Light", "Shaggy", "Slippery", "Icy", "Young",
                                 "Frantic", "Invisible", "Friendly", "Silly", "Tense",
-                                "Cross", "Glow", "Gold", "Red", "Green", "Shiny"};
+                                "Cross", "Me", "Gold", "Red", "Green", "Shiny"};
 
             string[] names = new string[] {
                                "Mako", "Turtle", "Alpha", "Beaver", "Pigglet",
