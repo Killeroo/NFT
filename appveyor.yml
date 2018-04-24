@@ -1,0 +1,32 @@
+version: 1.2.1.{build}-{branch}
+
+# Environment setup
+image: Visual Studio 2015
+clone_folder: c:\projects\NFT
+
+# Update assembly info
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "0.7.0.{build}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+
+before_build:
+  - nuget restore
+
+# Build config
+configuration: Release
+platform:
+  - x86
+  - x64
+build:
+   project: NFT.sln
+   verbosity: minimal
+
+#Artifact/Publishing 
+#artifacts:
+#  - path: \build\x86\
+#    name: NFT(x86)
+#  - path: \build\x64\
+#    name: NFT(x64)
