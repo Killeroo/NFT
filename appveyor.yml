@@ -17,9 +17,9 @@ before_build:
 
 # Build config
 configuration: Release
-platform:
-  - x86
-  - x64
+#platform:
+#  - x86
+#  - x64
 build:
    project: NFT.sln
    verbosity: minimal
